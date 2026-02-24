@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Login</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="/css/style-raiz.css" />
+    <link rel="stylesheet" href="/css/style-login.css" />
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-dark">
+      <div class="container">
+        <a class="navbar-brand" href="/">
+          <i class="fa-solid fa-utensils"></i> ECOVIF
+          <span class="tagline">Sistema de Gestão para Restaurantes</span>
+        </a>
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a href="/home" class="btn btn-login-voltar">Voltar</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <section class="secao-login">
+      <div class="container-login">
+        <div class="cabecalho-login">
+          <h1><i class="fa-solid fa-user-circle"></i></h1>
+          <p>Entre na sua conta para continuar</p>
+        </div>
+
+        <div class="login-body">
+          <form action="/login" method="POST">
+            <div class="form-group">
+              <label for="email" class="form-label">E-mail</label>
+              <div class="input-group">
+                <input
+                  class="form-control"
+                  type="text"
+                  name="email"
+                  placeholder="Digite seu e-mail"
+                  required
+                >
+                <i class="fa-solid fa-envelope input-group-icon"></i>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="senha" class="form-label">Senha</label>
+              <div class="input-group">
+                <input
+                  class="form-control"
+                  type="password"
+                  name="senha"
+                  placeholder="Digite sua senha"
+                  required
+                >
+                <i class="fa-solid fa-lock input-group-icon"></i>
+              </div>
+            </div>
+
+            <button type="submit" class="btn-login">Entrar</button>
+
+            <div class="login-links">
+              <a href="/recuperarSenha">Esqueceu a senha?</a>
+              <a href="/cadastrar">Cadastrar</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

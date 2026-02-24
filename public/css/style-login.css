@@ -1,0 +1,161 @@
+       .navbar-brand .tagline {
+            font-size: 0.9rem;
+            color: var(--cor-clara);
+            display: block;
+            font-weight: normal;
+            margin-top: 5px;
+        }
+
+        /* Container de Login */
+        .secao-login {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: calc(100vh - 100px);
+            padding: 40px 20px;
+        }
+
+        .container-login {
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            max-width: 450px;
+            width: 100%;
+        }
+
+        .cabecalho-login {
+            background: linear-gradient(135deg, var(--cor-primaria) 0%, var(--cor-secundaria) 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        .cabecalho-login h1 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .cabecalho-login p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .login-body {
+            padding: 40px 30px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            color: var(--cor-escura);
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .form-control {
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 12px 15px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: var(--cor-primaria);
+            box-shadow: 0 0 0 0.2rem rgba(196, 30, 58, 0.25);
+            outline: none;
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        .input-group .form-control {
+            padding-right: 45px;
+            border-radius: 10px !important; /* sobrescreve o bootstrap, matém todas as bordas arredondadas */
+            height: 50px;
+        }
+
+        .input-group-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+        }
+         
+        /*botões*/
+
+        .btn-login {
+            background: linear-gradient(135deg, var(--cor-primaria) 0%, var(--cor-secundaria) 100%);
+            border: none;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            width: 100%;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(196, 30, 58, 0.3);
+        }
+
+        .btn-login-voltar {
+            background: linear-gradient(135deg, var(--cor-primaria) 0%, var(--cor-secundaria) 100%);
+            border: none;
+            color: white;
+            padding: 8px 15px;       
+            border-radius: 8px;      
+            font-size: 0.9rem;       
+            font-weight: bold;
+            width: auto;            
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+}
+
+        .btn-login-voltar:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(196, 30, 58, 0.3); 
+}
+
+       
+        .login-links {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            font-size: 0.9rem;
+        }
+
+        .login-links a {
+            color: var(--cor-primaria);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .login-links a:hover {
+            color: var(--cor-secundaria);
+            text-decoration: underline;
+        }
+
+        @media (max-width: 576px) {
+            .cabecalho-login h1 {
+                font-size: 2rem;
+            }
+
+            .body-login {
+                padding: 30px 20px;
+            }
+
+            .navbar-brand {
+                font-size: 1.5rem;
+            }
+        }

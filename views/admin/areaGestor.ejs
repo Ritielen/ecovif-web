@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Área do Gestor - ECOVIF</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/style-raiz.css">
+    <link rel="stylesheet" href="/css/style-login.css">
+    <link rel="stylesheet" href="/css/style-area-gestor.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#ecovif"><i class="fa-solid fa-utensils"></i> ECOVIF
+                <span class="tagline">Sistema de Gestão para Restaurantes</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#areaGestor">
+                            <i class="fa-solid fa-user-shield"></i> Área do Gestor
+                        </a>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/suporte">Suporte</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login" id="logoutBtn">
+                            <i class="fa-solid fa-sign-out-alt"></i>
+                            Sair</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- Header da Área do Gestor -->
+    <section class="cabecalho-gestor">
+        <div class="container">
+            <div class="welcome-box">
+                <div class="user-info">
+                    <div class="user-avatar">
+                        <i class="fa-solid fa-circle-user"></i>
+                    </div>
+                    <div>
+                        <h1>Bem-vindo, Gestor!</h1>
+                        <p>Gerencie todas as operações do seu restaurante</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </section>
+
+    <!-- Grid de Funcionalidades -->
+    <section class="funcionalidades-grid">
+        <div class="container">
+            <h2 class="secao-titulo">Painel de Controle</h2>
+            <div class="row g-4">
+                <!-- Gestão de Comandas -->
+                <div class="col-md-6 col-lg-4">
+                    <a href="/admin/comandas" class="func-card">
+                        <div class="func-icon">
+                            <i class="fa-solid fa-receipt"></i>
+                        </div>
+                        <h3>Gestão de Comandas</h3>
+                        <p>Controle todas as comandas abertas, fechadas e histórico completo</p>
+                        <div class="func-badge">
+                            <span>
+                                <%= totalComandas %> Comandas Abertas
+                            </span>
+                        </div>
+                    </a>
+                </div>
+                <!-- Gestão de Pedidos -->
+                <div class="col-md-6 col-lg-4">
+                    <a href="/admin/pedidos" class="func-card">
+                        <div class="func-icon">
+                            <i class="fa-solid fa-utensils"></i>
+                        </div>
+                        <h3>Gestão de Pedidos</h3>
+                        <p>Gerencie os pedidos dos clientes</p>
+                        <div class="func-badge">
+                            <span>
+                                <%= totalPedidos %> Pedidos
+                            </span>
+                        </div>
+                    </a>
+                </div>
+                <!-- Controle de Estoque -->
+                <div class="col-md-6 col-lg-4">
+                    <a href="/admin/estoque" class="func-card">
+                        <div class="func-icon">
+                            <i class="fa-solid fa-boxes"></i>
+                        </div>
+                        <h3>Controle de Estoque</h3>
+                        <p>Monitore produtos, entradas, saídas e alertas de reposição</p>
+                        <div class="func-badge warning">
+                            <span>
+                                <%= baixaProdutos %> Produtos em baixa
+                            </span>
+                        </div>
+                    </a>
+                </div>
+                <!-- Relatórios e Dashboard -->
+                <div class="col-md-6 col-lg-4">
+                    <a href="/admin/relatoriosDashboard" class="func-card">
+                        <div class="func-icon">
+                            <i class="fa-solid fa-chart-line"></i>
+                        </div>
+                        <h3>Relatórios e Dashboard</h3>
+                        <p>Visualize gráficos, métricas e análises detalhadas do negócio</p>
+                        <div class="func-badge success">
+                            <span>Em Alta</span>
+                        </div>
+                    </a>
+                </div>
+                <!-- Cardápio Digital -->
+                <div class="col-md-6 col-lg-4">
+                    <a href="/admin/cardapio" class="func-card">
+                        <div class="func-icon">
+                            <i class="fa-solid fa-book-open"></i>
+                        </div>
+                        <h3>Cardápio Digital</h3>
+                        <p>Crie, edite e organize os itens do cardápio do restaurante</p>
+                        <div class="func-badge">
+                            <span>
+                                <%= totalItens %> Itens Ativos
+                            </span>
+                        </div>
+                    </a>
+                </div>
+                <!-- Gestão de Grupos -->
+                <div class="col-md-6 col-lg-4">
+                    <a href="/admin/cadastrarGrupo" class="func-card">
+                        <div class="func-icon">
+                            <i class="fa-solid fa-users"></i>
+                        </div>
+                        <h3>Gestão de Grupos</h3>
+                        <p>Gerenciar permissões e papéis</p>
+                        <div class="func-badge">
+                            <span>
+                                <%= totalGrupos %> Grupos
+                            </span>
+                        </div>
+                    </a>
+                </div>
+                <!-- Gestão de Equipe -->
+                <div class="col-md-6 col-lg-4">
+                    <a href="/admin/funcionarios" class="func-card">
+                        <div class="func-icon">
+                            <i class="fa-solid fa-user-plus"></i>
+                        </div>
+                        <h3>Gestão de Equipe</h3>
+                        <p>Cadastre funcionários e edite as informações pessoais</p>
+                        <div class="func-badge">
+                            <span>
+                                <%= totalFuncionarios %> Funcionarios
+                            </span>
+                        </div>
+                    </a>
+                </div>
+                <!-- Registro de Eventos -->
+                <div class="col-md-6 col-lg-4">
+                    <a href="/admin/eventos" class="func-card">
+                        <div class="func-icon">
+                            <i class="fa-solid fa-calendar-check"></i>
+                        </div>
+                        <h3>Registro de Eventos</h3>
+                        <p>Organize eventos especiais e automatize cobrança de couvert</p>
+                        <div class="func-badge">
+                            <span>
+                                <%= totalEventos %> Eventos Futuros
+                            </span>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <a href="/admin/vendas" class="func-card">
+                        <div class="func-icon">
+                            <i class="fa-solid fa-bag-shopping"></i>
+                        </div>
+                        <h3>Fechamento de caixa</h3>
+                        <p>Finalize os pedidos dos clientes</p>
+                        <div class="func-badge">
+                            <span>
+                                <%= totalPedidos %> Pedidos
+                            </span>
+                        </div>
+                    </a>
+                </div>
+    </section>
+
+    <!-- Atalhos Rápidos -->
+    <section class="quick-actions">
+        <div class="container">
+            <h3>Ações Rápidas</h3>
+            <div class="actions-grid">
+                <a href="/admin/pedidos" class="action-btn">
+                    <i class="fa-solid fa-utensils"></i>
+                    Pedidos da Cozinha
+                </a>
+                <a href="/admin/estoque" class="action-btn">
+                    <i class="fa-solid fa-box"></i>
+                    Adicionar Produto
+                </a>
+                <a href="/admin/funcionarios" class="action-btn">
+                    <i class="fa-solid fa-user-plus"></i>
+                    Novo Funcionário
+                </a>
+                <a href="/admin/relatoriosDashboard" class="action-btn">
+                    <i class="fa-solid fa-file-invoice"></i>
+                    Gerar Relatório
+                </a>
+            </div>
+        </div>
+    </section>
+    <!-- Footer -->
+    <footer class="rodape">
+        <div class="container">
+            <p>2026 Desenvolvido por Ritielen Rodrigues.</p>
+        </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Logout
+        document.getElementById('logoutBtn').addEventListener('click', function (e) {
+            e.preventDefault();
+            if (confirm('Deseja realmente sair?')) {
+                window.location.href = '/login';
+            }
+        });
+    </script>
+</body>
+</html>

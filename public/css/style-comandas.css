@@ -1,0 +1,376 @@
+/* Botão Voltar */
+.btn-voltar {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    backdrop-filter: blur(10px);
+}
+
+.btn-voltar:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+    transform: translateX(-5px);
+    color: white;
+}
+
+/* Seção de Itens da Comanda */
+.secao-itens-comanda {
+    background-color: #f8f9fa;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.secao-itens-comanda h3 {
+    color: var(--cor-escura);
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--cor-primaria);
+}
+
+/* Botão Adicionar Item */
+.btn-adicionar-item {
+    background: linear-gradient(135deg, var(--cor-primaria) 0%, var(--cor-secundaria) 100%);
+    border: none;
+    color: white;
+    padding: 0.7rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    justify-content: center;
+}
+
+.btn-adicionar-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(196, 30, 58, 0.3);
+}
+
+.btn-adicionar-item i {
+    font-size: 1rem;
+}
+
+/* Lista de Itens Adicionados */
+.lista-itens-adicionados {
+    background-color: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-top: 1rem;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.item-adicionado {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem;
+    background-color: #f8f9fa;
+    border-radius: 6px;
+    margin-bottom: 0.5rem;
+    border-left: 3px solid var(--cor-primaria);
+}
+
+.item-adicionado:last-child {
+    margin-bottom: 0;
+}
+
+.item-adicionado-info {
+    flex: 1;
+}
+
+.item-adicionado-nome {
+    font-weight: 600;
+    color: var(--cor-escura);
+    margin-bottom: 0.2rem;
+}
+
+.item-adicionado-detalhes {
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.btn-remover-item {
+    background-color: #ffebee;
+    color: #d32f2f;
+    border: none;
+    padding: 0.4rem 0.8rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 0.9rem;
+}
+
+.btn-remover-item:hover {
+    background-color: #ffcdd2;
+}
+
+/* Total da Comanda */
+.total-comanda {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: linear-gradient(135deg, var(--cor-primaria) 0%, var(--cor-secundaria) 100%);
+    color: white;
+    border-radius: 8px;
+    margin-top: 1rem;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.total-comanda strong {
+    font-size: 1.3rem;
+}
+
+.total-comanda span {
+    font-size: 1.5rem;
+}
+
+/* Filtro de Comandas */
+.filtro-comandas {
+    display: flex;
+    gap: 0.8rem;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    flex-wrap: wrap;
+}
+
+.btn-filtro {
+    flex: 1;
+    min-width: 120px;
+    background-color: #f8f9fa;
+    border: 2px solid #e0e0e0;
+    color: var(--cor-escura);
+    padding: 0.8rem 1.2rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.btn-filtro:hover {
+    background-color: #e9ecef;
+    border-color: var(--cor-primaria);
+    transform: translateY(-2px);
+}
+
+.btn-filtro.active {
+    background: linear-gradient(135deg, var(--cor-primaria) 0%, var(--cor-secundaria) 100%);
+    color: white;
+    border-color: var(--cor-primaria);
+    box-shadow: 0 4px 12px rgba(196, 30, 58, 0.3);
+}
+
+.btn-filtro i {
+    font-size: 1.1rem;
+}
+
+/* Card da Comanda */
+.card-comanda {
+    background: white;
+    border: 2px solid #e0e0e0;
+    border-left: 5px solid var(--cor-primaria);
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    transition: all 0.3s;
+}
+
+.card-comanda:hover {
+    border-color: var(--cor-primaria);
+    box-shadow: 0 5px 15px rgba(196, 30, 58, 0.15);
+}
+
+.cabecalho-comanda {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.info-comanda-principal {
+    flex: 1;
+}
+
+.numero-comanda {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: var(--cor-primaria);
+    margin-bottom: 0.3rem;
+}
+
+.cliente-mesa {
+    display: flex;
+    gap: 1.5rem;
+    margin-top: 0.5rem;
+    font-size: 0.95rem;
+}
+
+.cliente-mesa div {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.cliente-mesa i {
+    color: var(--cor-primaria);
+}
+
+.badge-status {
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    display: inline-block;
+}
+
+.badge-status.em-preparo {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.badge-status.finalizado {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+/* Itens da Comanda no Card */
+.itens-comanda-card {
+    margin: 1rem 0;
+    padding: 1rem;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+}
+
+.itens-comanda-card h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--cor-escura);
+    margin-bottom: 0.8rem;
+}
+
+.item-comanda-linha {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    font-size: 0.9rem;
+    border-bottom: 1px dashed #dee2e6;
+}
+
+.item-comanda-linha:last-child {
+    border-bottom: none;
+}
+
+.item-comanda-nome {
+    color: var(--cor-escura);
+    font-weight: 500;
+}
+
+.item-comanda-qtd {
+    color: #666;
+}
+
+.item-comanda-preco {
+    color: var(--cor-primaria);
+    font-weight: 600;
+}
+
+/* Rodapé do Card */
+.rodape-comanda {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 2px solid #e0e0e0;
+}
+
+.total-comanda-card {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: var(--cor-primaria);
+}
+
+.data-comanda {
+    font-size: 0.85rem;
+    color: #666;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.data-comanda i {
+    color: var(--cor-primaria);
+}
+
+/* Ações da Comanda */
+.acoes-comanda {
+    display: flex;
+    gap: 0.8rem;
+    margin-top: 1rem;
+}
+
+/* Texto de Ajuda */
+.texto-ajuda {
+    display: block;
+    margin-top: 0.3rem;
+    font-size: 0.85rem;
+    color: #666;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+    .filtro-comandas {
+        flex-direction: column;
+    }
+
+    .btn-filtro {
+        width: 100%;
+    }
+
+    .cabecalho-comanda {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .cliente-mesa {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .rodape-comanda {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+
+    .acoes-comanda {
+        flex-direction: column;
+        width: 100%;
+    }
+}

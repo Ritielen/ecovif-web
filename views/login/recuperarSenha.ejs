@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recuperar Senha - ECOVIF</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/style-raiz.css">
+    <link rel="stylesheet" href="/css/style-login.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fa-solid fa-utensils"></i> ECOVIF
+                <span class="tagline">Sistema de Gestão para Restaurantes</span>
+            </a>
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a href="/login" class="btn btn-login-voltar">Voltar</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <!-- Seção de Recuperação -->
+    <section class="secao-login">
+        <div class="container-login">
+            <div class="cabecalho-login">
+                <h1><i class="fa-solid fa-key"></i></h1>
+                <p>Recuperar Senha</p>
+            </div>
+            <div class="login-body">
+                <form action="/recuperarSenha" method="POST">
+                    <div class="form-group">
+                        <label for="email" class="form-label">Digite o seu e-mail</label>
+                        <div class="input-group">
+                            <input
+                            class="form-control" 
+                            type="text" 
+                            name="email" 
+                            placeholder="Seu e-mail cadastrado" 
+                            required
+                            >
+                            <i class="fa-solid fa-envelope input-group-icon"></i>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-login">Enviar Link de Recuperação</button>
+                </form>
+            </div>
+        </div>
+    </section>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,259 @@
+/* Seção de Filtros da Cozinha */
+.secao-filtros-cozinha {
+    background-color: white;
+    padding: 2rem 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.filtros-cozinha {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btn-filtro-cozinha {
+    flex: 1;
+    min-width: 180px;
+    max-width: 250px;
+    background-color: white;
+    border: 3px solid #e0e0e0;
+    color: var(--cor-escura);
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.btn-filtro-cozinha:hover {
+    background-color: #f8f9fa;
+    border-color: var(--cor-primaria);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.btn-filtro-cozinha.active {
+    background: linear-gradient(135deg, var(--cor-primaria) 0%, var(--cor-secundaria) 100%);
+    color: white;
+    border-color: var(--cor-primaria);
+    box-shadow: 0 6px 20px rgba(196, 30, 58, 0.4);
+}
+
+.btn-filtro-cozinha i {
+    font-size: 1.2rem;
+}
+
+/* Card de Pedido */
+.card-pedido {
+    background: white;
+    border: 3px solid #e0e0e0;
+    border-left: 6px solid var(--cor-primaria);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    transition: all 0.3s;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+}
+
+.card-pedido:hover {
+    border-color: var(--cor-primaria);
+    box-shadow: 0 8px 25px rgba(196, 30, 58, 0.2);
+    transform: translateY(-2px);
+}
+
+/* Cabeçalho do Pedido */
+.cabecalho-pedido {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+/* Itens do Pedido */
+.itens-pedido-card {
+    margin: 1.2rem 0;
+    padding: 1.2rem;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    border: 2px solid #e9ecef;
+}
+
+.itens-pedido-card h4 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--cor-escura);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.itens-pedido-card h4 i {
+    color: var(--cor-primaria);
+}
+
+.item-pedido-linha {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.7rem 0;
+    font-size: 1rem;
+    border-bottom: 1px dashed #dee2e6;
+}
+
+.item-pedido-linha:last-child {
+    border-bottom: none;
+}
+
+.item-pedido-nome {
+    color: var(--cor-escura);
+    font-weight: 600;
+}
+
+.item-pedido-preco {
+    color: var(--cor-primaria);
+    font-weight: 700;
+    font-size: 1.05rem;
+}
+
+/* Rodapé do Pedido */
+.rodape-pedido {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1.2rem;
+    padding-top: 1rem;
+    border-top: 2px solid #e0e0e0;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.total-pedido-card {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--cor-primaria);
+    margin-bottom: 0.5rem;
+}
+
+/* Status do Pedido */
+.status-pedido {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--cor-escura);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.badge-status.pendente {
+    background-color: #fff3cd;
+    color: #856404;
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+
+.badge-status.em-preparo {
+    background-color: #cfe2ff;
+    color: #084298;
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+
+.badge-status.pronto {
+    background-color: #d1e7dd;
+    color: #0f5132;
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+
+/* Ações do Pedido */
+.acoes-pedido {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.2rem;
+    padding-top: 1.2rem;
+    border-top: 2px dashed #e0e0e0;
+}
+
+.btn-em-preparo,
+.btn-pronto {
+    flex: 1;
+    border: none;
+    padding: 0.9rem 1.5rem;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+.btn-em-preparo {
+    background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+    color: white;
+}
+
+.btn-em-preparo:hover {
+    background: linear-gradient(135deg, #0a58ca 0%, #084298 100%);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(13, 110, 253, 0.4);
+}
+
+.btn-pronto {
+    background: linear-gradient(135deg, #198754 0%, #146c43 100%);
+    color: white;
+}
+
+.btn-pronto:hover {
+    background: linear-gradient(135deg, #146c43 0%, #0f5132 100%);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(25, 135, 84, 0.4);
+}
+
+.btn-em-preparo i,
+.btn-pronto i {
+    font-size: 1.1rem;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+    .filtros-cozinha {
+        flex-direction: column;
+    }
+
+    .btn-filtro-cozinha {
+        max-width: 100%;
+    }
+
+    .cabecalho-pedido {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .rodape-pedido {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .acoes-pedido {
+        flex-direction: column;
+    }
+}

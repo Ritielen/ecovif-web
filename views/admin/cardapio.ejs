@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Cardápio - ECOVIF</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style-raiz.css">
+    <link rel="stylesheet" href="style-login.css">
+    <link rel="stylesheet" href="style-area-gestor.css">
+    <link rel="stylesheet" href="style-cardapio.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="home.html">
+                <i class="fa-solid fa-utensils"></i> ECOVIF
+                <span class="tagline">Sistema de Gestão para Restaurantes</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="area-gestor.html">
+                            <i class="fa-solid fa-user-shield"></i> Área do Gestor
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="suporte.html">Suporte</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login" id="logoutBtn">
+                            <i class="fa-solid fa-sign-out-alt"></i> Sair
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header da Área do Gestor -->
+    <section class="cabecalho-gestor">
+        <div class="container">
+            <div class="welcome-box">
+                <div class="user-info">
+                    <div class="user-avatar">
+                        <i class="fa-solid fa-clipboard-list"></i>
+                    </div>
+                    <div>
+                        <h1>Cadastrar Cardápio</h1>
+                        <p>Gerencie os itens do cardápio do restaurante</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Principal -->
+    <main class="funcionalidades-grid">
+        <div class="container">
+            <div class="row">
+                <!-- Seção Formulário -->
+                <section class="col-lg-5 secao-formulario">
+                    <div class="caixa-formulario">
+                        <h2>Adicionar Item</h2>
+<!-- Formulário de Cadastro de Item -->
+ <%- include('../partials/alerts') %>
+<form id="formCadastro" action="/admin/cardapio/adicionar" method="POST">
+    <!-- Seletor de Categoria -->
+    <div class="grupo-formulario">
+        <label for="categoria" class="label-formulario">Categoria</label>
+        <select class="controle-formulario" id="categoria" name="categoria" required>
+            <option value="">Selecione...</option>
+            <option value="prato">Prato</option>
+            <option value="bebida">Bebida</option>
+            <option value="vinho">Carta de Vinhos</option>
+        </select>
+    </div>
+
+    <!-- Formulário para Pratos -->
+    <div id="formPrato" class="formulario-tipo" style="display:none;">
+        <div class="grupo-formulario">
+            <label for="descricao" class="label-formulario">Descrição do Prato</label>
+            <input type="text" name="descricao" id="descricao" class="controle-formulario" placeholder="Ex.: Filé Mignon com Batata">
+        </div>
+
+        <div class="grupo-formulario">
+            <label class="label-formulario">Ingredientes</label>
+            <div id="container-ingredientes">
+                <div class="linha-ingrediente">
+                    <div class="campo-ingrediente">
+                        <input type="text" name="nomeIngrediente" class="controle-formulario" placeholder="Nome do ingrediente">
+                    </div>
+                    <div class="campo-quantidade">
+                        <input type="text" name="quantidadeIngrediente" class="controle-formulario" placeholder="Quantidade" style="border-radius:4px 0 0 4px;">
+                        <select name="unidadeIngrediente" class="controle-formulario ingrediente-unidade" style="width:80px; border-radius:0 4px 4px 0; border-left:none;">
+                            <option value="">--</option>
+                            <option value="kg">kg</option>
+                            <option value="g">g</option>
+                            <option value="ml">ml</option>
+                            <option value="l">l</option>
+                            <option value="un">un</option>
+                        </select>
+                    </div>
+                    <div class="botoes-ingrediente">
+                        <button type="button" class="btn-adicionar-ingrediente">
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="linha-formulario">
+            <div class="grupo-formulario">
+                <label for="rendimento" class="label-formulario">Rendimento</label>
+                <input type="text" name="rendimento" id="rendimento" class="controle-formulario" placeholder="Ex.: 2 porções">
+            </div>
+        </div>
+
+        <div class="grupo-formulario">
+            <label for="custoPrato" class="label-formulario">Custo do Prato (R$)</label>
+            <input type="number" name="custoPrato" id="custoPrato" class="controle-formulario" placeholder="0.00" step="0.01" min="0">
+        </div>
+
+        <div class="grupo-formulario">
+            <label for="precoPrato" class="label-formulario">Preço (R$)</label>
+            <input type="number" name="precoPrato" id="precoPrato" class="controle-formulario" placeholder="0.00" step="0.01" min="0">
+        </div>
+    </div>
+
+    <!-- Formulário para Bebidas -->
+    <div id="formBebida" class="formulario-tipo" style="display:none;">
+        <div class="grupo-formulario">
+            <label for="nomeBebida" class="label-formulario">Nome</label>
+            <input type="text" name="nomeBebida" id="nomeBebida" class="controle-formulario" placeholder="Ex.: Refrigerante">
+        </div>
+        <div class="linha-formulario">
+            <div class="grupo-formulario">
+                <label for="tamanhoBebida" class="label-formulario">Tamanho</label>
+                <input type="text" name="tamanhoBebida" id="tamanhoBebida" class="controle-formulario" placeholder="Ex.: 500">
+            </div>
+            <div class="grupo-formulario">
+                <label for="unidadeBebida" class="label-formulario">Unidade</label>
+                <select name="unidadeBebida" id="unidadeBebida" class="controle-formulario">
+                    <option value="">Selecione...</option>
+                    <option value="ml">Mililitros (ml)</option>
+                    <option value="l">Litros (l)</option>
+                </select>
+            </div>
+        </div>
+        <div class="grupo-formulario">
+            <label for="precoBebida" class="label-formulario">Preço (R$)</label>
+            <input type="number" name="precoBebida" id="precoBebida" class="controle-formulario" placeholder="0.00" step="0.01" min="0">
+        </div>
+    </div>
+
+    <!-- Formulário para Vinhos -->
+    <div id="formVinho" class="formulario-tipo" style="display:none;">
+        <div class="grupo-formulario">
+            <label for="nomeVinho" class="label-formulario">Nome do Vinho</label>
+            <input type="text" name="nomeVinho" id="nomeVinho" class="controle-formulario" placeholder="Ex.: Malbec Reserva">
+        </div>
+        <div class="linha-formulario">
+            <div class="grupo-formulario">
+                <label for="tamanhoVinho" class="label-formulario">Tamanho</label>
+                <input type="text" name="tamanhoVinho" id="tamanhoVinho" class="controle-formulario" placeholder="Ex.: 750">
+            </div>
+            <div class="grupo-formulario">
+                <label for="unidadeVinho" class="label-formulario">Unidade</label>
+                <select name="unidadeVinho" id="unidadeVinho" class="controle-formulario">
+                    <option value="">Selecione...</option>
+                    <option value="ml">Mililitros (ml)</option>
+                    <option value="l">Litros (l)</option>
+                </select>
+            </div>
+        </div>
+        <div class="grupo-formulario">
+            <label for="tipoVinho" class="label-formulario">Tipo</label>
+            <select name="tipoVinho" id="tipoVinho" class="controle-formulario">
+                <option value="">Selecione...</option>
+                <option value="tinto">Tinto</option>
+                <option value="branco">Branco</option>
+                <option value="rose">Rosé</option>
+                <option value="espumante">Espumante</option>
+            </select>
+        </div>
+        <div class="grupo-formulario">
+            <label for="precoVinho" class="label-formulario">Preço (R$)</label>
+            <input type="number" name="precoVinho" id="precoVinho" class="controle-formulario" placeholder="0.00" step="0.01" min="0">
+        </div>
+    </div>
+
+    <!-- Botão de submit -->
+    <button type="submit" class="btn-login">
+        <i class="fa-solid fa-plus-circle"></i> Adicionar Item
+    </button>
+</form>
+
+                    </div>
+                </section>
+
+                <!-- Seção Lista -->
+<section class="col-lg-7 secao-lista">
+
+    <!-- ================= PRATOS ================= -->
+    <div class="caixa-categoria">
+        <h3><i class="fa-solid fa-drumstick-bite"></i> Pratos</h3>
+        <div class="lista-itens">
+
+            <% if (pratos && pratos.length > 0) { %>
+                <% pratos.forEach(function(prato) { %>
+
+                    <div class="conteudo-item">
+                        <h4>🍽️ <%= prato.descricao %></h4>
+
+                        <div class="ingredientes-lista">
+                            <strong>Ingredientes:</strong>
+                            <ul>
+                                <% prato.ingredientes.forEach(function(ing) { %>
+                                    <li>
+                                        <%= ing.nome %> 
+                                        (<%= ing.quantidade %> <%= ing.unidade %>)
+                                    </li>
+                                <% }) %>
+                            </ul>
+                        </div>
+
+                        <div class="info-item">
+                            <div><strong>Rendimento:</strong> <%= prato.rendimento %></div>
+                            <div><strong>Custo:</strong> R$ <%= prato.custo.toFixed(2) %></div>
+                        </div>
+
+                        <div class="preco-lucro">
+                            <span class="preco-destaque">
+                                Preço: R$ <%= prato.valor.toFixed(2) %>
+                            </span>
+                            <span class="lucro-destaque">
+                                Lucro: <%= prato.lucro %>%
+                            </span>
+                        </div>
+
+                        <div class="acoes-item">
+
+                            <!-- EDITAR -->
+                            <a href="/admin/cardapio/prato/editar/<%= prato.id %>" 
+                               class="btn-editar">
+                                <i class="fa-solid fa-edit"></i> Editar
+                            </a>
+
+                            <!-- EXCLUIR -->
+                            <form action="/admin/cardapio/prato/excluir/<%= prato.id %>" 
+                                  method="POST" 
+                                  style="display:inline;">
+                                <button type="submit" 
+                                        class="btn-excluir"
+                                        onclick="return confirm('Deseja excluir este prato?');">
+                                    <i class="fa-solid fa-trash"></i> Excluir
+                                </button>
+                            </form>
+
+                        </div>
+                    </div>
+
+                <% }) %>
+            <% } else { %>
+                <p class="texto-vazio">Nenhum prato cadastrado.</p>
+            <% } %>
+
+        </div>
+    </div>
+
+
+    <!-- ================= BEBIDAS ================= -->
+    <div class="caixa-categoria">
+        <h3><i class="fa-solid fa-glass-cheers"></i> Bebidas</h3>
+
+        <div class="lista-itens">
+
+            <% if (bebidas && bebidas.length > 0) { %>
+                <% bebidas.forEach(function(bebida) { %>
+
+                    <div class="conteudo-item">
+                        <h4>🥤 <%= bebida.nomeBebida %></h4>
+
+                        <div class="info-item">
+                            <div>
+                                <strong>Tamanho:</strong>
+                                <%= bebida.tamanhoBebida %> 
+                                <%= bebida.unidadeBebida %>
+                            </div>
+                        </div>
+
+                        <div class="preco-lucro">
+                            <span class="preco-destaque">
+                                R$ <%= bebida.precoBebida.toFixed(2) %>
+                            </span>
+                        </div>
+
+                        <div class="acoes-item">
+
+                            <a href="/admin/cardapio/bebida/editar/<%= bebida.id %>" 
+                               class="btn-editar">
+                                <i class="fa-solid fa-edit"></i> Editar
+                            </a>
+
+                            <form action="/admin/cardapio/bebida/excluir/<%= bebida.id %>" 
+                                  method="POST" 
+                                  style="display:inline;">
+                                <button type="submit"
+                                        class="btn-excluir"
+                                        onclick="return confirm('Deseja excluir esta bebida?');">
+                                    <i class="fa-solid fa-trash"></i> Excluir
+                                </button>
+                            </form>
+
+                        </div>
+                    </div>
+
+                <% }) %>
+            <% } else { %>
+                <p class="texto-vazio">Nenhuma bebida cadastrada.</p>
+            <% } %>
+
+        </div>
+    </div>
+
+
+    <!-- ================= VINHOS ================= -->
+    <div class="caixa-categoria">
+        <h3><i class="fa-solid fa-wine-bottle"></i> Carta de Vinhos</h3>
+
+        <div class="lista-itens">
+
+            <% if (vinhos && vinhos.length > 0) { %>
+                <% vinhos.forEach(function(vinho) { %>
+
+                    <div class="conteudo-item">
+                        <h4>🍷 <%= vinho.nomeVinho %></h4>
+
+                        <div class="info-item">
+                            <div><strong>Tipo:</strong> <%= vinho.tipoVinho %></div>
+                            <div>
+                                <strong>Tamanho:</strong>
+                                <%= vinho.tamanhoVinho %> 
+                                <%= vinho.unidadeVinho %>
+                            </div>
+                        </div>
+
+                        <div class="preco-lucro">
+                            <span class="preco-destaque">
+                                R$ <%= vinho.precoVinho.toFixed(2) %>
+                            </span>
+                        </div>
+
+                        <div class="acoes-item">
+
+                            <a href="/admin/cardapio/vinho/editar/<%= vinho.id %>" 
+                               class="btn-editar">
+                                <i class="fa-solid fa-edit"></i> Editar
+                            </a>
+
+                            <form action="/admin/cardapio/vinho/excluir/<%= vinho.id %>" 
+                                  method="POST" 
+                                  style="display:inline;">
+                                <button type="submit"
+                                        class="btn-excluir"
+                                        onclick="return confirm('Deseja excluir este vinho?');">
+                                    <i class="fa-solid fa-trash"></i> Excluir
+                                </button>
+                            </form>
+
+                        </div>
+                    </div>
+
+                <% }) %>
+            <% } else { %>
+                <p class="texto-vazio">Nenhum vinho cadastrado.</p>
+            <% } %>
+        </div>
+    </div>
+    <!-- Botão Voltar -->
+    <div class="text-end mt-3">
+        <a href="area-gestor.html" class="btn btn-login-voltar">
+            <i class="fa-solid fa-arrow-left"></i> Voltar
+        </a>
+    </div>
+</section>
+            </div>
+        </div>
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="rodape">
+        <div class="container">
+            <p>2026 Desenvolvido por Ritielen Rodrigues</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Script para controle dos formulários -->
+    <script>
+        // Aguarda o carregamento completo da página
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elementos do DOM
+            const selectCategoria = document.getElementById('categoria');
+            const formPrato = document.getElementById('formPrato');
+            const formBebida = document.getElementById('formBebida');
+            const formVinho = document.getElementById('formVinho');
+            
+            // Esconde todos os formulários inicialmente
+            formPrato.style.display = 'none';
+            formBebida.style.display = 'none';
+            formVinho.style.display = 'none';
+            
+            // Função para remover required de todos os campos
+            function removerRequired() {
+                // Pratos
+                document.querySelectorAll('#formPrato input, #formPrato select').forEach(campo => {
+                    campo.required = false;
+                });
+                
+                // Bebidas
+                document.querySelectorAll('#formBebida input, #formBebida select').forEach(campo => {
+                    campo.required = false;
+                });
+                
+                // Vinhos
+                document.querySelectorAll('#formVinho input, #formVinho select').forEach(campo => {
+                    campo.required = false;
+                });
+            }
+            
+            // Função para adicionar required aos campos do formulário ativo
+            function adicionarRequired(formulario) {
+                document.querySelectorAll(`#${formulario} input, #${formulario} select`).forEach(campo => {
+                    campo.required = true;
+                });
+            }
+            
+            // Evento de mudança no select
+            selectCategoria.addEventListener('change', function() {
+                const categoria = this.value;
+                
+                // Esconde todos os formulários
+                formPrato.style.display = 'none';
+                formBebida.style.display = 'none';
+                formVinho.style.display = 'none';
+                
+                // Remove required de todos os campos
+                removerRequired();
+                
+                // Mostra o formulário correspondente e adiciona required
+                if (categoria === 'prato') {
+                    formPrato.style.display = 'block';
+                    adicionarRequired('formPrato');
+                } else if (categoria === 'bebida') {
+                    formBebida.style.display = 'block';
+                    adicionarRequired('formBebida');
+                } else if (categoria === 'vinho') {
+                    formVinho.style.display = 'block';
+                    adicionarRequired('formVinho');
+                }
+            });
+            
+            // Funcionalidade do botão de adicionar ingrediente
+            const btnAdicionar = document.querySelector('.btn-adicionar-ingrediente');
+            if (btnAdicionar) {
+                btnAdicionar.addEventListener('click', function() {
+                    const container = document.getElementById('container-ingredientes');
+                    const linhaOriginal = document.querySelector('.linha-ingrediente');
+                    
+                    if (container && linhaOriginal) {
+                        const novaLinha = linhaOriginal.cloneNode(true);
+                        
+                        // Limpa os valores dos inputs na nova linha
+                        const inputs = novaLinha.querySelectorAll('input, select');
+                        inputs.forEach(input => {
+                            input.value = '';
+                        });
+                        
+                        container.appendChild(novaLinha);
+                    }
+                });
+            }  
+        });
+    </script>
+</body>
+</html>

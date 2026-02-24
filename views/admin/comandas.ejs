@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão de Comandas - ECOVIF</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/style-raiz.css">
+    <link rel="stylesheet" href="/css/style-login.css">
+    <link rel="stylesheet" href="/css/style-area-gestor.css">
+    <link rel="stylesheet" href="/css/style-cardapio.css">
+    <link rel="stylesheet" href="/css/style-comandas.css">
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#ecovif"><i class="fa-solid fa-utensils"></i> ECOVIF
+                <span class="tagline">Sistema de Gestão para Restaurantes</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/area-gestor">
+                            <i class="fa-solid fa-user-shield"></i> Área do Gestor
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login/suporte">Suporte</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login/login" id="logoutBtn">
+                            <i class="fa-solid fa-sign-out-alt"></i>
+                            Sair</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header da Área do Gestor -->
+    <section class="cabecalho-gestor">
+        <div class="container">
+            <div class="welcome-box">
+                <div class="user-info">
+                    <div class="user-avatar">
+                        <i class="fa-solid fa-receipt"></i>
+                    </div>
+                    <div>
+                        <h1>Registrar Comanda</h1>
+                        <p>Gerencie comandas, pedidos e controle total das mesas.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Principal -->
+    <main class="funcionalidades-grid">
+        <div class="container">
+            <div class="row">
+
+                <!-- Seção Formulário -->
+                <section class="col-lg-5 secao-formulario">
+                    <div class="caixa-formulario">
+                        <h2>Nova Comanda</h2>
+
+                        <form action="/admin/comandas" method="post" id="formComanda">
+                            <div class="grupo-formulario">
+                                <label class="label-formulario">Nome do Cliente</label>
+                                <input type="text" name="nome" class="controle-formulario" id="nomeCliente"
+                                    placeholder="Digite o nome do cliente" required>
+                            </div>
+
+                            <div class="grupo-formulario">
+                                <label class="label-formulario">Número da Mesa</label>
+                                <input type="number" name="numero" class="controle-formulario" id="numeroMesa"
+                                    placeholder="Ex: 5" min="1" required>
+                            </div>
+
+                            <!-- Seção Itens da Comanda -->
+                            <div class="secao-itens-comanda">
+                                <h3>Itens da Comanda</h3>
+
+                                <!-- Seletor de Cardápio -->
+                                <div class="grupo-formulario">
+                                    <label class="label-formulario">Selecionar do Cardápio</label>
+                                    <select class="controle-formulario" id="selectCardapio">
+                                        <option value="">Escolha um item...</option>
+
+
+                                        <!-- Agrupando os itens por categoria dinamicamente -->
+                                        <% const categorias=[...new Set(cardapio.map(item=> item.categoria))];
+                                            categorias.forEach(cat => {
+                                            %>
+                                            <optgroup label="<%= cat %>">
+                                                <% cardapio.filter(i=> i.categoria === cat).forEach(item => { %>
+                                                    <option value="<%= item.id %>" data-preco="<%= item.preco %>">
+                                                        <%= item.nome %> - R$ <%= item.preco.toLocaleString('pt-BR',
+                                                                {minimumFractionDigits: 2}) %>
+                                                    </option>
+                                                    <% }) %>
+                                            </optgroup>
+                                            <% }) %>
+                                    </select>
+                                </div>
+
+                                <div class="linha-formulario">
+                                    <div class="grupo-formulario">
+                                        <label class="label-formulario">Quantidade</label>
+                                        <input type="number" name="quantidade" class="controle-formulario"
+                                            id="quantidadeItem" min="1" value="1" required>
+                                    </div>
+
+                                    <div class="grupo-formulario" style="display: flex; align-items: flex-end;">
+                                        <button type="button" class="btn-adicionar-item">
+                                            <i class="fa-solid fa-plus"></i> Adicionar
+                                        </button>
+                                    </div>
+                                </div>
+                                <!--informações dos itens-->
+                                <% itensPedido.forEach(item=> { %>
+                                    <div class="item-info">
+                                        <span class="item-nome">
+                                            <%= item.nome %>
+                                        </span>
+                                        <span class="item-detalhes">
+                                            <%= item.quantidade %> x R$ <%= item.precoUnitario.toLocaleString('pt-BR',
+                                                    {minimumFractionDigits: 2}) %>
+                                        </span>
+                                    </div>
+                                    <div class="item-acoes">
+                                        <span class="item-subtotal">
+                                            R$ <%= (item.quantidade * item.precoUnitario).toLocaleString('pt-BR',
+                                                {minimumFractionDigits: 2}) %>
+                                        </span>
+                                        <button class="btn-remover-item">
+                                            <i class="fa-solid fa-minus"></i>
+                                        </button>
+                                    </div>
+
+                                    <!-- Lista de Itens Adicionados -->
+                                    <div class="lista-itens-adicionados" id="listaItensAdicionados">
+                                        <p class="texto-vazio" id="vazioItens">Nenhum item adicionado</p>
+                                    </div>
+
+
+                                    <!-- Total da Comanda -->
+                                    <div class="total-comanda">
+                                        <strong>Total:</strong>
+                                        <!-- Lógica para somar o total de todos os itens do array -->
+                                        <% let totalGeral=0; itensPedido.forEach(item=> {
+                                            totalGeral += (item.quantidade * item.precoUnitario);
+                                            });
+                                            %>
+                                            <span id="totalComanda">
+                                                R$ <%= totalGeral.toLocaleString('pt-BR', { minimumFractionDigits: 2 })
+                                                    %>
+                                            </span>
+                                    </div>
+
+                                    <!-- OBSERVAÇÕES DA COMANDA -->
+                                    <div class="grupo-formulario">
+                                        <label class="label-formulario">Observações do Pedido</label>
+                                        <textarea class="controle-formulario" name="observacoes" id="observacoesComanda"
+                                            placeholder="Ex: Aniversariante, restrições alimentares, preferências..."
+                                            rows="3"><%= typeof observacoesExistentes !== 'undefined' ? observacoesExistentes : '' %></textarea>
+                                        <small class="texto-ajuda">Observações gerais que serão repassadas para a
+                                            cozinha</small>
+                                    </div>
+
+                                    <button type="submit" class="btn-login">
+                                        <i class="fa-solid fa-check-circle"></i> <span id="textoBotao">Registrar
+                                            Comanda</span>
+                                    </button>
+                        </form>
+                    </div>
+                </section>
+
+                <!--Seção lista de comandas-->
+                <section class="col-lg-7 secao-lista">
+                    <div class="filtro-comandas">
+                        <button class="btn-filtro active">
+                            <i class="fa-solid fa-list"></i> Todas
+                        </button>
+                        <button class="btn-filtro">
+                            <i class="fa-solid fa-clock"></i> Em Preparo
+                        </button>
+                        <button class="btn-filtro">
+                            <i class="fa-solid fa-check"></i> Finalizadas
+                        </button>
+                    </div>
+
+                    <div class="caixa-categoria">
+                        <h3><i class="fa-solid fa-receipt"></i> Comandas Registradas</h3>
+
+                        <div id="listaComandas" class="lista-itens">
+                            <% if (comandas && comandas.length> 0) { %>
+                                <% comandas.forEach(c=> { %>
+                                    <div class="comanda-card mb-3">
+                                        <div class="comanda-header">
+                                            <h4>
+                                                <%= c.cliente %> | Mesa: <%= c.mesa %>
+                                            </h4>
+                                            <span class="comanda-data">
+                                                <%= new Date(c.data_hora).toLocaleString('pt-BR') %>
+                                            </span>
+                                        </div>
+
+                                        <div class="comanda-itens">
+                                            <%= c.itens_resumo %>
+                                        </div>
+                                        
+                                            <div class="comanda-status">
+                                                <span class="status-badge status-<%= c.status_slug %>">
+                                                    <%= c.status_nome %>
+                                                </span>
+                                            </div>
+
+                                            <div class="comanda-footer">
+                                            <div class="comanda-total">
+                                                <strong>Total: R$ <%= c.total.toLocaleString('pt-BR',
+                                                        {minimumFractionDigits: 2}) %></strong>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <% }) %>
+                                        <% } else { %>
+                                            <p class="texto-vazio" id="vazioComandas">Nenhuma comanda registrada no
+                                                momento.</p>
+                                            <% } %>
+                        </div>
+                    </div>
+                    <!--Botão Voltar-->
+                    <div class="text-end mt-3">
+                        <a href="/admin/area-gestor" class="btn btn-login-voltar">
+                            <i class="fa-solid fa-arrow-left"></i> Voltar
+                        </a>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="rodape">
+        <div class="container">
+            <p>2026 Desenvolvido por Ritielen Rodrigues.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

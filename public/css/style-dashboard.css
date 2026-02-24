@@ -1,0 +1,320 @@
+/* Botão Voltar */
+.btn-voltar {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    backdrop-filter: blur(10px);
+}
+
+.btn-voltar:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+    transform: translateX(-5px);
+    color: white;
+}
+
+/* Cards de Resumo */
+.card-resumo {
+    background: white;
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    transition: all 0.3s;
+    border-left: 5px solid var(--cor-primaria);
+}
+
+.card-resumo:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.card-faturamento {
+    border-left-color: #4caf50;
+}
+
+.card-despesas {
+    border-left-color: #ff9800;
+}
+
+.card-lucro {
+    border-left-color: #2196f3;
+}
+
+.card-icone {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    background: linear-gradient(135deg, var(--cor-primaria) 0%, var(--cor-secundaria) 100%);
+    color: white;
+}
+
+.card-faturamento .card-icone {
+    background: linear-gradient(135deg, #4caf50 0%, #8bc34a 100%);
+}
+
+.card-despesas .card-icone {
+    background: linear-gradient(135deg, #ff9800 0%, #ffb74d 100%);
+}
+
+.card-lucro .card-icone {
+    background: linear-gradient(135deg, #2196f3 0%, #64b5f6 100%);
+}
+
+.card-info {
+    flex: 1;
+}
+
+.card-info h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #666;
+    margin-bottom: 0.5rem;
+}
+
+.card-info .valor {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--cor-escura);
+    margin: 0;
+}
+
+.card-info small {
+    font-size: 0.85rem;
+    color: #999;
+}
+
+/* Alertas de Estoque */
+.alertas-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.alerta-item {
+    background: #fff3cd;
+    border: 2px solid #ffc107;
+    border-left: 5px solid #f57c00;
+    border-radius: 10px;
+    padding: 1rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.alerta-info h4 {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: var(--cor-escura);
+    margin-bottom: 0.3rem;
+}
+
+.alerta-info p {
+    font-size: 0.9rem;
+    color: #856404;
+    margin: 0;
+}
+
+.alerta-quantidade {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #f57c00;
+}
+
+/* Seletor de Mês */
+.seletor-mes {
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.seletor-mes label {
+    font-weight: 600;
+    color: var(--cor-escura);
+}
+
+.seletor-mes .controle-formulario {
+    max-width: 200px;
+    padding: 0.6rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+}
+
+/* Tabela do Dashboard */
+.tabela-vendidos,
+.tabela-comparativo {
+    overflow-x: auto;
+}
+
+.tabela-dashboard {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.tabela-dashboard thead {
+    background: linear-gradient(135deg, var(--cor-primaria) 0%, var(--cor-secundaria) 100%);
+    color: white;
+}
+
+.tabela-dashboard th {
+    padding: 1rem;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.tabela-dashboard tbody tr {
+    border-bottom: 1px solid #e0e0e0;
+    transition: all 0.3s;
+}
+
+.tabela-dashboard tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+.tabela-dashboard td {
+    padding: 1rem;
+    font-size: 0.95rem;
+    color: var(--cor-escura);
+}
+
+.tabela-dashboard .texto-vazio {
+    text-align: center;
+    color: #999;
+    font-style: italic;
+    padding: 2rem;
+}
+
+/* Badge de Tipo */
+.badge-tipo {
+    display: inline-block;
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: white;
+}
+
+.badge-tipo.prato {
+    background-color: #4caf50;
+}
+
+.badge-tipo.bebida {
+    background-color: #2196f3;
+}
+
+.badge-tipo.vinho {
+    background-color: #9c27b0;
+}
+
+/* Posição no Ranking */
+.posicao-ranking {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.posicao-1 {
+    background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+    color: #856404;
+}
+
+.posicao-2 {
+    background: linear-gradient(135deg, #c0c0c0 0%, #e8e8e8 100%);
+    color: #666;
+}
+
+.posicao-3 {
+    background: linear-gradient(135deg, #cd7f32 0%, #e09651 100%);
+    color: white;
+}
+
+.posicao-outros {
+    background-color: #f8f9fa;
+    color: var(--cor-escura);
+}
+
+/* Valores Positivos e Negativos */
+.valor-positivo {
+    color: #4caf50;
+    font-weight: 600;
+}
+
+.valor-negativo {
+    color: #f44336;
+    font-weight: 600;
+}
+
+/* Botões de Exportação */
+.acoes-exportacao {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+}
+
+.acoes-exportacao .btn-login {
+    flex: 1;
+    max-width: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+    .card-resumo {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .card-info .valor {
+        font-size: 1.5rem;
+    }
+
+    .seletor-mes {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .seletor-mes .controle-formulario {
+        max-width: 100%;
+    }
+
+    .alerta-item {
+        flex-direction: column;
+        gap: 0.5rem;
+        text-align: center;
+    }
+
+    .acoes-exportacao {
+        flex-direction: column;
+    }
+
+    .acoes-exportacao .btn-login {
+        max-width: 100%;
+    }
+}

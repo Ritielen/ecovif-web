@@ -1,0 +1,270 @@
+.funcionalidades-grid {
+    padding: 2rem 0;
+}
+
+/* SEÇÃO FORMULÁRIO */
+
+.secao-formulario {
+    padding: 1.5rem;
+}
+
+.caixa-formulario {
+    background: #ffffff;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+    position: sticky;
+    top: 20px;
+}
+
+.caixa-formulario h2 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 3px solid var(--cor-primaria);
+}
+
+/* FORMULÁRIOS */
+
+.grupo-formulario {
+    margin-bottom: 1.2rem;
+}
+
+.label-formulario {
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+    display: block;
+    font-size: 0.95rem;
+}
+
+.controle-formulario {
+    width: 100%;
+    padding: 0.7rem;
+    border-radius: 8px;
+    border: 2px solid #e0e0e0;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+}
+
+.controle-formulario:focus {
+    outline: none;
+    border-color: var(--cor-primaria);
+    box-shadow: 0 0 0 0.2rem rgba(196, 30, 58, 0.15);
+}
+
+.linha-formulario {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+/* INGREDIENTES */
+
+.linha-ingrediente {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    align-items: center;
+}
+
+.campo-ingrediente {
+    flex: 2;
+}
+
+.campo-quantidade {
+    flex: 1;
+    display: flex;
+}
+
+.campo-quantidade input {
+    flex: 1;
+}
+
+.campo-quantidade select {
+    width: 80px;
+}
+
+.botoes-ingrediente {
+    display: flex;
+}
+
+.btn-adicionar-ingrediente {
+    width: 40px;
+    height: 40px;
+    border-radius: 6px;
+    border: none;
+    background: #4CAF50;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-adicionar-ingrediente:hover {
+    background: #43a047;
+}
+
+/* SEÇÃO LISTA*/
+
+.secao-lista {
+    padding: 1.5rem;
+}
+
+.caixa-categoria {
+    background: #ffffff;
+    padding: 1.8rem;
+    border-radius: 15px;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+    margin-bottom: 2rem;
+}
+
+.caixa-categoria h3 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 1.2rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 3px solid var(--cor-primaria);
+}
+
+.caixa-categoria h3 i {
+    color: var(--cor-primaria);
+    margin-right: 0.5rem;
+}
+
+.lista-itens {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+/*CARD ITEM */
+
+.conteudo-item {
+    background: #f9f9f9;
+    border: 2px solid #e8e8e8;
+    border-radius: 12px;
+    padding: 1.3rem;
+    transition: 0.3s ease;
+}
+
+.conteudo-item:hover {
+    border-color: var(--cor-primaria);
+    box-shadow: 0 5px 15px rgba(196, 30, 58, 0.08);
+}
+
+.conteudo-item h4 {
+    font-weight: 700;
+    margin-bottom: 0.8rem;
+}
+
+.info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    font-size: 0.9rem;
+    margin-bottom: 0.8rem;
+}
+
+.ingredientes-lista {
+    background: #f1f3f5;
+    padding: 0.8rem;
+    border-radius: 8px;
+    margin-bottom: 0.8rem;
+}
+
+.ingredientes-lista ul {
+    margin: 5px 0 0;
+    padding-left: 20px;
+}
+
+/* PREÇO E LUCRO */
+
+.preco-destaque {
+    background: linear-gradient(135deg, var(--cor-primaria), var(--cor-secundaria));
+    color: #fff;
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 0.95rem;
+}
+
+.lucro-destaque {
+    background: #4CAF50;
+    color: white;
+    padding: 0.4rem 0.9rem;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+/*  BOTÕES EDITAR / EXCLUIR */
+
+.acoes-item {
+    display: flex;
+    gap: 0.6rem;
+    margin-top: 1rem;
+}
+
+.btn-editar,
+.btn-excluir {
+    flex: 1;
+    padding: 0.6rem;
+    border-radius: 8px;
+    border: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.btn-editar {
+    background: #e3f2fd;
+    color: #1976d2;
+}
+
+.btn-editar:hover {
+    background: #bbdefb;
+}
+
+.btn-excluir {
+    background: #ffebee;
+    color: #d32f2f;
+}
+
+.btn-excluir:hover {
+    background: #ffcdd2;
+}
+
+/*TEXTO VAZIO */
+
+.texto-vazio {
+    text-align: center;
+    font-style: italic;
+    color: #999;
+    padding: 1rem;
+}
+
+/* RESPONSIVO*/
+
+@media (max-width: 991px) {
+
+    .caixa-formulario {
+        position: relative;
+        top: 0;
+    }
+
+    .linha-formulario {
+        grid-template-columns: 1fr;
+    }
+
+    .acoes-item {
+        flex-direction: column;
+    }
+}

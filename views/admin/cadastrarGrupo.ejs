@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Grupo - ECOVIF</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/style-raiz.css">
+    <link rel="stylesheet" href="/css/style-login.css">
+    <link rel="stylesheet" href="/css/style-area-gestor.css">
+    <link rel="stylesheet" href="/css/style-cardapio.css">
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#ecovif"><i class="fa-solid fa-utensils"></i> ECOVIF
+                <span class="tagline">Sistema de Gestão para Restaurantes</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/areaGestor">
+                            <i class="fa-solid fa-user-shield"></i> Área do Gestor
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/suporte">Suporte</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login" id="logoutBtn">
+                            <i class="fa-solid fa-sign-out-alt"></i>
+                            Sair</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header da Área do Gestor -->
+    <section class="cabecalho-gestor">
+        <div class="container">
+            <div class="welcome-box">
+                <div class="user-info">
+                    <div class="user-avatar">
+                        <i class="fa-solid fa-users"></i>
+                    </div>
+                    <div>
+                        <h1>Cadastrar Grupo</h1>
+                        <p>Gerencie os grupos do restaurante</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Principal -->
+    <main class="funcionalidades-grid">
+        <div class="container">
+            <div class="row">
+
+                <!-- Seção Formulário -->
+                <section class="col-lg-5 secao-formulario">
+                    <div class="caixa-formulario">
+                        <h2>Adicionar Grupo</h2>
+                        <% include ../partials/alerts %>
+
+                                        <form action="/admin/cadastrarGrupo" method="POST">
+                                            <div class="grupo-formulario">
+                                                <label for="nomeGrupo" class="label-formulario">Nome do
+                                                    Grupo</label>
+                                                <input class="controle-formulario" type="text" name="nomeGrupo"
+                                                    placeholder="Digite o nome do grupo" required >
+                                            </div>
+                                            <button type="submit" class="btn-login">
+                                                <i class="fa-solid fa-plus-circle"></i>
+                                                <span id="textoBotaoGrupo">Cadastrar Grupo</span>
+                                            </button>
+                                        </form>
+                    </div>
+                </section>
+                <!-- Seção Lista -->
+                <section class="col-lg-7 secao-lista">
+                    <!-- GRUPOS -->
+                    <div class="caixa-categoria">
+                        <h3><i class="fa-solid fa-list"></i> Grupos Cadastrados</h3>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nome do Grupo</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="listaGrupos">
+                                <% if (grupos && grupos.length> 0) { %>
+                                    <% grupos.forEach(function(grupo) { %>
+                                        <tr>
+                                            <td>
+                                                <%= grupo.id %>
+                                            </td>
+                                            <td>
+                                                <%= grupo.nome %>
+                                            </td>
+                                            <td>
+                                                <form action="/admin/grupos/excluir/<%= grupo.id %>" method="POST"
+                                                    style="display:inline;">
+                                                    <button type="submit" class="btn-excluir"
+                                                        onclick="return confirm('Deseja excluir este grupo?');">
+                                                        <i class="fa-solid fa-trash"></i> Excluir
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        <% }) %>
+                                            <% } else { %>
+                                                <tr>
+                                                    <td colspan="3">
+                                                        <p class="texto-vazio" id="vazioGrupos">Nenhum grupo cadastrado.
+                                                        </p>
+                                                    </td>
+                                                </tr>
+                                                <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Botão Voltar -->
+                    <div class="text-end mt-3">
+                        <a href="/admin/areaGestor" class="btn btn-login-voltar"><i class="fa-solid fa-arrow-left"></i>
+                            Voltar</a>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+    <!-- Rodapé -->
+    <footer class="rodape">
+        <div class="container">
+            <p>2026 Desenvolvido por Ritielen Rodrigues.</p>
+        </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

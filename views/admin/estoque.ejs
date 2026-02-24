@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controle de Estoque - ECOVIF</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/style-raiz.css">
+    <link rel="stylesheet" href="/css/style-login.css">
+    <link rel="stylesheet" href="/css/style-area-gestor.css">
+    <link rel="stylesheet" href="/css/style-cardapio.css">
+    <link rel="stylesheet" href="/css/style-estoque.css">
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#ecovif">
+                <i class="fa-solid fa-utensils"></i> ECOVIF
+                <span class="tagline">Sistema de Gestão para Restaurantes</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/area-gestor">
+                            <i class="fa-solid fa-user-shield"></i> Área do Gestor
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login/suporte">Suporte</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login/login" id="logoutBtn">
+                            <i class="fa-solid fa-sign-out-alt"></i>
+                            Sair
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header da Área do Gestor -->
+    <section class="cabecalho-gestor">
+        <div class="container">
+            <div class="welcome-box">
+                <div class="user-info">
+                    <div class="user-avatar">
+                        <i class="fa-solid fa-boxes"></i>
+                    </div>
+                    <div>
+                        <h1>Cadastrar Produtos</h1>
+                        <p>Gerencie o estoque de produtos e bebidas do restaurante</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Grid de Funcionalidades -->
+    <section class="funcionalidades-grid">
+        <div class="container">
+            <div class="row">
+                <!-- Seção Formulário -->
+                <section class="col-lg-5 secao-formulario">
+                    <div class="caixa-formulario">
+                        <h2>Adicionar ao Estoque</h2>
+
+                        <form id="formEstoque" action="/admin/estoque" method="POST">
+                            <!-- Seletor de Tipo -->
+                            <div class="grupo-formulario">
+                                <label class="label-formulario">Tipo</label>
+                                <select class="controle-formulario" id="tipoItem" name="tipoItem">
+                                    <option value="">Selecione...</option>
+                                    <option value="produto">Produto</option>
+                                    <option value="bebida">Bebida</option>
+                                </select>
+                            </div>
+
+                            <!-- Formulário para Produtos -->
+                            <div id="formProduto" class="formulario-tipo" style="display: none;">
+                                <div class="grupo-formulario">
+                                    <label class="label-formulario">Nome do Produto</label>
+                                    <input type="text" class="controle-formulario" name="nomeProduto"
+                                        placeholder="Ex: Carne Bovina">
+                                </div>
+
+                                <div class="grupo-formulario">
+                                    <label class="label-formulario">Data de Validade</label>
+                                    <input type="date" class="controle-formulario" name="dataValidade">
+                                    <small class="texto-ajuda">Opcional</small>
+                                </div>
+
+                                <div class="grupo-formulario">
+                                    <label class="label-formulario">Categoria</label>
+                                    <select class="controle-formulario" name="categoria">
+                                        <option value="">Selecione...</option>
+                                        <option value="alto-custo">Alto Custo</option>
+                                        <option value="risco-medio">Risco Médio</option>
+                                        <option value="baixo-custo">Baixo Custo</option>
+                                    </select>
+                                </div>
+
+                                <div class="grupo-formulario">
+                                    <label class="label-formulario">Unidade</label>
+                                    <select class="controle-formulario" name="unidade">
+                                        <option value="">Selecione...</option>
+                                        <option value="kg">Kg</option>
+                                        <option value="g">g</option>
+                                        <option value="l">l</option>
+                                        <option value="un">un</option>
+                                    </select>
+                                </div>
+
+                                <div class="linha-formulario">
+                                    <div class="grupo-formulario">
+                                        <label class="label-formulario">Quantidade Inicial</label>
+                                        <input type="number" class="controle-formulario" name="quantidade"
+                                            placeholder="Ex: 10" min="0" step="0.01">
+                                    </div>
+                                    <div class="grupo-formulario">
+                                        <label class="label-formulario">Quantidade Mínima</label>
+                                        <input type="number" class="controle-formulario" name="quantidadeMinima"
+                                            placeholder="Ex: 2" min="0" step="0.01">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Formulário para Bebidas -->
+                            <div id="formBebida" class="formulario-tipo" style="display: none;">
+                                <div class="grupo-formulario">
+                                    <label class="label-formulario">Nome da Bebida</label>
+                                    <input type="text" class="controle-formulario" name="nomeBebida"
+                                        placeholder="Ex: Refrigerante Coca-Cola">
+                                </div>
+
+                                <div class="grupo-formulario">
+                                    <label class="label-formulario">Data de Validade</label>
+                                    <input type="date" class="controle-formulario" name="dataValidadeBebida">
+                                    <small class="texto-ajuda">Opcional</small>
+                                </div>
+
+                                <div class="linha-formulario">
+                                    <div class="grupo-formulario">
+                                        <label class="label-formulario">Tamanho</label>
+                                        <input type="number" class="controle-formulario" name="tamanho"
+                                            placeholder="Ex: 350" min="0" step="0.01">
+                                    </div>
+                                    <div class="grupo-formulario">
+                                        <label class="label-formulario">Unidade</label>
+                                        <select class="controle-formulario" name="unidadeBebida">
+                                            <option value="">Selecione...</option>
+                                            <option value="ml">Mililitros (ml)</option>
+                                            <option value="l">Litros (l)</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="linha-formulario">
+                                    <div class="grupo-formulario">
+                                        <label class="label-formulario">Quantidade (unidades)</label>
+                                        <input type="number" class="controle-formulario" name="quantidadeBebida"
+                                            placeholder="Ex: 24" min="0">
+                                    </div>
+                                    <div class="grupo-formulario">
+                                        <label class="label-formulario">Quantidade Mínima</label>
+                                        <input type="number" class="controle-formulario" name="quantidadeMinimaBebida"
+                                            placeholder="Ex: 6" min="0">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="grupo-formulario">
+                                <label class="label-formulario">Valor da Compra (R$)</label>
+                                <input type="number" class="controle-formulario" name="valorCompra" placeholder="0,00"
+                                    step="0.01" min="0">
+                                <small class="texto-ajuda">Opcional - registre o valor gasto na compra</small>
+                            </div>
+
+                            <!-- Botão de submit -->
+                            <button type="submit" class="btn-login">
+                                <i class="fa-solid fa-plus-circle"></i> <span id="textoBotao">Cadastrar Produto</span>
+                            </button>
+                        </form>
+                    </div>
+                </section>
+
+                <!--Seção lista-->
+                <section class="col-lg-7 secao-lista">
+                    <!-- PRODUTOS -->
+                    <div class="caixa-categoria">
+                        <h3><i class="fa-solid fa-box"></i> Produtos</h3>
+                        <div id="listaProdutos" class="lista-itens">
+                            <% if (produtos && produtos.length> 0) { %>
+                                <% produtos.forEach(function(produto) { %>
+                                    <div class="conteudo-item">
+                                        <h4>📦 <%= produto.nome %>
+                                        </h4>
+                                        <div class="info-item">
+                                            <div><strong>Categoria:</strong> <span
+                                                    class="badge-categoria <%= produto.categoria %>">
+                                                    <%= produto.categoriaLabel %>
+                                                </span></div>
+                                            <div><strong>Estoque Total:</strong>
+                                                <%= produto.estoqueTotal %>
+                                                    <%= produto.unidade %>
+                                            </div>
+                                            <div><strong>Quantidade Mínima:</strong>
+                                                <%= produto.quantidadeMinima %>
+                                                    <%= produto.unidade %>
+                                            </div>
+                                            <div><strong>Itens no Estoque:</strong>
+                                                <%= produto.registros %> registro(s)
+                                            </div>
+                                            <div><strong>Valor Total Investido:</strong> R$ <%=
+                                                    produto.valorTotal.toFixed(2) %>
+                                            </div>
+                                        </div>
+                                        <div class="acoes-item">
+                                            <form action="/admin/produtos/adicionar/<%= produto.id %>" method="POST"
+                                                style="display:inline;">
+                                                <button type="submit" class="btn-adicionar-qtd">
+                                                    <i class="fas fa-plus-circle"></i> Adicionar
+                                                </button>
+                                            </form>
+                                            <form action="/admin/produtos/excluir/<%= produto.id %>" method="POST"
+                                                style="display:inline;">
+                                                <button type="submit" class="btn-excluir"
+                                                    onclick="return confirm('Deseja excluir este produto?');">
+                                                    <i class="fas fa-trash"></i> Excluir
+                                                </button>
+                                            </form>
+                                            <form action="/admin/produtos/historico/<%= produto.id %>" method="POST"
+                                                style="display:inline;">
+                                                <button type="submit" class="btn-historico">
+                                                    <i class="fas fa-history"></i> Histórico
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <% }) %>
+                                        <% } else { %>
+                                            <p class="texto-vazio" id="vazioProdutos">Nenhum produto cadastrado.</p>
+                                            <% } %>
+                        </div>
+                    </div>
+                    <!-- BEBIDAS -->
+                    <div class="caixa-categoria">
+                        <h3><i class="fa-solid fa-wine-bottle"></i> Bebidas</h3>
+                        <div id="listaBebidas" class="lista-itens">
+                            <% if (bebidas && bebidas.length> 0) { %>
+                                <% bebidas.forEach(function(bebida) { %>
+                                    <div class="conteudo-item">
+                                        <h4>🍷 <%= bebida.nome %>
+                                        </h4>
+                                        <div class="info-item">
+                                            <div><strong>Tamanho:</strong>
+                                                <%= bebida.tamanho %>
+                                                    <%= bebida.unidade %>
+                                            </div>
+                                            <div><strong>Estoque Total:</strong>
+                                                <%= bebida.estoqueTotal %> un
+                                            </div>
+                                            <div><strong>Quantidade Mínima:</strong>
+                                                <%= bebida.quantidadeMinima %> un
+                                            </div>
+                                            <div><strong>Itens no Estoque:</strong>
+                                                <%= bebida.registros %> registro(s)
+                                            </div>
+                                            <div><strong>Valor Total Investido:</strong> R$ <%=
+                                                    bebida.valorTotal.toFixed(2) %>
+                                            </div>
+                                        </div>
+                                        <div class="acoes-item">
+                                            <form action="/admin/bebidas/adicionar/<%= bebida.id %>" method="POST"
+                                                style="display:inline;">
+                                                <button type="submit" class="btn-adicionar-qtd">
+                                                    <i class="fas fa-plus-circle"></i> Adicionar
+                                                </button>
+                                            </form>
+                                            <form action="/admin/bebidas/excluir/<%= bebida.id %>" method="POST"
+                                                style="display:inline;">
+                                                <button type="submit" class="btn-excluir"
+                                                    onclick="return confirm('Deseja excluir esta bebida?');">
+                                                    <i class="fas fa-trash"></i> Excluir
+                                                </button>
+                                            </form>
+                                            <form action="/admin/bebidas/historico/<%= bebida.id %>" method="POST"
+                                                style="display:inline;">
+                                                <button type="submit" class="btn-historico">
+                                                    <i class="fas fa-history"></i> Histórico
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <% }) %>
+                                        <% } else { %>
+                                            <p class="texto-vazio" id="vazioBebidas">Nenhuma bebida cadastrada.</p>
+                                            <% } %>
+                        </div>
+                    </div>
+
+                    <!-- Botão Voltar -->
+                    <div class="text-end mt-3">
+                        <a href="/admin/area-gestor" class="btn btn-login-voltar">
+                            <i class="fa-solid fa-arrow-left"></i> Voltar
+                        </a>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </section>
+
+    <!-- Rodapé -->
+    <footer class="rodape">
+        <div class="container">
+            <p>2026 Desenvolvido por Ritielen Rodrigues.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pedidos da Cozinha - ECOVIF</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/style-raiz.css">
+    <link rel="stylesheet" href="/css/style-login.css">
+    <link rel="stylesheet" href="/css/style-area-gestor.css">
+    <link rel="stylesheet" href="/css/style-cardapio.css">
+    <link rel="stylesheet" href="/css/style-comandas.css">
+    <link rel="stylesheet" href="/css/style-pedidos-cozinha.css">
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#ecovif">
+                <i class="fa-solid fa-utensils"></i> ECOVIF
+                <span class="tagline">Sistema de Gestão para Restaurantes</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/area-gestor">
+                            <i class="fa-solid fa-user-shield"></i> Área do Gestor
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/admin/pedidos">
+                            <i class="fa-solid fa-clipboard-list"></i> Pedidos Cozinha
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login/suporte">Suporte</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login/login" id="logoutBtn">
+                            <i class="fa-solid fa-sign-out-alt"></i>
+                            Sair</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header da Área do Gestor -->
+    <section class="cabecalho-gestor">
+        <div class="container">
+            <div class="welcome-box">
+                <div class="user-info">
+                    <div class="user-avatar">
+                        <i class="fa-solid fa-utensils"></i>
+                    </div>
+                    <div>
+                        <h1>Pedidos da Cozinha</h1>
+                        <p>Gerencie o preparo dos pedidos em tempo real</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Filtros de Pedidos -->
+    <section class="secao-filtros-cozinha">
+        <div class="container">
+            <div class="filtros-cozinha">
+                <button class="btn-filtro-cozinha active">
+                    <i class="fa-solid fa-list"></i> Todos os Pedidos
+                </button>
+                <button class="btn-filtro-cozinha">
+                    <i class="fa-solid fa-exclamation-circle"></i> Pendentes
+                </button>
+                <button class="btn-filtro-cozinha">
+                    <i class="fa-solid fa-clock"></i> Em Preparo
+                </button>
+                <button class="btn-filtro-cozinha">
+                    <i class="fa-solid fa-check-circle"></i> Prontos
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Lista de Pedidos -->
+    <section class="col-lg-7 secao-lista">
+        <main class="funcionalidades-grid">
+            <div class="container">
+                <div class="caixa-categoria">
+                    <h3><i class="fa-solid fa-clipboard-list"></i> Lista de Pedidos</h3>
+
+                    <div id="listaPedidos" class="lista-itens">
+
+                        <!-- Exemplo de Card de Pedido 1 -->
+                        <div class="card-pedido">
+                            <div class="cabecalho-pedido">
+                                <div class="info-pedido-principal">
+                                    <div class="numero-comanda">Comanda #001</div>
+                                    <div class="cliente-mesa">
+                                        <div>
+                                            <i class="fa-solid fa-user"></i>
+                                            <strong>Cliente:</strong> João Silva
+                                        </div>
+                                        <div>
+                                            <i class="fa-solid fa-chair"></i>
+                                            <strong>Mesa:</strong> 5
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="itens-pedido-card">
+                                <h4><i class="fa-solid fa-utensils"></i> Itens do Pedido</h4>
+
+                                <!-- Prato 1 -->
+                                <div class="item-pedido-linha">
+                                    <span class="item-pedido-nome">
+                                        <strong>2x Alcatra do Chef</strong>
+                                    </span>
+                                    <span class="item-pedido-preco">R$ 68,00</span>
+                                </div>
+
+                                <!-- Observações do prato -->
+                                <div class="observacoes-pedido">
+                                    <strong><i class="fa-solid fa-sticky-note"></i> Observações:</strong>
+                                    <span class="texto-observacoes">Sem salada, ponto médio</span>
+                                </div>
+
+                                <!-- Prato 2 -->
+                                <div class="item-pedido-linha">
+                                    <span class="item-pedido-nome">
+                                        <strong>1x Filé Mignon com Fritas</strong>
+                                    </span>
+                                    <span class="item-pedido-preco">R$ 45,00</span>
+                                </div>
+
+                                <!-- Observações do prato 2 -->
+                                <div class="observacoes-pedido">
+                                    <strong><i class="fa-solid fa-sticky-note"></i> Observações:</strong>
+                                    <span class="texto-observacoes">Bem passado, sem molho</span>
+                                </div>
+                            </div>
+
+                            <div class="rodape-pedido">
+                                <div>
+                                    <div class="total-pedido-card">Total: R$ 113,00</div>
+                                    <div class="status-pedido">
+                                        Status: <span class="badge-status pendente">Pendente</span>
+                                    </div>
+                                </div>
+                                <div class="data-pedido">
+                                    <i class="fa-solid fa-clock"></i> 14:30
+                                </div>
+                            </div>
+
+                            <div class="acoes-pedido">
+                                <button class="btn-em-preparo">
+                                    <i class="fa-solid fa-play"></i> Em Preparo
+                                </button>
+                                <button class="btn-pronto">
+                                    <i class="fa-solid fa-check"></i> Pronto
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Exemplo de Card de Pedido 2 -->
+                        <div class="card-pedido">
+                            <div class="cabecalho-pedido">
+                                <div class="info-pedido-principal">
+                                    <div class="numero-comanda">Comanda #002</div>
+                                    <div class="cliente-mesa">
+                                        <div>
+                                            <i class="fa-solid fa-user"></i>
+                                            <strong>Cliente:</strong> Maria Santos
+                                        </div>
+                                        <div>
+                                            <i class="fa-solid fa-chair"></i>
+                                            <strong>Mesa:</strong> 3
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="itens-pedido-card">
+                                <h4><i class="fa-solid fa-utensils"></i> Itens do Pedido</h4>
+
+                                <!-- Prato 1 -->
+                                <div class="item-pedido-linha">
+                                    <span class="item-pedido-nome">
+                                        <strong>1x Frango Supremo</strong>
+                                    </span>
+                                    <span class="item-pedido-preco">R$ 25,00</span>
+                                </div>
+
+                                <!-- Observações do prato -->
+                                <div class="observacoes-pedido">
+                                    <strong><i class="fa-solid fa-sticky-note"></i> Observações:</strong>
+                                    <span class="texto-observacoes">Sem legumes, extra tempero</span>
+                                </div>
+
+                                <!-- Prato 2 -->
+                                <div class="item-pedido-linha">
+                                    <span class="item-pedido-nome">
+                                        <strong>1x Salada Caesar</strong>
+                                    </span>
+                                    <span class="item-pedido-preco">R$ 18,00</span>
+                                </div>
+
+                                <!-- Observações do prato 2 -->
+                                <div class="observacoes-pedido">
+                                    <strong><i class="fa-solid fa-sticky-note"></i> Observações:</strong>
+                                    <span class="texto-observacoes">Sem croutons, molho à parte</span>
+                                </div>
+                            </div>
+
+                            <div class="rodape-pedido">
+                                <div>
+                                    <div class="total-pedido-card">Total: R$ 43,00</div>
+                                    <div class="status-pedido">
+                                        Status: <span class="badge-status em-preparo">Em Preparo</span>
+                                    </div>
+                                </div>
+                                <div class="data-pedido">
+                                    <i class="fa-solid fa-clock"></i> 14:25
+                                </div>
+                            </div>
+
+                            <div class="acoes-pedido">
+                                <button class="btn-em-preparo">
+                                    <i class="fa-solid fa-play"></i> Em Preparo
+                                </button>
+                                <button class="btn-pronto">
+                                    <i class="fa-solid fa-check"></i> Pronto
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Exemplo de Card de Pedido 3 (sem observações) -->
+                        <div class="card-pedido">
+                            <div class="cabecalho-pedido">
+                                <div class="info-pedido-principal">
+                                    <div class="numero-comanda">Comanda #003</div>
+                                    <div class="cliente-mesa">
+                                        <div>
+                                            <i class="fa-solid fa-user"></i>
+                                            <strong>Cliente:</strong> Carlos Oliveira
+                                        </div>
+                                        <div>
+                                            <i class="fa-solid fa-chair"></i>
+                                            <strong>Mesa:</strong> 2
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="itens-pedido-card">
+                                <h4><i class="fa-solid fa-utensils"></i> Itens do Pedido</h4>
+
+                                <!-- Prato 1 -->
+                                <div class="item-pedido-linha">
+                                    <span class="item-pedido-nome">
+                                        <strong>1x Risoto de Cogumelos</strong>
+                                    </span>
+                                    <span class="item-pedido-preco">R$ 32,00</span>
+                                </div>
+
+                                <!-- Sem observações -->
+                                <div class="observacoes-pedido sem-observacoes">
+                                    <strong><i class="fa-solid fa-sticky-note"></i> Observações:</strong>
+                                    <span class="texto-observacoes">Nenhuma</span>
+                                </div>
+                            </div>
+
+                            <div class="rodape-pedido">
+                                <div>
+                                    <div class="total-pedido-card">Total: R$ 32,00</div>
+                                    <div class="status-pedido">
+                                        Status: <span class="badge-status pronto">Pronto</span>
+                                    </div>
+                                </div>
+                                <div class="data-pedido">
+                                    <i class="fa-solid fa-clock"></i> 14:15
+                                </div>
+                            </div>
+
+                            <div class="acoes-pedido">
+                                <button class="btn-em-preparo">
+                                    <i class="fa-solid fa-play"></i> Em Preparo
+                                </button>
+                                <button class="btn-pronto">
+                                    <i class="fa-solid fa-check"></i> Pronto
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="texto-vazio" id="vazioPedidos" style="display: none;">Nenhum pedido no momento.</p>
+                </div>
+            </div>
+            <!-- Botão Voltar -->
+            <div class="text-end mt-3">
+                <a href="/admin/area-gestor" class="btn btn-login-voltar"><i class="fa-solid fa-arrow-left"></i>
+                    Voltar</a>
+            </div>
+    </section>
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="rodape">
+        <div class="container">
+            <p>2026 Desenvolvido por Ritielen Rodrigues.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,242 @@
+/* Botão Voltar */
+.btn-voltar {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    backdrop-filter: blur(10px);
+}
+
+.btn-voltar:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+    transform: translateX(-5px);
+    color: white;
+}
+
+/* Card de Venda */
+.card-venda {
+    background: white;
+    border: 3px solid #e0e0e0;
+    border-left: 6px solid var(--cor-primaria);
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Resumo da Conta */
+.resumo-conta {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border: 2px solid #dee2e6;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.resumo-linha {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.8rem 0;
+    border-bottom: 1px dashed #dee2e6;
+}
+
+.resumo-linha:last-child {
+    border-bottom: none;
+    padding-top: 1rem;
+    border-top: 2px solid var(--cor-primaria);
+}
+
+.resumo-label {
+    font-weight: 600;
+    color: var(--cor-escura);
+}
+
+.resumo-valor {
+    font-weight: 700;
+    color: var(--cor-primaria);
+    font-size: 1.1rem;
+}
+
+.resumo-linha.total-final {
+    background: linear-gradient(135deg, var(--cor-primaria) 0%, var(--cor-secundaria) 100%);
+    padding: 1.2rem;
+    margin: 1rem -1.5rem -1.5rem;
+    border-radius: 0 0 10px 10px;
+}
+
+.resumo-linha.total-final .resumo-label,
+.resumo-linha.total-final .resumo-valor {
+    color: white;
+    font-size: 1.4rem;
+}
+
+/* Aviso Informativo */
+.aviso-conta {
+    background-color: #e7f3ff;
+    border-left: 4px solid #2196f3;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    margin: 1rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.aviso-conta i {
+    color: #2196f3;
+    font-size: 1.3rem;
+}
+
+.aviso-conta p {
+    margin: 0;
+    color: #0d47a1;
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+/* Ações da Venda */
+.acoes-venda {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.btn-remover-taxa {
+    flex: 1;
+    min-width: 200px;
+    background-color: #ff9800;
+    color: white;
+    border: none;
+    padding: 1rem 1.5rem;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    font-size: 1rem;
+}
+
+.btn-remover-taxa:hover {
+    background-color: #f57c00;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(255, 152, 0, 0.4);
+}
+
+.btn-remover-taxa:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.btn-finalizar-venda {
+    flex: 1;
+    min-width: 200px;
+    background: linear-gradient(135deg, #4caf50 0%, #66bb6a 100%);
+    color: white;
+    border: none;
+    padding: 1rem 1.5rem;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    font-size: 1rem;
+}
+
+.btn-finalizar-venda:hover {
+    background: linear-gradient(135deg, #388e3c 0%, #4caf50 100%);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+}
+
+/* Badge de Evento Ativo */
+.badge-evento-ativo {
+    display: inline-block;
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-left: 0.5rem;
+}
+
+/* Detalhes da Conta */
+.detalhes-conta {
+    margin: 1rem 0;
+}
+
+.detalhe-linha {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.6rem 0;
+    font-size: 0.95rem;
+}
+
+.detalhe-label {
+    color: #666;
+}
+
+.detalhe-valor {
+    font-weight: 600;
+    color: var(--cor-escura);
+}
+
+.detalhe-linha.destaque {
+    font-weight: 700;
+    font-size: 1.05rem;
+    padding-top: 1rem;
+    border-top: 1px solid #dee2e6;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+    .acoes-venda {
+        flex-direction: column;
+    }
+
+    .btn-remover-taxa,
+    .btn-finalizar-venda {
+        width: 100%;
+    }
+
+    .resumo-linha.total-final .resumo-label,
+    .resumo-linha.total-final .resumo-valor {
+        font-size: 1.2rem;
+    }
+}
+  
+    @keyframes slideIn {
+        from {
+            transform: translateX(400px);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+    
+    @keyframes slideOut {
+        from {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        to {
+            transform: translateX(400px);
+            opacity: 0;
+        }
+    }

@@ -1,0 +1,145 @@
+:root {
+    --cor-primaria: #C41E3A;      
+    --cor-secundaria: #FF8C00;   
+    --cor-escura: #2B1810;         
+    --cor-clara: #FFF8F0;        
+    --cor-destaque: #D2691E;     
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: var(--cor-escura);
+    background-color: var(--cor-clara);
+}
+
+/* Navbar */
+.navbar {
+    background-color: var(--cor-escura);
+    padding: 1rem 0;
+    box-shadow: 0 0.125rem 0.625rem rgba(0,0,0,0.1);
+}
+
+.navbar-brand {
+    color: var(--cor-secundaria) !important;
+    font-size: clamp(1.4rem, 2vw, 1.8rem);
+    font-weight: bold;
+}
+
+.navbar-nav .nav-link {
+    color: var(--cor-clara) !important;
+    margin: 0 0.8rem;
+    transition: color 0.3s;
+}
+
+.navbar-nav .nav-link:hover {
+    color: var(--cor-secundaria) !important;
+}
+
+/* Seção Hero */
+.secao-texto {
+    background: linear-gradient(135deg, var(--cor-primaria), var(--cor-destaque));
+    color: white;
+    padding: 4rem 1rem;
+    text-align: center;
+}
+
+.secao-texto h1 {
+    font-size: clamp(1.8rem, 5vw, 3rem);
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+}
+
+.secao-texto p {
+    font-size: clamp(1rem, 2.5vw, 1.3rem);
+    margin-bottom: 2rem;
+    max-width: 90%;
+    width: 40rem;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Botão */
+.btn-primary-custom {
+    background-color: var(--cor-secundaria);
+    border: none;
+    padding: 0.8rem 2.5rem;
+    font-size: clamp(1rem, 2.5vw, 1.2rem);
+    border-radius: 3rem;
+    color: var(--cor-escura);
+    font-weight: bold;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.btn-primary-custom:hover {
+    transform: translateY(-0.2rem);
+    box-shadow: 0 0.6rem 1.2rem rgba(0,0,0,0.2);
+    background-color: #ffb84d;
+}
+
+/* Seção Recursos */
+.secao-recursos {
+    padding: 4rem 1rem;
+    background-color: white;
+}
+
+.secao-recursos h2 {
+    text-align: center;
+    font-size: clamp(1.6rem, 4vw, 2.5rem);
+    color: var(--cor-escura);
+    margin-bottom: 3rem;
+    font-weight: bold;
+}
+
+/* Cards */
+.feature-card {
+    background: linear-gradient(135deg, #ffffff, #fff8f0);
+    border: 0.125rem solid var(--cor-secundaria);
+    border-radius: 1rem;
+    padding: 2rem 1.5rem;
+    text-align: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+    height: 100%;
+    cursor: pointer;
+}
+
+.feature-card:hover {
+    transform: translateY(-0.6rem);
+    box-shadow: 0 0.9rem 1.8rem rgba(212, 70, 31, 0.2);
+}
+
+.feature-icon {
+    font-size: clamp(2rem, 5vw, 3rem);
+    color: var(--cor-primaria);
+    margin-bottom: 1rem;
+}
+
+.feature-card h3 {
+    color: var(--cor-escura);
+    font-size: clamp(1.2rem, 3vw, 1.5rem);
+    margin-bottom: 1rem;
+    font-weight: bold;
+}
+
+.feature-card p {
+    color: var(--cor-destaque);
+    font-size: 1rem;
+}
+
+/* Rodapé */
+.rodape {
+    background-color: var(--cor-escura);
+    color: var(--cor-clara); 
+    text-align: center;
+    padding: 2rem 1rem;
+}
+
+.rodape p {
+    margin: 0;
+    font-size: 0.95rem;
+}

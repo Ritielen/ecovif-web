@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vendas - ECOVIF</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/style-raiz.css">
+    <link rel="stylesheet" href="/css/style-login.css">
+    <link rel="stylesheet" href="/css/style-area-gestor.css">
+    <link rel="stylesheet" href="/css/style-cardapio.css">
+    <link rel="stylesheet" href="/css/style-comandas.css">
+    <link rel="stylesheet" href="/css/style-pedidos-cozinha.css">
+    <link rel="stylesheet" href="/css/style-vendas.css">
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#ecovif"><i class="fa-solid fa-utensils"></i> ECOVIF
+                <span class="tagline">Sistema de Gestão para Restaurantes</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/area-gestor">
+                            <i class="fa-solid fa-user-shield"></i> Área do Gestor
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/admin/vendas">
+                            <i class="fa-solid fa-cash-register"></i> Vendas
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login/suporte">Suporte</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login/login" id="logoutBtn"><i class="fa-solid fa-sign-out-alt"></i>
+                            Sair</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <section class="cabecalho-gestor">
+        <div class="container">
+            <div class="welcome-box">
+                <div class="user-info">
+                    <div class="user-avatar">
+                        <i class="fa-solid fa-cash-register"></i>
+                    </div>
+                    <div>
+                        <h1>Finalizar Vendas</h1>
+                        <p>Feche as contas e finalize os pedidos</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Lista de Vendas -->
+    <main class="funcionalidades-grid">
+        <div class="container">
+            <div class="caixa-categoria">
+                <h3><i class="fa-solid fa-receipt"></i> Pedidos para Finalizar</h3>
+
+                <div id="listaVendas" class="lista-itens">
+                    <div class="item-pedido-linha">
+                        <span class="item-pedido-nome"></span>
+                    </div>
+                </div>
+                <div class="cabecalho-pedido">
+                    <div class="info-pedido-principal">
+                        <div class="numero-comanda">
+                            <span class="badge-evento-ativo"><i class="fa-solid fa-calendar-star"></i> Evento
+                                Ativo</span>
+                        </div>
+                        <div class="cliente-mesa">
+                            <div>
+                                <i class="fa-solid fa-user"></i>
+                                <strong>Cliente:</strong>
+                            </div>
+                            <div>
+                                <i class="fa-solid fa-chair"></i>
+                                <strong>Mesa:</strong>
+                            </div>
+                            <div>
+                                <i class="fa-solid fa-clock"></i>
+                                <span class="comanda-data">data, hora</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="itens-pedido-card">
+                    <h4><i class="fa-solid fa-utensils"></i> Itens do Pedido</h4>
+
+                    <div class="item-pedido-linha">
+                        <span class="item-pedido-nome">Frango Assado</span>
+                        <span class="item-pedido-preco">R$ 10</span>
+                    </div>
+                </div>
+
+                <div class="resumo-conta">
+                    <div class="resumo-linha">
+                        <span class="resumo-label">Subtotal (Itens)</span>
+                        <span class="resumo-valor">R$ </span>
+                    </div>
+                    <div class="resumo-linha" id="linha-taxa-${indiceReal}">
+                        <span class="resumo-label">Taxa de Serviço (10%)</span>
+                        <span class="resumo-valor" id="valor-taxa-${indiceReal}">R$ </span>
+                    </div>
+
+                    <div class="resumo-linha">
+                        <span class="resumo-label">Couvert Artístico</span>
+                        <span class="resumo-valor">R$ </span>
+                    </div>
+
+                    <div class="resumo-linha total-final" id="linha-total-${indiceReal}">
+                        <span class="resumo-label">TOTAL</span>
+                        <span class="resumo-valor" id="total-final-${indiceReal}">R$ </span>
+                    </div>
+                </div>
+
+                <div class="aviso-conta">
+                    <i class="fa-solid fa-info-circle"></i>
+                    <p id="aviso-${indiceReal}">
+                        Já incluso couvert artístico e taxa de serviço. ou: Já incluso taxa de serviço.
+                    </p>
+                </div>
+
+                <div class="acoes-venda">
+                    <button class="btn-remover-taxa" id="btn-remover-${indiceReal}">
+                        <i class="fa-solid fa-minus-circle"></i> Remover Taxa de Serviço
+                    </button>
+                    <button class="btn-finalizar-venda">
+                        <i class="fa-solid fa-check-circle"></i> Finalizar Venda
+                    </button>
+                </div>
+
+                <p class="texto-vazio" id="vazioVendas" style="display: none;">Nenhum pedido aguardando finalização.</p>
+            </div>
+        </div>
+        </div>
+        <!-- Botão Voltar -->
+        <div class="text-end mt-3">
+            <a href="/admin/area-gestor" class="btn btn-login-voltar"><i class="fa-solid fa-arrow-left"></i> Voltar</a>
+        </div>
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="rodape">
+        <div class="container">
+            <p>2026 Desenvolvido por Ritielen Rodrigues.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+</body>
+</html>

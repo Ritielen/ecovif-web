@@ -1,0 +1,187 @@
+/* Header da Área do Gestor */
+.cabecalho-gestor {
+    background: linear-gradient(135deg, var(--cor-primaria), var(--cor-destaque));
+    padding: 3rem 1rem;
+    color: white;
+}
+
+.welcome-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.user-avatar {
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    color: var(--cor-secundaria);
+}
+
+.user-info h1 {
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    font-weight: bold;
+    margin: 0;
+}
+
+.user-info p {
+    font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+    margin-top: 0.5rem;
+    opacity: 0.9;
+}
+
+
+/* Grid de Funcionalidades */
+.funcionalidades-grid {
+    padding: 4rem 1rem;
+    background-color: var(--cor-clara);
+}
+
+.secao-titulo {
+    text-align: center;
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    font-weight: bold;
+    color: var(--cor-escura);
+    margin-bottom: 3rem;
+}
+
+/* Card */
+.func-card {
+    background: white;
+    border-radius: 1rem;
+    padding: 2rem 1.5rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 0.3rem 1rem rgba(0, 0, 0, 0.08);
+    display: block;
+    text-decoration: none;
+    color: var(--cor-escura);
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.func-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 0.3rem;
+    background: linear-gradient(90deg, var(--cor-primaria), var(--cor-secundaria));
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.func-card:hover::before {
+    transform: scaleX(1);
+}
+
+.func-card:hover {
+    transform: translateY(-0.5rem);
+    box-shadow: 0 1rem 2rem rgba(196, 30, 58, 0.2);
+}
+
+/* Ícone */
+.func-icon {
+    width: 5rem;
+    height: 5rem;
+    margin: 0 auto 1.5rem;
+    background: linear-gradient(135deg, var(--cor-primaria), var(--cor-secundaria));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease;
+}
+
+.func-card:hover .func-icon {
+    transform: scale(1.1) rotate(5deg);
+}
+
+.func-icon i {
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    color: white;
+}
+
+.func-card h3 {
+    font-size: clamp(1.2rem, 3vw, 1.5rem);
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.func-card p {
+    font-size: 0.95rem;
+    color: #666;
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+}
+
+/* Badge informações do grid span */
+.func-badge {
+    display: inline-block;
+    background-color: #e3f2fd;
+    color: var(--cor-primaria);
+    padding: 0.4rem 0.9rem;
+    border-radius: 2rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+/* Ações Rápidas */
+.quick-actions {
+    padding: 3rem 1rem;
+    background-color: white;
+}
+
+.quick-actions h3 {
+    text-align: center;
+    font-size: clamp(1.3rem, 4vw, 2rem);
+    font-weight: bold;
+    margin-bottom: 2rem;
+}
+
+.actions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+    gap: 1.5rem;
+    width: 100%;
+}
+
+.action-btn {
+    background: linear-gradient(135deg, var(--cor-primaria), var(--cor-secundaria));
+    border: none;
+    color: white;
+    padding: 1.5rem 1rem;
+    border-radius: 1rem;
+    font-size: clamp(0.9rem, 2.5vw, 1rem);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.action-btn i {
+    font-size: clamp(1.5rem, 4vw, 2rem);
+}
+
+.action-btn:hover {
+    transform: translateY(-0.4rem);
+    box-shadow: 0 0.8rem 1.8rem rgba(196, 30, 58, 0.3);
+}
+
+/* Navbar link ativo */
+.nav-link.active {
+    color: var(--cor-secundaria) !important;
+    font-weight: bold;
+}
