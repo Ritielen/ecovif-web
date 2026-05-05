@@ -79,11 +79,14 @@
 
 .campo-quantidade input {
     flex: 1;
+     min-width: 100px;
 }
 
 .campo-quantidade select {
     width: 80px;
 }
+
+
 
 .botoes-ingrediente {
     display: flex;
@@ -105,6 +108,31 @@
 
 .btn-adicionar-ingrediente:hover {
     background: #43a047;
+}
+
+.btn-remover-ingrediente {
+    width: 40px;
+    height: 40px;
+    border-radius: 6px;
+    border: none;
+    background: #dc3545;
+    color: white;
+    display: flex;  
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: 0.2s;
+    margin-left: 5px;
+}
+
+.btn-remover-ingrediente:hover {
+    background: #c82333;
+}
+
+/* ADICIONAR - Container dos botões */
+.botoes-ingrediente {
+    display: flex;
+    gap: 5px; /* espaçamento entre botões */
 }
 
 /* SEÇÃO LISTA*/
@@ -201,11 +229,15 @@
 }
 
 /*  BOTÕES EDITAR / EXCLUIR */
-
 .acoes-item {
     display: flex;
-    gap: 0.6rem;
-    margin-top: 1rem;
+    gap: 8px;
+    margin-top: 15px;
+}
+
+.acoes-item form {
+    flex: 1;
+    display: contents; 
 }
 
 .btn-editar,
@@ -222,6 +254,8 @@
     gap: 0.4rem;
     cursor: pointer;
     transition: 0.3s ease;
+    text-decoration: none;
+    font-family: inherit;
 }
 
 .btn-editar {
@@ -242,8 +276,47 @@
     background: #ffcdd2;
 }
 
-/*TEXTO VAZIO */
+/* Botão de cancelar edição */
+.btn-cancelar {
+    flex: 1;
+    padding: 0.6rem;
+    border-radius: 8px;
+    border: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    cursor: pointer;
+    transition: 0.3s ease;
+    background: #f5f5f5;
+    color: #666;
+    margin-top: 10px;
+}
 
+.btn-cancelar:hover {
+    background: #e0e0e0;
+}
+
+/* Indicador de modo edição */
+.modo-edicao-indicador {
+    background: #e3f2fd;
+    color: #1976d2;
+    padding: 10px 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-weight: 600;
+}
+
+.modo-edicao-indicador i {
+    margin-right: 8px;
+}
+
+/*TEXTO VAZIO */
 .texto-vazio {
     text-align: center;
     font-style: italic;
@@ -267,4 +340,184 @@
     .acoes-item {
         flex-direction: column;
     }
+}
+/* ===================================================
+   BARRA DE PESQUISA E FILTRO — CARDÁPIO
+   =================================================== */
+
+.barra-pesquisa-wrapper {
+  margin-bottom: 1.5rem;
+}
+
+.barra-pesquisa-wrapper > label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--cor-escura);
+  margin-bottom: 0.5rem;
+}
+
+.linha-pesquisa {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.input-pesquisa {
+  flex: 1;
+  min-width: 200px;
+  height: 40px;
+  padding: 0 14px;
+  border: 2px solid var(--cor-destaque);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  color: var(--cor-escura);
+  background: var(--cor-clara);
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.input-pesquisa::placeholder {
+  color: var(--cor-destaque);
+  opacity: 0.7;
+}
+
+.input-pesquisa:focus {
+  border-color: var(--cor-primaria);
+}
+
+.btn-pesquisar {
+  height: 40px;
+  padding: 0 18px;
+  background: var(--cor-primaria);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+
+.btn-pesquisar:hover {
+  background: var(--cor-destaque);
+}
+
+/* Filtro */
+.filtro-wrapper {
+  position: relative;
+}
+
+.btn-filtro {
+  height: 40px;
+  padding: 0 16px;
+  background: var(--cor-clara);
+  color: var(--cor-escura);
+  border: 2px solid var(--cor-destaque);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 0.2s, color 0.2s;
+  white-space: nowrap;
+}
+
+.btn-filtro:hover {
+  background: var(--cor-destaque);
+  color: #fff;
+}
+
+.filtro-dropdown {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  background: var(--cor-clara);
+  border: 2px solid var(--cor-destaque);
+  border-radius: 8px;
+  padding: 0.7rem 1rem;
+  z-index: 100;
+  min-width: 150px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.filtro-dropdown.aberto {
+  display: flex;
+}
+
+.filtro-opcao {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--cor-escura);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 4px 0;
+  text-align: left;
+  transition: color 0.15s;
+}
+
+.filtro-opcao:hover {
+  color: var(--cor-primaria);
+}
+
+.filtro-opcao.ativo {
+  color: var(--cor-primaria);
+  font-weight: 700;
+}
+
+/* Tag filtro ativo */
+.filtro-ativo-tag {
+  display: none;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  font-size: 0.82rem;
+  color: var(--cor-primaria);
+  font-weight: 600;
+}
+
+.filtro-ativo-tag.visivel {
+  display: flex;
+}
+
+.btn-limpar-filtro {
+  background: none;
+  border: none;
+  color: var(--cor-destaque);
+  cursor: pointer;
+  font-size: 0.8rem;
+  text-decoration: underline;
+  padding: 0;
+}
+
+.btn-limpar-filtro:hover {
+  color: var(--cor-primaria);
+}
+
+/* Sem resultado */
+.msg-sem-resultado {
+  display: none;
+  text-align: center;
+  padding: 30px 20px;
+  color: var(--cor-destaque);
+  font-size: 0.95rem;
+}
+
+/* Ocultar seções até pesquisar  */
+.caixa-categoria {
+  display: none;
 }

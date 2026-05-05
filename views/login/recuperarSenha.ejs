@@ -14,7 +14,7 @@
     <!-- Navbar -->
     <nav class="navbar navbar-dark">
         <div class="container">
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="/">
                 <i class="fa-solid fa-utensils"></i> ECOVIF
                 <span class="tagline">Sistema de Gestão para Restaurantes</span>
             </a>
@@ -31,6 +31,7 @@
             <div class="cabecalho-login">
                 <h1><i class="fa-solid fa-key"></i></h1>
                 <p>Recuperar Senha</p>
+                <%- include ('../partials/alerts') %>
             </div>
             <div class="login-body">
                 <form action="/recuperarSenha" method="POST">

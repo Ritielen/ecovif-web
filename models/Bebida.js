@@ -5,45 +5,54 @@ const Bebida = sequelizeconnect.define(
   "Bebida",
   {
       id: { 
-        type: DataTypes.INTEGER, 
-        autoIncrement: true, 
-        primaryKey: true 
-    },
-    nome: {
-      type: DataTypes.STRING,
-    },
-    tamanho: {
-      type: DataTypes.STRING,
-    },
-    unidade: {
-      type: DataTypes.STRING,
-    },
-    data_validade: {
-      type: DataTypes.DATEONLY,
-      allowNull: true,
-    },
-     quantidade_minima: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    quantidade: {
-      type: DataTypes.INTEGER,      
-      allowNull: false,
-    },
-    preco: {
-      type: DataTypes.DOUBLE,
-    },
-    UsuarioId: {
-      type: DataTypes.INTEGER,
-    },
-    CardapioId: {
-      type: DataTypes.INTEGER,
-    }
+    type: DataTypes.INTEGER, 
+    autoIncrement: true, 
+    primaryKey: true, 
+  },
+  preco_venda: {
+    type: DataTypes.DECIMAL(10, 2),
+    allowNull: false,
+    defaultValue: 0.0,
+  },
+  produto_id: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  cardapio_id: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  usuario_id: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  }
+   
   },
   {
-    timestamps: false,
-    tableName: "bebida",
+    timestamps: true,
+    createdAt: 'created_at',
+  updatedAt: 'updated_at',
+    tableName: "bebidas",
+     underscored: true,
   }
 );
+
+// ASSOCIAÇÕES DA BEBIDA
+Bebida.associate = (models) => {
+  Bebida.belongsTo(models.Usuario, {
+    foreignKey: 'usuario_id',
+    as: 'usuario'
+  });
+
+  Bebida.belongsTo(models.Cardapio, {
+    foreignKey: 'cardapio_id',
+    as: 'cardapio'
+  });
+  // NOVA ASSOCIAÇÃO
+  Bebida.belongsTo(models.Produto, {
+    foreignKey: 'produto_id',
+    as: 'produto'
+  });
+};
 
 module.exports = Bebida;

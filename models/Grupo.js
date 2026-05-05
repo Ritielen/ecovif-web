@@ -7,18 +7,30 @@ const Grupo = sequelizeconnect.define("Grupo", {
     autoIncrement: true, 
     primaryKey: true 
   },
-  nome: { 
+  nome_grupo: { 
     type: DataTypes.STRING, 
     allowNull: false 
   },
-  slug: { 
-    type: DataTypes.STRING, 
-    allowNull: false, 
-    unique: true }, 
+ 
+  descricao_grupo: { 
+    type: DataTypes.STRING,
+    allowNull: true
+  }
 }, 
 {
-  timestamps: false,
   tableName: "grupos",
+   timestamps: true,
+    createdAt: 'created_at',
+  updatedAt: 'updated_at',
+  underscored: true,
 });
+
+// ASSOCIAÇÕES DO GRUPO
+Grupo.associate = (models) => {
+  Grupo.hasMany(models.Usuario, {
+    foreignKey: 'grupo_id',
+    as: 'usuarios'
+  });
+};
 
 module.exports = Grupo;

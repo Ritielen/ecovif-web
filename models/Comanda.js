@@ -17,35 +17,48 @@ const Comanda = sequelizeconnect.define(
             type: DataTypes.INTEGER,
             allowNull: false,
         },
-         tipo_item: {
-      type: DataTypes.STRING, 
-      allowNull: true,
-    },
-    quantidade: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-    },
-        observacoes: {
+       
+     observacoes: {
             type: DataTypes.TEXT,
             allowNull: true,
         },
         total: {
-            type: DataTypes.DOUBLE,
+            type: DataTypes.DECIMAL(10, 2),
             allowNull: false,
         },
          status: {
-            type: DataTypes.STRING,
+            type: DataTypes.ENUM ('pendente', 'em preparo', 'finalizada'),
             allowNull: false,
-        },
-          UsuarioId: {
+            defaultValue: 'pendente'
+         },
+       usuario_id: {
       type: DataTypes.INTEGER,
-    }
+    allowNull: false,
+  },
+    data: { 
+    type: DataTypes.DATE,
+    defaultValue: DataTypes.NOW
+  }
     },
     {
         tableName: "comandas",
         underscored: true,
-        timestamps: true, 
+         timestamps: true,
+    createdAt: 'created_at',
+  updatedAt: 'updated_at',
     }
 );
 
+Comanda.associate = (models) => {
+  Comanda.belongsTo(models.Usuario, {
+    foreignKey: 'usuario_id',
+    as: 'usuario'
+  });
+  
+  // modelo ItemComanda 
+  Comanda.hasMany(models.ItemComanda, {
+    foreignKey: 'comanda_id',
+    as: 'itens'
+  });
+};
 module.exports = Comanda;

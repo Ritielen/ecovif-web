@@ -1,37 +1,105 @@
-const { DataTypes } = require("Sequelize");
+const { DataTypes } = require("sequelize");
 const sequelizeconnect = require("../config/connection");
 
 const Usuario = sequelizeconnect.define(
-    "Usuario",
-    {
-        id: { 
-        type: DataTypes.INTEGER, 
-        autoIncrement: true, 
-        primaryKey: true 
+  "Usuario",
+  {
+    id: { 
+      type: DataTypes.INTEGER, 
+      autoIncrement: true, 
+      primaryKey: true 
     },
-        nome: {
-            type: DataTypes.STRING,
-        },
-        sobrenome: {
-            type: DataTypes.STRING,
-        },
-        telefone:{
-            type: DataTypes.STRING,
-        },
-        email: {
-            type: DataTypes.STRING,
-             allowNull: false,
-             unique: true,
-        },
-        senha: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
+    nome: {
+      type: DataTypes.STRING,
+      allowNull: false
     },
-        {
-            timestamps: false,
-            tableName: "usuarios",
-        }
+    sobrenome: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    telefone:{
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+      validate: {
+        isEmail: true
+      }
+    },
+    senha: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    funcionario: {
+      type: DataTypes.ENUM('gestor', 'funcionario'),
+      allowNull: false,
+      defaultValue: 'funcionario'
+    },
+    criado_por: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: 'usuarios',
+        key: 'id'
+      }
+    },
+    admin: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false
+    },
+     grupo_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: 'grupos',
+        key: 'id'
+      }
+    }
+    
+  },
+  {
+    tableName: "usuarios",
+    timestamps: true,
+    createdAt: 'created_at',
+    updatedAt: 'updated_at',
+    underscored: true
+  }
 );
+
+// Associações
+Usuario.associate = (models) => {
+  Usuario.belongsTo(models.Grupo, {
+    foreignKey: 'grupo_id',
+    as: 'grupo'
+  });
+
+  Usuario.hasMany(models.Usuario, {
+    as: 'funcionarios_criados',
+    foreignKey: 'criado_por'
+  });
+
+  Usuario.belongsTo(models.Usuario, {
+    as: 'criador',
+    foreignKey: 'criado_por'
+  });
+
+  Usuario.hasMany(models.Produto, {
+    foreignKey: 'usuario_id',
+    as: 'produtos'
+  });
+  Usuario.hasMany(models.MovimentacaoProduto, {
+    foreignKey: 'usuario_id',
+    as: 'movimentacoes_produto'
+  });
+
+  Usuario.hasMany(models.Token, {
+    foreignKey: 'usuario_id',
+    as: 'tokens'
+  });
+};
 
 module.exports = Usuario;

@@ -17,37 +17,68 @@ const Pedido = sequelizeconnect.define(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-      tipo_item: {
-      type: DataTypes.STRING, 
+      descricao_prato: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
+    observacoes: {
+      type: DataTypes.TEXT,
       allowNull: true,
     },
     quantidade: {
         type: DataTypes.INTEGER,
         allowNull: false,
     },
-     observacoes: {
-      type: DataTypes.TEXT,
-      allowNull: true,
-    },
-    total: {
-      type: DataTypes.DOUBLE,
-      allowNull: false,
-    },
     status: {
-      type: DataTypes.STRING,
+      type: DataTypes.ENUM('pendente', 'em preparo', 'pronto', 'cancelado'),
       allowNull: false,
+      defaultValue: 'pendente'
     },
-   
-    UsuarioId: {
-      type: DataTypes.INTEGER, // quem registrou o pedido
+   comanda_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+   },
+   prato_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+   },
+   ItemComanda_id:{
+      type: DataTypes.INTEGER,
+      allowNull: true,
+   },  
+   usuario_id: {
+      type: DataTypes.INTEGER, 
       allowNull: true,
     }
-  },
+    },
+  
   {
     tableName: "pedidos",
+     timestamps: true,
+    createdAt: 'created_at',
+  updatedAt: 'updated_at',
     underscored: true,
-    timestamps: true,
   }
 );
+
+// ASSOCIAÇÕES DO PEDIDO
+Pedido.associate = (models) => {
+  Pedido.belongsTo(models.Usuario, {
+    foreignKey: 'usuario_id',
+    as: 'usuario'
+  });
+  Pedido.belongsTo(models.Prato, {
+    foreignKey: 'prato_id',
+    as: 'prato'
+  });
+  Pedido.belongsTo(models.Comanda, {
+    foreignKey: 'comanda_id',
+    as: 'comanda'
+  });
+  Pedido.belongsTo(models.ItemComanda, {
+    foreignKey: 'ItemComanda_id',
+    as: 'item_comanda'
+  });
+};
 
 module.exports = Pedido;

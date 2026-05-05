@@ -21,24 +21,35 @@ const Evento = sequelizeconnect.define(
       type: DataTypes.TIME,
       allowNull: false,
     },
-    valorCouvert: {
-      type: DataTypes.DOUBLE,
-      allowNull: true, 
-    },
-    possuiCouvert: {
+    couvert_ativo: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
       defaultValue: false,
+     },
+      valor_couvert: {
+      type: DataTypes.DECIMAL(10, 2),
+      allowNull: true, 
     },
-    UsuarioId: {
+       usuario_id: {
       type: DataTypes.INTEGER,
-      allowNull: false,
-    }
+    allowNull: false,
+  },
   },
   {
-    timestamps: false,
+   
     tableName: "eventos",
+     timestamps: true,
+    createdAt: 'created_at',
+  updatedAt: 'updated_at',
+     underscored: true,
   }
 );
 
+// ASSOCIAÇÕES DO EVENTO
+Evento.associate = (models) => {
+  Evento.belongsTo(models.Usuario, {
+    foreignKey: 'usuario_id',
+    as: 'usuario'
+  });
+};
 module.exports = Evento;

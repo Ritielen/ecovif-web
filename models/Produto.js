@@ -7,61 +7,93 @@ const Produto = sequelizeconnect.define(
     id: { 
         type: DataTypes.INTEGER, 
         autoIncrement: true, 
-        primaryKey: true 
+        primaryKey: true,
     },
-    tipo: {
-      type: DataTypes.STRING, 
-      allowNull: false,
-    },
-
+    tipo_item: {
+  type: DataTypes.ENUM('produto', 'bebida'),
+  allowNull: false,
+  defaultValue: 'produto',
+},
     nome: {
       type: DataTypes.STRING,
-      allowNull: false,
-    },
-
-    categoria: {
-      type: DataTypes.STRING, 
       allowNull: true,
     },
-
-    tamanho: {
-      type: DataTypes.DOUBLE,
-      allowNull: true,
-    },
-
-    unidade: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-
-    quantidade: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-
-    quantidade_minima: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-
-    data_validade: {
+     data_validade: {
       type: DataTypes.DATEONLY,
       allowNull: true,
     },
-
-    valor_compra: {
-      type: DataTypes.DOUBLE,
+  categoria: {
+      type: DataTypes.ENUM('alto_custo', 'medio_custo', 'baixo_custo'), 
       allowNull: true,
     },
-    UsuarioId: {
+  tamanho: {
+  type: DataTypes.DECIMAL(10, 2),
+  allowNull: true,
+},
+unidade: {
+  type: DataTypes.ENUM('kg', 'g', 'l', 'ml', 'un'),
+  allowNull: true,
+},
+tipo_vinho: {
+      type: DataTypes.ENUM('tinto', 'branco', 'rose', 'espumante'),
+      allowNull: true,
+    },
+    quantidade_inicial: {
       type: DataTypes.INTEGER,
-    }
+      allowNull: true,
+    },
+    quantidade: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
+    quantidade_minima: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
+    valor_compra: {
+      type: DataTypes.DECIMAL(10, 2),
+      allowNull: true,
+      defaultValue: 0.0,
+    },
+      usuario_id: {
+      type: DataTypes.INTEGER,
+    allowNull: false,
+  }
   },
   {
     tableName: "produtos",
+     timestamps: true,
+    createdAt: 'created_at',
+  updatedAt: 'updated_at',
     underscored: true,
-    timestamps: true,
+    
   }
 );
 
+// ASSOCIAÇÕES DO PRODUTO
+Produto.associate = (models) => {
+  Produto.belongsTo(models.Usuario, {
+    foreignKey: 'usuario_id',
+    as: 'usuario'
+  });
+  Produto.hasMany(models.Ingrediente, {
+    foreignKey: 'produto_id',
+    as: 'ingredientes'
+  });
+// associate do movimentação produto
+Produto.hasMany(models.MovimentacaoProduto, {
+  foreignKey: 'produto_id',
+  as: 'movimentacoes'
+});
+  Produto.hasMany(models.Bebida, {
+    foreignKey: 'produto_id',
+    as: 'bebidas'
+  });
+  Produto.belongsToMany(models.Prato, {
+  through: models.Ingrediente,
+  foreignKey: 'produto_id',
+  otherKey: 'prato_id',
+  as: 'pratos'
+});
+};
 module.exports = Produto;

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,6 +11,7 @@
     <link rel="stylesheet" href="/css/style-login.css">
     <link rel="stylesheet" href="/css/style-area-gestor.css">
 </head>
+
 <body>
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark">
@@ -27,7 +29,9 @@
                             <i class="fa-solid fa-user-shield"></i> Área do Gestor
                         </a>
                     <li class="nav-item">
-                        <a class="nav-link" href="/suporte">Suporte</a>
+                        <a class="nav-link" href="/suporte">
+                            <i class="fa-solid fa-headset"></i> Suporte
+                        </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/login" id="logoutBtn">
@@ -55,7 +59,6 @@
         </div>
         </div>
     </section>
-
     <!-- Grid de Funcionalidades -->
     <section class="funcionalidades-grid">
         <div class="container">
@@ -71,7 +74,7 @@
                         <p>Controle todas as comandas abertas, fechadas e histórico completo</p>
                         <div class="func-badge">
                             <span>
-                                <%= totalComandas %> Comandas Abertas
+
                             </span>
                         </div>
                     </a>
@@ -86,14 +89,13 @@
                         <p>Gerencie os pedidos dos clientes</p>
                         <div class="func-badge">
                             <span>
-                                <%= totalPedidos %> Pedidos
                             </span>
                         </div>
                     </a>
                 </div>
                 <!-- Controle de Estoque -->
                 <div class="col-md-6 col-lg-4">
-                    <a href="/admin/estoque" class="func-card">
+                    <a href="/estoque" class="func-card">
                         <div class="func-icon">
                             <i class="fa-solid fa-boxes"></i>
                         </div>
@@ -101,7 +103,6 @@
                         <p>Monitore produtos, entradas, saídas e alertas de reposição</p>
                         <div class="func-badge warning">
                             <span>
-                                <%= baixaProdutos %> Produtos em baixa
                             </span>
                         </div>
                     </a>
@@ -121,7 +122,7 @@
                 </div>
                 <!-- Cardápio Digital -->
                 <div class="col-md-6 col-lg-4">
-                    <a href="/admin/cardapio" class="func-card">
+                    <a href="/cardapio" class="func-card">
                         <div class="func-icon">
                             <i class="fa-solid fa-book-open"></i>
                         </div>
@@ -129,14 +130,13 @@
                         <p>Crie, edite e organize os itens do cardápio do restaurante</p>
                         <div class="func-badge">
                             <span>
-                                <%= totalItens %> Itens Ativos
                             </span>
                         </div>
                     </a>
                 </div>
                 <!-- Gestão de Grupos -->
                 <div class="col-md-6 col-lg-4">
-                    <a href="/admin/cadastrarGrupo" class="func-card">
+                    <a href="/cadastrarGrupo" class="func-card">
                         <div class="func-icon">
                             <i class="fa-solid fa-users"></i>
                         </div>
@@ -144,14 +144,13 @@
                         <p>Gerenciar permissões e papéis</p>
                         <div class="func-badge">
                             <span>
-                                <%= totalGrupos %> Grupos
                             </span>
                         </div>
                     </a>
                 </div>
                 <!-- Gestão de Equipe -->
                 <div class="col-md-6 col-lg-4">
-                    <a href="/admin/funcionarios" class="func-card">
+                    <a href="/cadastrarFuncionario" class="func-card">
                         <div class="func-icon">
                             <i class="fa-solid fa-user-plus"></i>
                         </div>
@@ -159,7 +158,6 @@
                         <p>Cadastre funcionários e edite as informações pessoais</p>
                         <div class="func-badge">
                             <span>
-                                <%= totalFuncionarios %> Funcionarios
                             </span>
                         </div>
                     </a>
@@ -174,7 +172,6 @@
                         <p>Organize eventos especiais e automatize cobrança de couvert</p>
                         <div class="func-badge">
                             <span>
-                                <%= totalEventos %> Eventos Futuros
                             </span>
                         </div>
                     </a>
@@ -188,7 +185,7 @@
                         <p>Finalize os pedidos dos clientes</p>
                         <div class="func-badge">
                             <span>
-                                <%= totalPedidos %> Pedidos
+
                             </span>
                         </div>
                     </a>
@@ -200,15 +197,15 @@
         <div class="container">
             <h3>Ações Rápidas</h3>
             <div class="actions-grid">
-                <a href="/admin/pedidos" class="action-btn">
-                    <i class="fa-solid fa-utensils"></i>
-                    Pedidos da Cozinha
+                <a href="/listaGrupos" class="action-btn">
+                    <i class="fa-solid fa-users"></i>
+                    Lista de Grupos
                 </a>
                 <a href="/admin/estoque" class="action-btn">
                     <i class="fa-solid fa-box"></i>
                     Adicionar Produto
                 </a>
-                <a href="/admin/funcionarios" class="action-btn">
+                <a href="/cadastrarFuncionario" class="action-btn">
                     <i class="fa-solid fa-user-plus"></i>
                     Novo Funcionário
                 </a>
@@ -231,9 +228,10 @@
         document.getElementById('logoutBtn').addEventListener('click', function (e) {
             e.preventDefault();
             if (confirm('Deseja realmente sair?')) {
-                window.location.href = '/login';
+                window.location.href = '/logout';
             }
         });
     </script>
 </body>
+
 </html>

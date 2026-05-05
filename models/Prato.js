@@ -9,34 +9,63 @@ const Prato = sequelizeconnect.define(
         autoIncrement: true, 
         primaryKey: true 
     },
-    descricao: {
+    categoria: {
+      type: DataTypes.ENUM('prato', 'bebida'),
+      allowNull: false,
+      defaultValue: 'prato'
+    },
+    nome: {
       type: DataTypes.TEXT,
       allowNull: false,
     },
     rendimento: {
       type: DataTypes.INTEGER,
-    },
-    custo_prato: {
-      type: DataTypes.DOUBLE,
-    },
-    percentual_lucro: {
-      type: DataTypes.DOUBLE,
       allowNull: false,
     },
-    preco: {
-      type: DataTypes.DOUBLE,
+    custo_prato: {
+      type: DataTypes.DECIMAL(10, 2),
+      allowNull: false,
+      defaultValue: 0.0
     },
-    CardapioId: {
-      type: DataTypes.INTEGER,
+    preco_venda: {
+      type: DataTypes.DECIMAL(10, 2),
+      allowNull: false,
+      defaultValue: 0.0
     },
-    UsuarioId: {
-      type: DataTypes.INTEGER,
-    }
+  cardapio_id: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  usuario_id: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  }
   },
   {
-    timestamps: false,
-    tableName: "prato",
+    tableName: "pratos",
+     timestamps: true,
+    createdAt: 'created_at',
+  updatedAt: 'updated_at',
+  underscored: true,
   }
 );
+
+Prato.associate = (models) => {
+  Prato.belongsTo(models.Usuario, {
+    foreignKey: 'usuario_id',
+    as: 'usuario'
+  });
+
+ Prato.belongsTo(models.Cardapio, {
+    foreignKey: 'cardapio_id',
+    as: 'cardapio'
+  });
+
+  
+  Prato.hasMany(models.Ingrediente, {
+    foreignKey: 'prato_id',
+    as: 'ingredientes'
+  });
+};
 
 module.exports = Prato;

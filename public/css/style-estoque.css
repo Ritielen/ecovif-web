@@ -1,10 +1,73 @@
-.conteudo-item h4 {
-    color: var(--cor-escura);
-    font-size: 1.1rem;
-    font-weight: bold;
-    margin-bottom: 0.8rem;
+.funcionalidades-grid {
+    padding: 2rem 0;
 }
 
+/* SEÇÃO FORMULÁRIO */
+.secao-formulario {
+    padding: 1.5rem;  
+}
+.caixa-formulario {
+    background: #ffffff;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+    position: relative;
+    top: 20px;
+    height: 100%;
+}
+.caixa-formulario h2 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 3px solid var(--cor-primaria);
+}
+/* FORMULÁRIOS */
+.grupo-formulario {
+    margin-bottom: 1.2rem;
+}
+
+.label-formulario {
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+    display: block;
+    font-size: 0.95rem;
+}
+.controle-formulario {
+    width: 100%;
+    padding: 0.7rem;
+    border-radius: 8px;
+    border: 2px solid #e0e0e0;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+}
+.controle-formulario:focus {
+    outline: none;
+    border-color: var(--cor-primaria);
+    box-shadow: 0 0 0 0.2rem rgba(196, 30, 58, 0.15);
+}
+
+.linha-formulario {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.conteudo-item h4 {
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
+    color: black;
+    font-size: 1.2rem;
+    font-weight: bold;  
+}
+    .badge-categoria {
+        padding: 0.3rem 0.8rem;
+        border-radius: 15px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        color: var(--cor-escura);
+        display: inline-block;   
+    }
 
     .badge-categoria {
         padding: 0.3rem 0.8rem;
@@ -15,16 +78,16 @@
         display: inline-block;
     }
     
-    .badge-categoria.alto-custo {
+    .badge-categoria.alto_custo {
         background-color: #d32f2f;
     }
     
-    .badge-categoria.risco-medio {
+    .badge-categoria.medio_custo {
         background-color: #f57c00;
     }
     
-    .badge-categoria.baixo-custo {
-        background-color: #388e3c;
+    .badge-categoria.baixo_custo {
+        background-color: #27da30;
     }
     
     .alerta-estoque-baixo {
@@ -69,7 +132,6 @@
         min-width: 120px;
         justify-content: center;
     }
-    
     .btn-adicionar-qtd {
         background-color: #4CAF50;
         color: white;
@@ -84,7 +146,6 @@
         background-color: #9C27B0;
         color: white;
     }
-    
     .btn-adicionar-qtd:hover {
         background-color: #45a049;
         transform: translateY(-2px);
@@ -153,7 +214,6 @@
         flex-wrap: wrap;
         gap: 1rem;
     }
-    
     .resumo-historico div {
         text-align: center;
     }
@@ -173,3 +233,20 @@
     .btn-fechar:hover {
         background-color: #d32f2f;
     }
+
+    /* RESPONSIVO*/
+
+@media (max-width: 991px) {
+    .caixa-formulario {
+        position: relative;
+        top: 0;
+    }
+
+    .linha-formulario {
+        grid-template-columns: 1fr;
+    }
+    .acoes-item {
+        flex-direction: column;
+    }
+}
+    

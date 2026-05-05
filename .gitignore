@@ -1,0 +1,8 @@
+node_modules/
+.env
+.env.*
+
+/*Isso faz com que:
+seu email ❌ não vá pro GitHub
+sua senha ❌ não vá pro GitHub
+dados do banco ❌ não vazem */

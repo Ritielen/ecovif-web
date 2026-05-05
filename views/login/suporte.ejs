@@ -20,7 +20,7 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark">
       <div class="container">
-        <a class="navbar-brand" href="/home"
+        <a class="navbar-brand" href="/"
           ><i class="fa-solid fa-utensils"></i> ECOVIF
           <span class="tagline">Sistema de Gestão para Restaurantes</span>
         </a>
@@ -38,20 +38,20 @@
         >
           <ul class="navbar-nav">
             <li class="nav-item">
-              <a href="/home" class="btn btn-login-voltar">Voltar</a>
+              <a href="/" class="btn btn-login-voltar">Voltar</a>
             </li>
           </ul>
         </div>
       </div>
     </nav>
-    <!-- Hero Section -->
+    
     <section class="hero-section">
       <div class="container">
         <h1><i class="fa-solid fa-headset"></i> Central de Suporte</h1>
         <p>
           Estamos aqui para ajudar! Entre em contato conosco e nossa equipe
-          responderá o mais breve possível.
-        </p>
+          responderá o mais breve possível.</p>
+          <%- include ('../partials/alerts') %>
       </div>
     </section>
     <!-- Formulário de Suporte -->
@@ -65,7 +65,7 @@
               horas úteis
             </p>
           </div>
-          <form action="/suporte" method="POST">
+          <form action="/enviar-suporte" method="POST">
             <div class="form-group">
               <label for="nome" class="form-label">Nome Completo</label>
               <div class="input-group">
