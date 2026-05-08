@@ -9,11 +9,11 @@ const Cardapio = sequelizeconnect.define(
         autoIncrement: true, 
         primaryKey: true 
     },
+    usuario_id: { 
+        type: DataTypes.INTEGER, 
+        allowNull: false,
+    },
    
-   usuario_id: {
-      type: DataTypes.INTEGER,
-    allowNull: false,
-  }
   },
   {
     tableName: "cardapio",
@@ -27,9 +27,9 @@ const Cardapio = sequelizeconnect.define(
 // ASSOCIAÇÕES DO CARDAPIO
 Cardapio.associate = (models) => {
   Cardapio.belongsTo(models.Usuario, {
-    foreignKey: 'usuario_id',
-    as: 'usuario'
-  });
+  foreignKey: 'usuario_id',
+  as: 'usuario'
+});
 
   Cardapio.hasMany(models.Prato, {
     foreignKey: 'cardapio_id',

@@ -12,6 +12,10 @@ module.exports = {
       type: Sequelize.DECIMAL(10, 2),
       allowNull: false,
     },
+     unidade_ingrediente: {
+         type: Sequelize.ENUM('kg', 'g', 'l', 'ml', 'un'),
+         allowNull: true,
+       },
         produto_id: {
              type: Sequelize.INTEGER,
            allowNull: false,

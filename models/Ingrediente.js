@@ -13,7 +13,10 @@ const Ingrediente = sequelizeconnect.define(
       type: DataTypes.DECIMAL(10, 2),
       allowNull: false,
     },
-   
+    unidade_ingrediente: {
+  type: DataTypes.ENUM('kg', 'g', 'l', 'ml', 'un'),
+  allowNull: true,
+},
     produto_id: {
       type: DataTypes.INTEGER,
     allowNull: false,

@@ -9,11 +9,7 @@ const Prato = sequelizeconnect.define(
         autoIncrement: true, 
         primaryKey: true 
     },
-    categoria: {
-      type: DataTypes.ENUM('prato', 'bebida'),
-      allowNull: false,
-      defaultValue: 'prato'
-    },
+    
     nome: {
       type: DataTypes.TEXT,
       allowNull: false,

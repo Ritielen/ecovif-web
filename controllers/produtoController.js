@@ -1,4 +1,3 @@
-const bcrypt = require("bcrypt");
 const db = require("../models");
 const passport = require('../config/passport');
 const { sendMail, sendSupportContact } = require("../config/mailer");
@@ -25,11 +24,13 @@ async function cadastrarProduto(req, res) {
   const {
     tipo_item,
     nome,
+    codigo,
     categoria,
     unidade,
     quantidade,
     quantidade_minima,
     data_validade,
+    observacoes,
     valor_compra,
     tamanho, 
     tipo_vinho
@@ -63,6 +64,7 @@ async function cadastrarProduto(req, res) {
     await db.Produto.create({
       tipo_item,
       nome,
+      codigo: codigo || null,
       categoria,
       unidade,
       tipo_vinho,
@@ -70,6 +72,7 @@ async function cadastrarProduto(req, res) {
       quantidade_inicial: qtd, // SALVA O VALOR INICIAL AQUI (TRAVADO)
       quantidade: qtd,         // SALVA O SALDO ATUAL AQUI (DINÂMICO)
       quantidade_minima: qtdMin,
+      observacoes: observacoes || null,
       valor_compra: valorCompraLimpo, 
       tamanho: tamanhoFinal,
       usuario_id: usuarioRegistrado.id,
@@ -122,6 +125,8 @@ async function editarProduto(req, res) {
   const { id } = req.params;
   const { 
     nome, 
+    codigo,
+    observacoes,
     categoria, 
     quantidade_minima, 
     nova_data_validade, 
@@ -135,6 +140,7 @@ async function editarProduto(req, res) {
 
     const usuarioId = req.session.usuarioId;
 
+     
     //  Cálculos de Acúmulo
     const qtdAdicionada = Number(nova_quantidade) || 0;
     const valorAdicionado = Number(novo_valor_compra) || 0;
@@ -152,6 +158,9 @@ async function editarProduto(req, res) {
       if (!isNaN(data)) dataValidadeMovimentacao = data;
     }
 
+    const codigoFinal = codigo !== "" ? parseInt(codigo) : produto.codigo;
+const observacoesFinal = observacoes !== "" ? observacoes.toString() : produto.observacoes;
+
     // SALVAR HISTÓRICO (registro do "novo item água" com data diferente)
     await db.MovimentacaoProduto.create({
       produto_id: produto.id,
@@ -166,6 +175,8 @@ async function editarProduto(req, res) {
     //  ATUALIZAR O PRODUTO 
     await produto.update({
       nome: nome || produto.nome,
+      codigo: codigoFinal,
+      observacoes: observacoesFinal,
       categoria: categoria || produto.categoria,
       quantidade_minima: quantidade_minima !== "" ? Number(quantidade_minima) : produto.quantidade_minima,
       

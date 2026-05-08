@@ -95,6 +95,11 @@ Usuario.associate = (models) => {
     foreignKey: 'usuario_id',
     as: 'movimentacoes_produto'
   });
+  Usuario.hasOne(models.Cardapio, {
+  foreignKey: 'usuario_id',
+  as: 'cardapio'
+});
+
 
   Usuario.hasMany(models.Token, {
     foreignKey: 'usuario_id',

@@ -76,6 +76,7 @@
   <!-- CABEÇALHO DO PRODUTO  -->
   <tr style="background-color: #f8f9fa; font-weight: bold;">
     <td>Tipo</td>
+    <td>Código</td>
     <td>Nome</td>
     <td>Data Validade Original</td>
     <td>Quantidade Inicial</td>
@@ -89,6 +90,7 @@
   <!-- DADOS DO PRODUTO (Resumo Geral) -->
   <tr>
     <td><%= produto.tipo_item %></td>
+    <td><%= produto.codigo %></td>
     <td><%= produto.nome %></td>
     <td><%= produto.data_validade || 'Não informada' %></td>
     
@@ -118,7 +120,7 @@
   </tr>
 
   <!-- ESPAÇADOR -->
-  <tr style="height: 20px;"><td colspan="9"></td></tr>
+  <tr style="height: 20px;"><td colspan="10"></td></tr>
 
   <!-- CABEÇALHO DAS MOVIMENTAÇÕES (Histórico de Lotes) -->
   <tr style="background-color: #e9ecef;">
@@ -129,6 +131,7 @@
     <th>Valor da Entrada</th>
     <th>Custo Total Até Então</th>
     <th colspan="2">Data do Registro</th>
+    <th></th>
     <th></th>
   </tr>
 
@@ -144,6 +147,7 @@
       <td colspan="2" style="font-size: 0.85em; color: #888;">
         <%= new Date(mov.created_at).toLocaleDateString('pt-BR') %>
       </td>
+      <td></td>
       <td></td>
     </tr>
   <% }) %>
@@ -173,13 +177,24 @@
                                     <label class="label-formulario">Editar Nome</label>
                                     <input type="string" class="controle-formulario" name="nome" value="<%= produto.nome %>">
                                 </div>
-                                
+                                 <div class="grupo-formulario">
+                                    <label class="label-formulario">Mudar o Código</label>
+                                    <input type="number" class="controle-formulario" name="codigo">
+                                    <small>Código atual: <%= produto.codigo || 'Não informado' %> </small>
+                                </div>
+                             </div>
+                             <div class="grupo-formulario">
+                                    <label class="label-formulario">Mudar o Observações</label>
+                                    <textarea class="controle-formulario" name="observacoes" ></textarea>
+                                    <small>Observação atual: <%= produto.observacoes || 'Não informada' %> </small>
+                                </div>
+                             <div class="linha-formulario">
                             <div class="grupo-formulario">
                                 <label class="label-formulario">Nova Data</label>
                                 <input type="date" class="controle-formulario" name="nova_data_validade" >
                                 <small>Data atual: <%= produto.data_validade || 'Não informada' %> </small>
                             </div>
-                        </div>
+                        
                             <div class="grupo-formulario">
                                 <label class="label-formulario">Nova Categoria</label>
                                 <select class="controle-formulario" name="categoria" value="<%= produto.categoria  %>">
@@ -188,6 +203,7 @@
                                     <option value="baixo_custo">Baixo Custo</option>
                                 </select>
                             </div>
+                             </div>
                             <div class="linha-formulario">
                                 <div class="grupo-formulario">
                                     <label class="label-formulario">Adicionar Quantidade</label>
@@ -206,6 +222,17 @@
                                 <div class="grupo-formulario">
                                     <label class="label-formulario">Editar Nome</label>
                                     <input type="string" class="controle-formulario" name="nome" value="<%= produto.nome %>">
+                                </div>
+                                <div class="grupo-formulario">
+                                    <label class="label-formulario">Mudar o Código</label>
+                                    <input type="number" class="controle-formulario" name="codigo">
+                                    <small>Código atual: <%= produto.codigo || 'Não informado' %> </small>
+                                </div>
+                             </div>
+                             <div class="grupo-formulario">
+                                    <label class="label-formulario">Mudar o Observações</label>
+                                    <textarea class="controle-formulario" name="observacoes" ></textarea>
+                                    <small>Observação atual: <%= produto.observacoes || 'Não informada' %> </small>
                                 </div>
                             <div class="grupo-formulario">
                                 <label class="label-formulario">Nova Data</label>
@@ -228,7 +255,7 @@
                         <% } %>  
                         <div class="grupo-formulario">
                             <label class="label-formulario">Novo Valor da Compra</label>
-                            <input type="number" class="controle-formulario" name="novo_valor_compra" >
+                            <input type="number" class="controle-formulario" name="novo_valor_compra" step="0.01">
                             <small>Último valor registrado: R$ <%= produto.valor_compra %> </small>
                         </div>
                         <button type="submit" class="btn-login">

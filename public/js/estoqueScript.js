@@ -45,10 +45,7 @@ document.addEventListener('DOMContentLoaded', function () {
         .forEach(campo => campo.required = true);
 }
 
-    /*function adicionarRequired(formId) {
-        document.querySelectorAll(`#${formId} input, #${formId} select`)
-            .forEach(campo => campo.required = true);
-    }*/
+   
 
     function esconderForms() {
         if (formProduto) formProduto.style.display = 'none';
@@ -116,6 +113,8 @@ document.addEventListener('DOMContentLoaded', function () {
             
         });
     }
+
+      
 
     // ==============================
     // ELEMENTOS DA PESQUISA

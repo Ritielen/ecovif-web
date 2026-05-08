@@ -64,7 +64,7 @@ async function criarGestor(req, res) {
     const hash = bcrypt.hashSync(senha, salt);
 
     // Criação do gestor
-    await db.Usuario.create({
+    const novoGestor = await db.Usuario.create({
       nome,
       sobrenome,
       telefone,
@@ -73,6 +73,10 @@ async function criarGestor(req, res) {
       funcionario: 'gestor',             // sempre gestor nesta rota
       admin: admin === "true"     
     });
+    // Criação automática do cardápio associado ao gestor
+await db.Cardapio.create({
+  usuario_id: novoGestor.id
+});
 
     res.redirect("/login");
   } catch (error) {

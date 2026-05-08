@@ -8,11 +8,6 @@ module.exports = {
             autoIncrement: true, 
             primaryKey: true 
         },
-        categoria: {
-          type: Sequelize.ENUM('prato', 'bebida'),
-          allowNull: false,
-          defaultValue: 'prato',
-        },
         nome: {
           type: Sequelize.TEXT,
           allowNull: false,

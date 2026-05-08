@@ -68,7 +68,7 @@ router.post("/admin/produto/excluir/:id", produtoController.excluirProduto);
 
 //rota do cardapio cadastro do prato e preço de venda da bebida
 router.get("/cardapio", cardapioController.mostrarCardapio);
-
+router.post("/cadastroCardapio", cardapioController.cadastrarItemCardapio);
 
 
 

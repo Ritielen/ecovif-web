@@ -9,6 +9,7 @@ const Bebida = sequelizeconnect.define(
     autoIncrement: true, 
     primaryKey: true, 
   },
+  
   preco_venda: {
     type: DataTypes.DECIMAL(10, 2),
     allowNull: false,

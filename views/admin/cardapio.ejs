@@ -17,7 +17,7 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
-            <a class="navbar-brand" href="#ecovif">
+            <a class="navbar-brand" href="/area-gestor">
                 <i class="fa-solid fa-utensils"></i> ECOVIF
                 <span class="tagline">Sistema de Gestão para Restaurantes</span>
             </a>
@@ -27,7 +27,7 @@
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" href="/admin/areaGestor">
+                        <a class="nav-link" href="/area-gestor">
                             <i class="fa-solid fa-user-shield"></i> Área do Gestor
                         </a>
                     </li>
@@ -63,136 +63,111 @@
     <main class="funcionalidades-grid">
         <div class="container">
             <div class="row">
-                <!-- Seção Formulário -->
-                <section class="col-lg-5 secao-formulario">
-                    <div class="caixa-formulario">
-                        <h2>Adicionar Item</h2>
-                        <!-- Formulário de Cadastro de Item -->
-                        <%- include('../partials/alerts') %>
+            <!-- Seção Formulário -->
+<section class="col-lg-5 secao-formulario">
+    <div class="caixa-formulario">
+        <h2>Adicionar Item</h2>
+        
+        <%- include('../partials/alerts') %>
 
-                            <!-- Seletor de Categoria -->
-                            <div class="grupo-formulario">
-                                <label for="categoria" class="label-formulario">Categoria</label>
-                                <select class="controle-formulario" id="categoria" name="categoria" required>
-                                    <option value="" disabled selected>Selecione...</option>
-                                    <option value="prato">Prato</option>
-                                    <option value="bebida">Bebida</option>
+        <div class="card-formulario">
+            <form id="formCadastroPrato" action="/cadastroCardapio" method="POST">
+
+                <!-- 1. Seletor de Categoria (Sempre Visível) -->
+                <div class="grupo-formulario">
+                    <label for="categoria" class="label-formulario">Categoria</label>
+                    <select class="controle-formulario" id="categoria" name="categoria" required>
+                        <option value="" disabled selected>Selecione...</option>
+                        <option value="prato">Prato</option>
+                        <option value="bebida">Bebida</option>
+                    </select>
+                </div>
+
+                <!-- 2. Container Dinâmico (Começa escondido) -->
+                <div id="conteudoFormulario" style="display: none;">
+                    
+                    <!-- Bloco Prato -->
+                    <div id="formPrato" class="formulario-tipo" style="display: none;">
+                        <div class="grupo-formulario">
+                            <label for="nome" class="label-formulario">Nome do Prato</label>
+                            <input type="text" name="nome" id="nome" class="controle-formulario" placeholder="Ex.: Filé Mignon">
+                        </div>
+
+                        <!-- Parte de Ingredientes -->
+                        <div id="container-ingredientes">
+                            <label class="label-formulario">Ingrediente e Qtd</label>
+                            <div class="linha-ingrediente" style="display: flex; gap: 5px; margin-bottom: 10px;">
+                                <select name="produto_id" class="controle-formulario">
+                                    <option value="" disabled selected>Produto...</option>
+                                    <% if (produtos && produtos.length > 0) { %>
+                                        <% produtos.forEach(function(p) { %>
+                                            <option value="<%= p.id %>"><%= p.nome %> <%= p.quantidade %> <%= p.unidade %></option>
+                                        <% }) %>
+                                    <% } %>
                                 </select>
+                                <input type="number" name="quantidade_ingrediente" class="controle-formulario" style="width: 80px;" placeholder="0">
+                                <div class="grupo-formulario">
+                                        <label class="label-formulario">Unidade</label>
+                                        <select class="controle-formulario" name="unidade_ingrediente" data-required="true">
+                                            <option value="" disabled selected>Selecione...</option>
+                                            <option value="kg">kg</option>
+                                            <option value="g">g</option>
+                                            <option value="l">Litros(l)</option>
+                                            <option value="ml">Mililitros(ml)</option>
+                                            <option value="un">un</option>
+                                        </select>
+                                    </div>
+                                <button type="button" class="btn-adicionar-ingrediente"><i class="fa-solid fa-plus"></i></button>
+                                <button type="button" class="btn-remover-ingrediente"><i class="fa-solid fa-trash"></i></button>
                             </div>
-                            <!-- Formulário para Pratos -->
-                            <form id="formCadastroPrato" action="/cardapioCadastrarPrato" method="POST"
-                                style="display:none;">
+                        </div>
 
-                                <div id="formPrato" class="formulario-tipo">
-                                    <div class="grupo-formulario">
-                                        <label for="nome" class="label-formulario">Nome do Prato (descrição)</label>
-                                        <input type="text" name="nome" id="nome" class="controle-formulario"
-                                            placeholder="Ex.: Filé Mignon com Batata" required>
-                                    </div>
-                                    <div class="grupo-formulario">
-                                        <label for="ingrediente" class="label-formulario">Ingredientes</label>
-                                        <div id="container-ingredientes">
-                                            <div class="linha-ingrediente">
-                                                <div class="campo-ingrediente">
-                                                    <select name="produto_id" id="ingrediente"
-                                                        class="controle-formulario" required>
-                                                        <option value="" disabled selected>Selecione um produto...
-                                                        </option>
-                                                        <% if (produtos && produtos.length> 0) { %>
-                                                            <% produtos.forEach(function(produto) { %>
-                                                                <option value="<%= produto.id %>">
-                                                                    <%= produto.nome %>
-                                                                        <% if (produto.unidade) { %> (<%=
-                                                                                produto.unidade %>) <% } %>
-                                                                </option>
-                                                                <% }) %>
-                                                                    <% } else { %>
-                                                                        <option value="" disabled>Nenhum produto
-                                                                            cadastrado</option>
-                                                                        <% } %>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="campo-quantidade">
-                                            <input type="number" name="quantidade_ingrediente"
-                                                id="quantidade_ingrediente" class="controle-formulario input-quantidade"
-                                                placeholder="Quantidade" style="border-radius:4px 0 0 4px;" required>
-                                        </div>
-                                        <div class="botoes-ingrediente">
-                                            <button type="button" class="btn-adicionar-ingrediente">
-                                                <i class="fa-solid fa-plus"></i>
-                                            </button>
-                                            <button type="button" class="btn-remover-ingrediente"
-                                                title="Remover ingrediente">
-                                                <i class="fa-solid fa-trash"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                    </div>
-                    <div class="linha-formulario">
                         <div class="grupo-formulario">
                             <label for="rendimento" class="label-formulario">Rendimento</label>
-                            <input type="text" name="rendimento" id="rendimento" class="controle-formulario"
-                                placeholder="Ex.: 2 porções" required>
+                            <input type="text" name="rendimento" id="rendimento" class="controle-formulario">
                         </div>
-                    </div>
+                    
+
                     <div class="grupo-formulario">
                         <label for="custo_prato" class="label-formulario">Custo do Prato (R$)</label>
                         <input type="number" name="custo_prato" id="custo_prato" class="controle-formulario"
                             placeholder="0.00" step="0.01" min="0" required>
                     </div>
-                    <div class="grupo-formulario">
-                        <label for="preco_venda" class="label-formulario">Preço de venda (R$)</label>
-                        <input type="number" name="preco_venda" id="preco_venda" class="controle-formulario"
-                            placeholder="0.00" step="0.01" min="0" required>
                     </div>
-            </div>
-            <!-- Botão adicionar item -->
-            <button type="submit" class="btn-login">
-                <i class="fa-solid fa-plus-circle"></i> Adicionar Item
-            </button>
+                    
+
+                    <!-- Bloco Bebida -->
+                    <div id="formBebida" class="formulario-tipo" style="display: none;">
+                        <div class="grupo-formulario">
+                            <label for="bebida_produto_id" class="label-formulario">Selecionar Bebida</label>
+                            <select name="produto_id" id="bebida_produto_id" class="controle-formulario">
+                                <option value="" disabled selected>Selecione...</option>
+                                <% if (produtos && produtos.length > 0) { %>
+                                    <% produtos.forEach(function(p) { %>
+                                        <option value="<%= p.id %>"><%= p.nome %> <%= p.tamanho %> <%= p.unidade %> <%= p.tipo_vinho %></option>
+                                    <% }) %>
+                                <% } %>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Campos Finais -->
+                    <div class="grupo-formulario">
+                        <label for="preco_venda" class="label-formulario">Preço de Venda (R$)</label>
+                        <input type="number" name="preco_venda" id="preco_venda" class="controle-formulario" step="0.01" required>
+                    </div>
+
+                    <button type="submit" class="btn-login">
+                        <i class="fa-solid fa-plus-circle"></i> Adicionar Item
+                    </button>
+                    
+                    
+                </div> <!-- Fim conteudoFormulario -->
             </form>
-        </div>
-        <!-- Formulário para Bebidas -->
-        <form id="formCadastroBebida" action="/cardapioCadastrarBebida" method="POST" style="display:none;">
-            <div id="formBebida" class="formulario-tipo">
-                <div class="grupo-formulario">
-                    <label for="produto_id" class="label-formulario">Selecionar Produto (Bebida)</label>
-                    <select name="produto_id" id="produto_id" class="controle-formulario" required>
-                        <option value="" disabled selected>Selecione a bebida...</option>
-                        <% if (produtos && produtos.length> 0) { %>
-                            <% produtos.forEach(function(produto) { %>
-                                <option value="<%= produto.id %>">
-                                    <%= produto.nome %>
-                                        — <%= produto.tamanho %>
-                                            <%= produto.unidade %>
-                                                <% if (produto.tipo_vinho) { %>
-                                                    (<%= produto.tipo_vinho.charAt(0).toUpperCase() +
-                                                        produto.tipo_vinho.slice(1) %>)
-                                                        <% } %>
-                                </option>
-                                <% }) %>
-                                    <% } else { %>
-                                        <option value="" disabled>Nenhum produto cadastrado</option>
-                                        <% } %>
-                    </select>
-                    <small class="ajuda-formulario">Os dados de tamanho, unidade e tipo são puxados automaticamente do
-                        produto.</small>
-                </div>
-            </div>
-            <div class="grupo-formulario">
-                <label for="preco_venda" class="label-formulario">Preço de venda (R$)</label>
-                <input type="number" name="preco_venda" id="preco_venda" class="controle-formulario" placeholder="0.00"
-                    step="0.01" min="0" required>
-            </div>
-            <!-- Botão adicionar item -->
-            <button type="submit" class="btn-login">
-                <i class="fa-solid fa-plus-circle"></i> Adicionar Item
-            </button>
-        </form>
-        </section>
+        </div> <!-- Fim card-formulario -->
+    </div> <!-- Fim caixa-formulario -->
+</section> <!-- Fim secao-formulario -->    
+    
         <!-- Seção Lista -->
         <section class="col-lg-7 secao-lista">
             <!-- ========== BARRA DE PESQUISA ========== -->
@@ -206,151 +181,201 @@
                     <button type="button" class="btn-pesquisar" id="btnPesquisar">
                         <i class="fa-solid fa-search"></i> Pesquisar
                     </button>
-                    <div class="filtro-wrapper">
-                        <button type="button" class="btn-filtro" id="btnFiltro">
-                            <i class="fa-solid fa-filter"></i> Filtrar
-                        </button>
-                        <div class="filtro-dropdown" id="filtroDropdown">
-                            <button type="button" class="filtro-opcao ativo" data-filtro="todos">
-                                <i class="fa-solid fa-border-all"></i> Todos
-                            </button>
+                    <button type="button" class="btn-limpar-filtro" id="btnLimparFiltro" >
+                       <i class="fa-solid fa-broom"></i> Limpar Pesquisa
+                    </button>
+                    
                             <button type="button" class="filtro-opcao" data-filtro="prato">
                                 <i class="fa-solid fa-drumstick-bite"></i> Pratos
                             </button>
                             <button type="button" class="filtro-opcao" data-filtro="bebida">
                                 <i class="fa-solid fa-glass-cheers"></i> Bebidas
                             </button>
-                        </div>
+                        
                     </div>
-                </div>
-                <div class="filtro-ativo-tag" id="filtroAtivoTag">
-                    <i class="fa-solid fa-tag"></i> Filtro ativo: <span id="filtroAtivoNome">Todos</span>
-                    <button type="button" class="btn-limpar-filtro" id="btnLimparFiltro">Limpar</button>
-                </div>
+                
+                
             </div>
             <div class="msg-sem-resultado" id="msgSemResultado">
                 <i class="fa-solid fa-magnifying-glass"></i> Nenhum item encontrado para "<span
                     id="termoPesquisado"></span>
             </div>
-            <!-- ================= PRATOS ================= -->
-            <div class="caixa-categoria">
-                <h3><i class="fa-solid fa-drumstick-bite"></i> Pratos</h3>
-                <div class="lista-itens">
-                    <% if (pratos && pratos.length> 0) { %>
-                        <% pratos.forEach(function(prato) { %>
-                            <div class="conteudo-item">
-                                <h4>
-                                    <%= prato.nome %>
-                                </h4>
-                                <div class="ingredientes-lista">
-                                    <strong>Ingredientes:</strong>
-                                    <ul>
-                                        <li>
-                                            <% if (produtos && produtos.length> 0) { %>
-                                                <% produtos.forEach(function(produto) { %>
-                                                    <%= produto.nome %>
-                                                        <% }) %>
-                                                            <% } else { %>
-                                                                <p class="texto-vazio">Nenhum ingrediente cadastrado.
-                                                                </p>
-                                                                <% } %>
-                                        <li>
-                                            <% if (ingredientes && ingredientes.length> 0) { %>
-                                                <% ingredientes.forEach(function(ingrediente) { %>
-                                                    <%= ingrediente.quantidade_ingrediente %>
-                                                        <% }) %>
-                                                            <% } else { %>
-                                                                <p class="texto-vazio">Nenhuma quantidade cadastrada.
-                                                                </p>
-                                                                <% } %>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="info-item">
-                                    <div><strong>Rendimento:</strong>
-                                        <%= prato.rendimento %>
-                                    </div>
-                                    <div><strong>Custo:</strong> R$ <%= prato.custo_prato.toFixed(2) %>
-                                    </div>
-                                </div>
-                                <div class="preco-lucro">
-                                    <span class="preco-destaque">Preco: R$ <%= prato.preco_venda.toFixed(2) %></span>
-                                    <span class="lucro-destaque"> Lucro: <%= prato.lucro %>%</span>
-                                </div>
-                                <div class="acoes-item">
-                                    <!-- EDITAR -->
-                                    <form action="/cardapioPratoEditar/<%= prato.id %>" method="POST"
-                                        style="flex: 1; display: contents;">
-                                        <button type="button" class="btn-editar"
-                                            onclick="editarItem('<%= prato.id %>', 'prato')">
-                                            <i class="fa-solid fa-edit"></i> Editar
-                                        </button>
-                                    </form>
-                                    <!-- EXCLUIR -->
-                                    <form action="/cardapioPratoExcluir/<%= prato.id %>" method="POST"
-                                        style="flex: 1; display: contents;">
-                                        <button type="submit" class="btn-excluir"
-                                            onclick="return confirm('Deseja excluir este prato?');">
-                                            <i class="fa-solid fa-trash"></i> Excluir
-                                        </button>
-                                    </form>
-                                </div>
+            
+
+    <!-- ================= PRATOS ================= -->
+    <div class="caixa-categoria">
+        <h3><i class="fa-solid fa-drumstick-bite"></i> Pratos</h3>
+
+        <div class="lista-itens">
+
+            <% if (pratos && pratos.length > 0) { %>
+
+                <% pratos.forEach(function(prato) { %>
+
+                    <div class="conteudo-item">
+
+                        <h4><%= prato.nome %></h4>
+
+                        <div class="ingredientes-lista">
+                            <strong>Ingredientes:</strong>
+
+                        <ul>
+
+    <% prato.ingredientes.forEach(function(ingrediente) { %>
+
+        <li>
+            <%= ingrediente.produto.nome %> -
+            <%= ingrediente.quantidade_ingrediente %>
+            <%= ingrediente.unidade_ingrediente %>
+        </li>
+
+    <% }) %>
+
+</ul>
+    
+                        </div>
+
+                        <div class="info-item">
+                            <div>
+                                <strong>Rendimento: <%= prato.rendimento %></strong>
                             </div>
-                            <% }) %>
-                                <% } else { %>
-                                    <p class="texto-vazio">Nenhum prato cadastrado.</p>
-                                    <% } %>
-                </div>
-            </div>
-            <!-- ================= BEBIDAS ================= -->
-            <div class="caixa-categoria">
-                <h3><i class="fa-solid fa-glass-cheers"></i> Bebidas</h3>
-                <div class="lista-itens">
-                    <% if (produtos && produtos.length> 0) { %>
-                        <% produtos.forEach(function(produto) { %>
-                            <div class="conteudo-item">
-                                <h4>🥤 <%= produto.nome %>
-                                </h4>
-                                <div class="info-item">
-                                    <div><strong>Tamanho:</strong>
-                                        <%= produto.tamanho %>
-                                            <%= produto.unidade %>
-                                    </div>
-                                </div>
-                                <div class="preco-lucro">
-                                    <% if (bebidas && bebidas.length> 0) { %>
-                                        <% bebidas.forEach(function(bebida) { %>
-                                            <span class="preco-destaque">R$ <%= bebida.preco_venda.toFixed(2) %></span>
-                                            <% }) %>
-                                                <% } else { %>
-                                                    <p class="texto-vazio">Nenhum preço cadastrado.</p>
-                                                    <% } %>
-                                </div>
-                                <div class="acoes-item">
-                                    <form action="/cardapioBebidaEditar/<%= bebida.id %>" method="POST"
-                                        style="flex: 1; display: contents;">
-                                        <button type="button" class="btn-editar"
-                                            onclick="editarItem('<%= bebida.id %>', 'bebida')">
-                                            <i class="fa-solid fa-edit"></i> Editar
-                                        </button>
-                                    </form>
-                                    <form action="/cardapioBebidaExcluir/<%= bebida.id %>" method="POST"
-                                        style="flex: 1; display: contents;">
-                                        <button type="submit" class="btn-excluir"
-                                            onclick="return confirm('Deseja excluir esta bebida?');">
-                                            <i class="fa-solid fa-trash"></i> Excluir
-                                        </button>
-                                    </form>
-                                </div>
+
+                            <div>
+                                <strong>Custo: <%= prato.custo_prato %></strong>
                             </div>
-                            <% }) %>
-                                <% } else { %>
-                                    <p class="texto-vazio">Nenhuma bebida cadastrada.</p>
-                                    <% } %>
+                        </div>
+
+                        <div class="preco-lucro">
+                            <span class="preco-destaque">
+                                Preço: R$ <%= prato.preco_venda %>
+                            </span>
+
+                            <span class="lucro-destaque">
+                                Lucro:
+                            </span>
+                        </div>
+
+                        <div class="acoes-item">
+
+                            <!-- EDITAR -->
+                            <form action="/cardapioPratoEditar/" method="POST">
+                                <button type="button" class="btn-editar">
+                                    <i class="fa-solid fa-edit"></i> Editar
+                                </button>
+                            </form>
+
+                            <!-- EXCLUIR -->
+                            <form action="/cardapioPratoExcluir/" method="POST">
+                                <button type="submit" class="btn-excluir">
+                                    <i class="fa-solid fa-trash"></i> Excluir
+                                </button>
+                            </form>
+
+                        </div>
+
+                    </div>
+
+                <% }) %>
+
+            <% } else { %>
+
+                <p class="texto-vazio">
+                    Nenhum prato cadastrado.
+                </p>
+
+            <% } %>
+
+        </div>
+    </div>
+
+
+
+
+            <!-- =====bebidas========== -->
+<div class="caixa-categoria">
+
+    <h3>
+        <i class="fa-solid fa-glass-cheers"></i> Bebidas
+    </h3>
+
+    <div class="lista-itens">
+
+        <% if (bebidas && bebidas.length > 0) { %>
+
+            <% bebidas.forEach(function(bebida) { %>
+
+                <div class="conteudo-item">
+
+                    <h4>
+                        🥤 <%= bebida.produto.nome %>
+                    </h4>
+
+                    <div class="info-item">
+
+                        <div>
+                            <strong>Tamanho:</strong>
+
+                            <%= bebida.produto.tamanho %>
+                            <%= bebida.produto.unidade %>
+                        </div>
+
+                    </div>
+
+                    <div class="preco-lucro">
+
+                        <span class="preco-destaque">
+                            R$ <%= bebida.preco_venda %>
+                        </span>
+
+                    </div>
+
+                    <div class="acoes-item">
+
+                        <form action="/cardapioBebidaEditar/<%= bebida.id %>" method="POST"
+                            style="flex: 1; display: contents;">
+
+                            <button type="button" class="btn-editar">
+
+                                <i class="fa-solid fa-edit"></i>
+                                Editar
+
+                            </button>
+
+                        </form>
+
+                        <form action="/cardapioBebidaExcluir/<%= bebida.id %>" method="POST"
+                            style="flex: 1; display: contents;">
+
+                            <button type="submit"
+                                class="btn-excluir"
+                                onclick="return confirm('Deseja excluir esta bebida?');">
+
+                                <i class="fa-solid fa-trash"></i>
+                                Excluir
+
+                            </button>
+
+                        </form>
+
+                    </div>
+
                 </div>
-            </div>
+
+            <% }) %>
+
+        <% } else { %>
+
+            <p class="texto-vazio">
+                Nenhuma bebida cadastrada.
+            </p>
+
+        <% } %>
+
+    </div>
+
+</div>
             <div class="text-end mt-3">
-                <a href="/admin/areaGestor" class="btn btn-login-voltar">
+                <a href="/area-gestor" class="btn btn-login-voltar">
                     <i class="fa-solid fa-arrow-left"></i> Voltar
                 </a>
             </div>
@@ -365,7 +390,10 @@
         </div>
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/js/cardapioScript.js"></script>
+    
+
+<script src="/js/cardapioScript.js"></script>
+<script src="/js/estoqueScript.js"></script>
 </body>
 
 </html>

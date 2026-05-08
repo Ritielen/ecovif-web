@@ -8,6 +8,7 @@ module.exports = {
             autoIncrement: true, 
             primaryKey: true, 
         },  
+        
         preco_venda:{
           type: Sequelize.DECIMAL(10, 2),
           allowNull: false,

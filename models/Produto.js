@@ -18,6 +18,10 @@ const Produto = sequelizeconnect.define(
       type: DataTypes.STRING,
       allowNull: true,
     },
+    codigo: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
      data_validade: {
       type: DataTypes.DATEONLY,
       allowNull: true,
@@ -50,6 +54,10 @@ tipo_vinho: {
       type: DataTypes.INTEGER,
       allowNull: true,
     },
+    observacoes: {
+            type: DataTypes.TEXT,
+            allowNull: true,
+        },
     valor_compra: {
       type: DataTypes.DECIMAL(10, 2),
       allowNull: true,

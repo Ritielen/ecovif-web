@@ -12,10 +12,21 @@
     box-sizing: border-box;
 }
 
+html,
+body {
+    min-height: 100vh;
+}
+
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: var(--cor-escura);
     background-color: var(--cor-clara);
+      display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
 }
 
 /* Navbar */
@@ -134,12 +145,18 @@ body {
 /* Rodapé */
 .rodape {
     background-color: var(--cor-escura);
-    color: var(--cor-clara); 
+    color: var(--cor-clara);
     text-align: center;
-    padding: 2rem 1rem;
+
+    width: 100%;
+
+    padding: clamp(1rem, 2vw, 2rem);
 }
 
 .rodape p {
     margin: 0;
-    font-size: 0.95rem;
+
+    font-size: clamp(0.8rem, 1vw, 1rem);
+
+    line-height: 1.5;
 }

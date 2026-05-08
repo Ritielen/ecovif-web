@@ -17,7 +17,10 @@ module.exports = {
          type: Sequelize.STRING,
          allowNull: true,
        },
-      
+      codigo: {
+         type: Sequelize.INTEGER,
+         allowNull: true,
+       },
         data_validade: {
          type: Sequelize.DATEONLY,
          allowNull: true,
@@ -33,7 +36,6 @@ module.exports = {
        unidade: {
          type: Sequelize.ENUM('kg', 'g', 'l', 'ml', 'un'),
          allowNull: true,
-         
        },
        tipo_vinho: {
          type: Sequelize.ENUM('tinto', 'branco', 'rose', 'espumante'),
@@ -50,6 +52,10 @@ module.exports = {
        quantidade_minima: {
          type: Sequelize.INTEGER,
          allowNull: true,
+       },
+       observacoes: {
+        type: Sequelize.TEXT,
+        allowNull: true,
        },
        valor_compra: {
          type: Sequelize.DECIMAL(10, 2),
