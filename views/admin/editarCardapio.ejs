@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro de Cardápio - ECOVIF</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="/css/style-raiz.css">
+  <link rel="stylesheet" href="/css/style-login.css">
+  <link rel="stylesheet" href="/css/style-area-gestor.css">
+  <link rel="stylesheet" href="/css/style-cardapio.css">
+</head>
+
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+      <a class="navbar-brand" href="/area-gestor">
+        <i class="fa-solid fa-utensils"></i> ECOVIF
+        <span class="tagline">Sistema de Gestão para Restaurantes</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="/area-gestor">
+              <i class="fa-solid fa-user-shield"></i> Área do Gestor
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/suporte">Suporte</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/login" id="logoutBtn">
+              <i class="fa-solid fa-sign-out-alt"></i> Sair
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <!-- Header da Área do Gestor -->
+  <section class="cabecalho-gestor">
+    <div class="container">
+      <div class="welcome-box">
+        <div class="user-info">
+          <div class="user-avatar">
+            <i class="fa-solid fa-clipboard-list"></i>
+          </div>
+          <div>
+            <h1>Atualizar Cardápio</h1>
+            <p>Gerencie os itens do cardápio do restaurante</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Principal -->
+  <main class="funcionalidades-grid">
+    <div class="container">
+      <div class="row">
+        <!-- Seção Formulário -->
+        <section class="col-lg-5 secao-formulario">
+          <div class="caixa-formulario">
+            <h2>Editar Item</h2>
+
+            <%- include('../partials/alerts') %>
+
+            <div class="card-formulario">
+
+              <!-- ===== FORM PRATO ===== -->
+              <% if (categoria.categoria === 'prato') { %>
+              <form id="formCadastroPrato" action="/salvarEdicaoPrato/<%= prato.id %>" method="POST">
+
+                <div class="grupo-formulario">
+                  <label for="nome" class="label-formulario">Nome do Prato</label>
+                  <input type="text" name="nome" id="nome" class="controle-formulario" value="<%= prato.nome %>">
+                </div>
+
+                <!-- Ingredientes -->
+                <div id="container-ingredientes">
+                  <label class="label-formulario">Ingrediente e Qtd</label>
+
+                  <!-- Linhas preenchidas com dados do banco -->
+                  <% if (ingredientes && ingredientes.length > 0) { %>
+                  <% ingredientes.forEach(function(ing) { %>
+                  <div class="linha-ingrediente" style="display: flex; gap: 5px; margin-bottom: 10px;">
+                    <select name="produto_id" class="controle-formulario">
+                      <option value="" disabled>Produto...</option>
+                      <% produtos.forEach(function(p) { %>
+                      <option value="<%= p.id %>" <%= p.id === ing.produto_id ? 'selected' : '' %>>
+                        <%= p.nome %> <%= p.unidade %>
+                      </option>
+                      <% }) %>
+                    </select>
+
+                    <input type="number" name="quantidade_ingrediente" class="controle-formulario" style="width: 80px;" value="<%= ing.quantidade_ingrediente %>">
+
+                    <div class="grupo-formulario">
+                      <label class="label-formulario">Unidade</label>
+                      <select class="controle-formulario" name="unidade_ingrediente">
+                        <option value="kg" <%= ing.unidade_ingrediente === 'kg'  ? 'selected' : '' %>>kg</option>
+                        <option value="g" <%= ing.unidade_ingrediente === 'g'   ? 'selected' : '' %>>g</option>
+                        <option value="l" <%= ing.unidade_ingrediente === 'l'   ? 'selected' : '' %>>Litros (l)</option>
+                        <option value="ml" <%= ing.unidade_ingrediente === 'ml'  ? 'selected' : '' %>>Mililitros (ml)</option>
+                        <option value="un" <%= ing.unidade_ingrediente === 'un'  ? 'selected' : '' %>>un</option>
+                      </select>
+                    </div>
+
+                    <button type="button" class="btn-adicionar-ingrediente"><i class="fa-solid fa-plus"></i></button>
+                    <button type="button" class="btn-remover-ingrediente"><i class="fa-solid fa-trash"></i></button>
+                  </div>
+                  <% }) %>
+                  <% } else { %>
+                  <!-- Linha vazia quando não há ingredientes cadastrados -->
+                  <div class="linha-ingrediente" style="display: flex; gap: 5px; margin-bottom: 10px;">
+                    <select name="produto_id" class="controle-formulario">
+                      <option value="" disabled selected>Produto...</option>
+                      <% produtos.forEach(function(p) { %>
+                      <option value="<%= p.id %>"><%= p.nome %> <%= p.unidade %></option>
+                      <% }) %>
+                    </select>
+                    <input type="number" name="quantidade_ingrediente" class="controle-formulario" style="width: 80px;" placeholder="0">
+                    <div class="grupo-formulario">
+                      <label class="label-formulario">Unidade</label>
+                      <select class="controle-formulario" name="unidade_ingrediente">
+                        <option value="" disabled selected>Selecione...</option>
+                        <option value="kg">kg</option>
+                        <option value="g">g</option>
+                        <option value="l">Litros (l)</option>
+                        <option value="ml">Mililitros (ml)</option>
+                        <option value="un">un</option>
+                      </select>
+                    </div>
+                    <button type="button" class="btn-adicionar-ingrediente"><i class="fa-solid fa-plus"></i></button>
+                    <button type="button" class="btn-remover-ingrediente"><i class="fa-solid fa-trash"></i></button>
+                  </div>
+                  <% } %>
+                </div>
+
+                <div class="grupo-formulario">
+                  <label for="rendimento" class="label-formulario">Rendimento</label>
+                  <input type="text" name="rendimento" id="rendimento" class="controle-formulario" value="<%= prato.rendimento %>">
+                </div>
+
+                <div class="grupo-formulario">
+                  <label for="custo_prato" class="label-formulario">Custo do Prato (R$)</label>
+                  <input type="number" name="custo_prato" id="custo_prato" class="controle-formulario" placeholder="0.00" step="0.01" value="<%= prato.custo_prato %>">
+                </div>
+
+                <div class="grupo-formulario">
+                  <label for="preco_venda" class="label-formulario">Preço de Venda (R$)</label>
+                  <input type="number" name="preco_venda" id="preco_venda" class="controle-formulario" step="0.01" value="<%= prato.preco_venda %>">
+                </div>
+
+                <button type="submit" class="btn-login">
+                  <i class="fa-solid fa-check"></i> Salvar Prato
+                </button>
+
+              </form>
+              <% } %>
+
+              <!-- ===== FORM BEBIDA ===== -->
+              <% if (categoria.categoria === 'bebida') { %>
+              <form id="formCadastroBebida" action="/salvarEdicaoBebida/<%= bebida.id %>" method="POST">
+
+                <div class="grupo-formulario">
+                  <label class="label-formulario">Bebida</label>
+                  <input type="text" class="controle-formulario" value="<%= bebida.produto ? `${bebida.produto.nome} ${bebida.produto.tamanho || ''} ${bebida.produto.unidade || ''}`.trim() : '' %>" disabled>
+                </div>
+
+                <div class="grupo-formulario">
+                  <label for="preco_venda" class="label-formulario">Preço de Venda (R$)</label>
+                  <input type="number" name="preco_venda" id="preco_venda" class="controle-formulario" step="0.01" value="<%= bebida.preco_venda %>">
+                </div>
+
+                <button type="submit" class="btn-login">
+                  <i class="fa-solid fa-check"></i></i> Salvar Bebida
+                </button>
+
+              </form>
+              <% } %>
+
+            </div> <!-- Fim card-formulario -->
+            <!-- Botões de ação -->
+            <div class="text-end mt-3" style="display: flex; gap: 10px; justify-content: flex-end;">
+              <a href="/cardapio" class="btn btn-login-voltar">
+                <i class="fa-solid fa-arrow-left"></i> Voltar
+              </a>
+
+              <% if (categoria.categoria === 'prato') { %>
+              <form action="/excluirPrato/<%= prato.id %>" method="POST">
+                <button type="submit" class="btn-excluir" onclick="return confirm('Deseja excluir este prato?');">
+                  <i class="fa-solid fa-trash"></i> Excluir
+                </button>
+              </form>
+              <% } else if (categoria.categoria === 'bebida') { %>
+              <form action="/excluirBebida/<%= bebida.id %>" method="POST">
+                <button type="submit" class="btn-excluir" onclick="return confirm('Deseja excluir esta bebida?');">
+                  <i class="fa-solid fa-trash"></i> Excluir
+                </button>
+              </form>
+              <% } %>
+
+            </div>
+
+          </div> <!-- Fim caixa-formulario -->
+        </section> <!-- Fim secao-formulario -->
+      </div>
+    </div>
+  </main>
+  <!-- Rodapé -->
+  <footer class="rodape">
+    <div class="container">
+      <p>2026 Desenvolvido por Ritielen Rodrigues</p>
+    </div>
+  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script src="/js/cardapioScript.js"></script>
+  <script src="/js/estoqueScript.js"></script>
+</body>
+
+</html>

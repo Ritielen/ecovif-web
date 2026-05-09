@@ -149,10 +149,7 @@ if (containerIngredientes) {
     
     // Inicializa: esconde o botão remover da primeira linha
     atualizarBotoesRemover();
-}
+}   
     
 
-    
-});
-
-
+ });

@@ -7,8 +7,7 @@ const {Op} = require("sequelize");
 async function mostrarCardapio(req, res) {
   const { sucesso } = req.query;
   try {
-    //const pratos = await db.Prato.findAll();
-    //const bebidas = await db.Bebida.findAll();
+    
     const pratos = await db.Prato.findAll({
   include: [
     {
@@ -42,7 +41,6 @@ const bebidas = await db.Bebida.findAll({
       produtos,
       pratos,
       bebidas,
-      
       msgSucesso: sucesso
     }); 
     
@@ -62,8 +60,8 @@ async function cadastrarItemCardapio(req, res) {
     const usuarioId = req.session.usuarioId;
     const { categoria, produto_id, preco_venda, nome, rendimento, custo_prato, quantidade_ingrediente, unidade_ingrediente } = req.body;
 
-    // Aqui você pode assumir que cada usuário tem um cardápio único
-    // Se quiser simplificar, pode usar cardapio_id = 1 ou buscar pelo usuario_id
+    // cada usuário tem um cardápio único
+    // cardapio_id = 1 ou buscar pelo usuario_id
     const cardapio = await db.Cardapio.findOne({ where: { usuario_id: usuarioId } });
     if (!cardapio) {
       // Se não existir, cria automaticamente
@@ -109,7 +107,6 @@ async function cadastrarItemCardapio(req, res) {
 
 }
 
-    
     } else if (categoria === 'bebida') {
       const bebida = await db.Bebida.create({
         nome,
@@ -127,7 +124,7 @@ async function cadastrarItemCardapio(req, res) {
   }
 }
 
-//buscar item do cardápio por nome
+
 // Buscar produto por nome ou categoria
 function buscarProdutos(lista, termo) {
   const termoNormalizado = termo.toLowerCase();
@@ -137,11 +134,196 @@ function buscarProdutos(lista, termo) {
   );
 }
 
+//tela de edição do prato
 
+async function edicaoPrato(req, res) {
+  const { id } = req.params;
+  const { sucesso } = req.query;
 
+  try {
+    const prato = await db.Prato.findByPk(id);
+    if (!prato) {
+      return res.redirect("/cardapio?erro=Prato não encontrado");
+    }
 
+    // Busca ingredientes pelo prato_id 
+    const ingredientes = await db.Ingrediente.findAll({
+      where: { prato_id: id }, // <-- corrigido
+      include: [{ model: db.Produto, as: 'produto' }] // traz os dados do produto junto
+    });
+
+    const produtos = await db.Produto.findAll({
+      attributes: ['id', 'nome', 'unidade', 'tamanho'],
+      order: [['nome', 'ASC']]
+    });
+
+    res.render("admin/editarCardapio", {
+      categoria: { categoria: "prato" },
+      prato,
+      produtos,
+      ingredientes, // array com os ingredientes do prato
+      msgSucesso: sucesso
+    });
+  } catch (error) {
+    console.error("Erro ao carregar edição de prato:", error);
+    res.redirect("/cardapio?erro=Erro ao carregar prato");
+  }
+}
+
+//edição da bebida
+async function edicaoBebida(req, res) {
+  const { id } = req.params;
+  const { sucesso } = req.query;
+
+  try {
+    // Uma única busca
+    const bebida = await db.Bebida.findByPk(id, {
+      include: [{ model: db.Produto, as: 'produto' }]
+    });
+
+    if (!bebida) {
+      return res.redirect("/cardapio?erro=Bebida não encontrada");
+    }
+
+    const produtos = await db.Produto.findAll({
+      attributes: ['id', 'nome', 'unidade', 'tamanho'],
+      order: [['nome', 'ASC']]
+    });
+
+    res.render("admin/editarCardapio", {
+      categoria: { categoria: "bebida" },
+      bebida,
+      produtos,
+      msgSucesso: sucesso
+    });
+  } catch (error) {
+    console.error("Erro ao carregar edição de bebida:", error);
+    res.redirect("/cardapio?erro=Erro ao carregar bebida");
+  }
+}
+          
+   async function atualizarPrato(req, res) {
+  const { id } = req.params;
+  const {
+    nome,
+    rendimento,
+    custo_prato,
+    preco_venda,
+    produto_id,
+    quantidade_ingrediente,
+    unidade_ingrediente
+  } = req.body;
+
+  try {
+    const prato = await db.Prato.findByPk(id);
+    if (!prato) {
+      return res.redirect("/cardapio?erro=Prato não encontrado");
+    }
+
+    // Atualiza o prato
+    await prato.update({
+      nome: nome || prato.nome,
+      rendimento: rendimento || prato.rendimento,
+      custo_prato: custo_prato || prato.custo_prato,
+      preco_venda: preco_venda || prato.preco_venda,
+    });
+
+    // Normaliza para array (caso venha só 1 ingrediente, não será array)
+    const ids       = Array.isArray(produto_id)             ? produto_id             : [produto_id];
+    const qtds      = Array.isArray(quantidade_ingrediente) ? quantidade_ingrediente : [quantidade_ingrediente];
+    const unidades  = Array.isArray(unidade_ingrediente)    ? unidade_ingrediente    : [unidade_ingrediente];
+
+    // Remove todos os ingredientes antigos e recria
+    await db.Ingrediente.destroy({ where: { prato_id: id } });
+
+    const novosIngredientes = ids
+      .filter(pid => pid) // ignora linhas vazias
+      .map((pid, i) => ({
+        produto_id: pid,
+        quantidade_ingrediente: qtds[i] || 0,
+        unidade_ingrediente: unidades[i] || 'un',
+        prato_id: id
+      }));
+
+    if (novosIngredientes.length > 0) {
+      await db.Ingrediente.bulkCreate(novosIngredientes);
+    }
+
+    res.redirect(`/editarPrato/${id}?sucesso=Prato atualizado com sucesso`);
+  } catch (error) {
+    console.error("Erro ao atualizar prato:", error);
+    res.redirect(`/editarPrato/${id}?error=Erro ao processar`);
+  }
+}
+
+async function excluirPrato(req, res) {
+  const { id } = req.params;
+
+  try {
+    const prato = await db.Prato.findByPk(id);
+    if (!prato) {
+      return res.redirect("/cardapio?erro=Prato não encontrado");
+    }
+
+    // Exclui os ingredientes primeiro (chave estrangeira)
+    await db.Ingrediente.destroy({ where: { prato_id: id } });
+
+    // Depois exclui o prato
+    await prato.destroy();
+
+    res.redirect("/cardapio?sucesso=Prato excluído com sucesso");
+  } catch (error) {
+    console.error("Erro ao excluir prato:", error);
+    res.redirect("/cardapio?erro=Erro ao excluir prato");
+  }
+}
+
+async function atualizarBebida(req, res) {
+  const { id } = req.params;
+  const { preco_venda } = req.body;
+
+  try {
+    const bebida = await db.Bebida.findByPk(id);
+    if (!bebida) {
+      return res.redirect("/cardapio?erro=Bebida não encontrada");
+    }
+
+    await bebida.update({
+      preco_venda: preco_venda || bebida.preco_venda, 
+    });
+
+    res.redirect(`/editarBebida/${id}?sucesso=Bebida atualizada com sucesso`);
+  } catch (error) {
+    console.error("Erro ao atualizar bebida:", error);
+    res.redirect(`/editarBebida/${id}?erro=Erro ao processar`);
+  }
+}
+
+async function excluirBebida(req, res) {
+  const { id } = req.params;
+
+  try {
+    const bebida = await db.Bebida.findByPk(id);
+    if (!bebida) {
+      return res.redirect("/cardapio?erro=Bebida não encontrada");
+    }
+
+    await bebida.destroy();
+
+    res.redirect("/cardapio?sucesso=Bebida excluída com sucesso");
+  } catch (error) {
+    console.error("Erro ao excluir bebida:", error);
+    res.redirect("/cardapio?erro=Erro ao excluir bebida");
+  }
+}
 
 module.exports = {
     mostrarCardapio,
-    cadastrarItemCardapio
+    cadastrarItemCardapio,
+    edicaoPrato,
+    edicaoBebida,
+    atualizarPrato,
+    excluirPrato,
+    atualizarBebida,
+    excluirBebida
 };

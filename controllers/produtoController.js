@@ -84,10 +84,19 @@ async function cadastrarProduto(req, res) {
   }
 }
 
-//buscar produto por nome
+/* buscar produto por nome
 function buscarProdutos(lista, termo) {
   return lista.filter(produto =>
     produto.nome.toLowerCase().includes(termo.toLowerCase())
+  );
+} */
+
+// Buscar produto por nome ou categoria
+function buscarProdutos(lista, termo) {
+  const termoNormalizado = termo.toLowerCase();
+  return lista.filter(produto =>
+    produto.nome.toLowerCase().includes(termoNormalizado) ||
+    produto.categoria.toLowerCase().includes(termoNormalizado)
   );
 }
 

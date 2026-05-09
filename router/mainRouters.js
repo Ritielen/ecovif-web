@@ -70,6 +70,15 @@ router.post("/admin/produto/excluir/:id", produtoController.excluirProduto);
 router.get("/cardapio", cardapioController.mostrarCardapio);
 router.post("/cadastroCardapio", cardapioController.cadastrarItemCardapio);
 
+router.get("/editarPrato/:id", cardapioController.edicaoPrato);
+router.get("/editarBebida/:id", cardapioController.edicaoBebida);
+
+router.post("/salvarEdicaoPrato/:id", cardapioController.atualizarPrato);
+router.post("/excluirPrato/:id", cardapioController.excluirPrato);
+
+router.post("/salvarEdicaoBebida/:id", cardapioController.atualizarBebida);
+router.post("/excluirBebida/:id", cardapioController.excluirBebida);
+
 
 
 
