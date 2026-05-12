@@ -7,6 +7,7 @@ const mainController = require("../controllers/mainController");
 const produtoController = require("../controllers/produtoController");
 const cardapioController = require("../controllers/cardapioController");
 const comandaController = require("../controllers/comandaController");
+const pedidoCozinhaController = require("../controllers/pedidoCozinhaController");
 
 
 //rotas da home e logout
@@ -86,6 +87,9 @@ router.post("/excluirBebida/:id", cardapioController.excluirBebida);
 router.get("/comanda", comandaController.mostrarComanda);
 router.post("/criarComanda", comandaController.criarComanda);
 
+//rotas da cozinha
+router.get("/pedidoCozinha", pedidoCozinhaController.listarComandas);
+router.post("/admin/comanda/:id/status", pedidoCozinhaController.atualizarStatus);
 
 
 

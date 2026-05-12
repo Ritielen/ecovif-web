@@ -140,3 +140,37 @@ formComanda.addEventListener("submit", (e) => {
 
   formComanda.appendChild(inputTotal);
 });
+  
+//função para atualizar status da comanda
+
+  function atualizarStatusComanda(comandaId, novoStatus) {
+  // Mapear status para os valores corretos do ENUM
+  const statusMap = {
+    'Em Preparo': 'em preparo',
+    'Pronto': 'pronta',
+    'Pendente': 'pendente',
+    'Cancelada': 'cancelada'
+  };
+
+  const statusParaEnviar = statusMap[novoStatus] || novoStatus;
+
+  fetch(`/admin/comanda/${comandaId}/status`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ status: statusParaEnviar })
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      location.reload();
+    } else {
+      alert('Erro ao atualizar status: ' + data.message);
+    }
+  })
+  .catch(error => {
+    console.error('Erro:', error);
+    alert('Erro ao conectar com o servidor');
+  });
+}

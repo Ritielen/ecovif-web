@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pedidos da Cozinha - ECOVIF</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="/css/style-raiz.css">
+  <link rel="stylesheet" href="/css/style-login.css">
+  <link rel="stylesheet" href="/css/style-area-gestor.css">
+  <link rel="stylesheet" href="/css/style-cardapio.css">
+  <link rel="stylesheet" href="/css/style-comandas.css">
+  <link rel="stylesheet" href="/css/style-pedidos-cozinha.css">
+</head>
+
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+      <a class="navbar-brand" href="/area-gestor">
+        <i class="fa-solid fa-utensils"></i> ECOVIF
+        <span class="tagline">Sistema de Gestão para Restaurantes</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="/area-gestor">
+              <i class="fa-solid fa-user-shield"></i> Área do Gestor
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="/pedidoCozinha">
+              <i class="fa-solid fa-clipboard-list"></i> Pedidos Cozinha
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/suporte">Suporte</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/login" id="logoutBtn">
+              <i class="fa-solid fa-sign-out-alt"></i>
+              Sair</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Header da Área do Gestor -->
+  <section class="cabecalho-gestor">
+    <div class="container">
+      <div class="welcome-box">
+        <div class="user-info">
+          <div class="user-avatar">
+            <i class="fa-solid fa-utensils"></i>
+          </div>
+          <div>
+            <h1>Pedidos da Cozinha</h1>
+            <p>Gerencie o preparo dos pedidos em tempo real</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Principal -->
+  <main class="funcionalidades-grid">
+
+    <!-- Filtros de Pedidos -->
+    <section class="secao-filtros-cozinha">
+      <div class="container">
+        <div class="filtros-cozinha">
+          <button class="btn-filtro-cozinha active">
+            <i class="fa-solid fa-list"></i> Todos os Pedidos
+          </button>
+          <button class="btn-filtro-cozinha">
+            <i class="fa-solid fa-exclamation-circle"></i> Pendentes
+          </button>
+          <button class="btn-filtro-cozinha">
+            <i class="fa-solid fa-clock"></i> Em Preparo
+          </button>
+          <button class="btn-filtro-cozinha">
+            <i class="fa-solid fa-check-circle"></i> Prontos
+          </button>
+        </div>
+      </div>
+    </section>
+
+   <!-- Lista de Pedidos -->
+<section class="col-lg-7 secao-lista">
+
+  <!-- ========== BARRA DE PESQUISA ========== -->
+  <div class="barra-pesquisa-wrapper">
+    <label for="inputPesquisa">
+      <i class="fa-solid fa-magnifying-glass"></i> Pesquisar comanda
+    </label>
+    <div class="linha-pesquisa">
+      <input type="text" id="inputPesquisa" class="input-pesquisa" placeholder="Ex.: Nome do cliente, número da mesa..." autocomplete="off">
+      <button type="button" class="btn-pesquisar" id="btnPesquisar">
+        <i class="fa-solid fa-search"></i> Pesquisar
+      </button>
+      <button type="button" class="btn-limpar-filtro" id="btnLimparFiltro">
+        <i class="fa-solid fa-broom"></i> Limpar Pesquisa
+      </button>
+    </div>
+  </div>
+  
+  <div class="msg-sem-resultado" id="msgSemResultado">
+    <i class="fa-solid fa-magnifying-glass"></i> Nenhuma comanda encontrada para "<span id="termoPesquisado"></span>"
+  </div>
+
+  <!-- ================= COMANDA ================= -->
+  <div class="caixa-categoria">
+    <h3><i class="fa-solid fa-clipboard-list"></i> Lista de Pedidos</h3>
+    
+    <div class="lista-itens">
+      <% comandas.forEach(comanda => { %>
+      
+      <div class="conteudo-item" data-id="<%= comanda.id %>">
+        <h4>Comanda #<%= comanda.id %></h4>
+        
+        <div class="info-item">
+          <div>
+            <strong>Cliente:</strong> <%= comanda.nome_cliente %>
+          </div>
+          <div>
+            <strong>Mesa:</strong> <%= comanda.mesa %>
+          </div>
+          <div>
+            <% if (comanda.observacoes) { %>
+                  <div class="obs-texto"><strong>Obs:</strong> <%= comanda.observacoes %></div>
+                  <% } %>
+          </div>
+          <div class="data-pedido">
+              <strong>Horário:</strong>    <%= comanda.created_at.toLocaleTimeString() %>
+                </div>
+        </div>
+        
+        <div class="ingredientes-lista">
+          <strong>Itens do Pedido:</strong>
+          <ul>
+            <% comanda.itens.forEach(item => { %>
+            <li>
+              <strong><%= item.quantidade %>x</strong> 
+              <%= item.tipo_item === "prato" ? item.prato.nome : item.bebida.produto.nome %>
+              - R$ <%= item.tipo_item === "prato" ? item.prato.preco_venda : item.bebida.preco_venda %>
+              <% if (item.observacoes) { %>
+              <br><em>Obs.: <%= item.observacoes %></em>
+              <% } %>
+            </li>
+            <% }) %>
+          </ul>
+        </div>
+         
+        
+        <div class="preco-lucro">
+          <span class="preco-destaque">
+            Total: R$ <%= comanda.total %>
+          </span>
+          <span class="lucro-destaque">
+            <%= comanda.status %>
+          </span>
+        </div>
+        
+        <div class="acoes-item">
+          <button class="btn-editar" onclick="event.preventDefault(); atualizarStatusComanda('<%= comanda.id %>', 'em preparo')">
+    <i class="fa-solid fa-play"></i> Em Preparo
+  </button>
+  
+  <button class="btn-excluir" onclick="event.preventDefault(); atualizarStatusComanda('<%= comanda.id %>', 'pronta')">
+    <i class="fa-solid fa-check"></i> Pronta
+  </button>
+        </div>
+      </div>
+      <% }) %>
+    </div>
+  </div>
+  
+  <!-- Botão Voltar -->
+  <div class="text-end mt-3">
+    <a href="/area-gestor" class="btn btn-login-voltar">
+      <i class="fa-solid fa-arrow-left"></i> Voltar
+    </a>
+  </div>
+</section>
+</div>
+  </main>
+
+  <!-- Rodapé -->
+  <footer class="rodape">
+    <div class="container">
+      <p>2026 Desenvolvido por Ritielen Rodrigues.</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/cardapioScript.js"></script>
+  
+  <script src="/js/estoqueScript.js"></script>
+  <script src="/js/comandaScript.js"></script>
+</body>
+
+</html>
