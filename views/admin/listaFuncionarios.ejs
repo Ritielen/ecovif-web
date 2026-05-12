@@ -120,7 +120,12 @@
                   <td>
                     <%= funcionario.funcionario %>
                   </td>
-                  <td><%= funcionario.criado_por %></td>
+                  <td><% if (funcionario.Criador) { %>
+                    <%= funcionario.criado_por %> - <%= funcionario.Criador.nome %> - <%= funcionario.Criador.sobrenome %>
+                    <% } else { %>
+                    <span class="badge bg-primary">Gestor (Raiz)</span>
+                    <% } %>
+                  </td>
                   <td>
                     <%= funcionario.admin ? "Sim" : "Não" %>
                   </td>

@@ -129,7 +129,7 @@ async function criarFuncionario(req, res) {
     });
 
     console.log(`✅ Funcionário ${nome} criado com sucesso por ID: ${criadoPorId}`);
-    res.redirect("/admin/listaFuncionarios?sucesso=true");
+    res.redirect("/listaFuncionarios?sucesso=true");
 
   } catch (error) {
     console.error("Erro ao cadastrar funcionário:", error);
@@ -144,15 +144,20 @@ async function criarFuncionario(req, res) {
 // Renderizar lista de funcionários 
 async function renderizarListaFuncionarios(req, res) {
   try {
-    // Remove o filtro de funcionario
     const funcionarios = await db.Usuario.findAll({
-      include: [{
-        model: db.Grupo,
-        as: 'grupo',
-        attributes: ['id', 'nome_grupo', 'descricao_grupo']
-      }],
+      include: [
+        {
+          model: db.Grupo,
+          as: 'grupo',
+        },
+        {
+          model: db.Usuario, // Relacionamento com a própria tabela de usuários
+          as: 'Criador',     // apelido definido no Model
+        }
+      ],
       order: [['id', 'DESC']]
     });
+
     res.render("admin/listaFuncionarios", { funcionarios });
   } catch (error) {
     console.error("Erro ao buscar funcionários:", error);
@@ -162,7 +167,6 @@ async function renderizarListaFuncionarios(req, res) {
     });
   }
 }
-
 // Função para EXCLUIR funcionário (igual ao gestor)
 async function excluirFuncionario(req, res) {
   const { id } = req.params;

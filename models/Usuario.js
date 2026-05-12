@@ -77,14 +77,14 @@ Usuario.associate = (models) => {
     as: 'grupo'
   });
 
-  Usuario.hasMany(models.Usuario, {
-    as: 'funcionarios_criados',
-    foreignKey: 'criado_por'
+  Usuario.hasMany(models.Usuario, {   
+    foreignKey: 'criado_por',
+    as: 'subordinados'
   });
 
   Usuario.belongsTo(models.Usuario, {
-    as: 'criador',
-    foreignKey: 'criado_por'
+    foreignKey: 'criado_por',
+    as: 'Criador'
   });
 
   Usuario.hasMany(models.Produto, {
