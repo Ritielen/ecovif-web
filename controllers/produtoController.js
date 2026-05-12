@@ -5,7 +5,7 @@ const {Op} = require("sequelize");
 
  async function renderizarEstoque(req, res) {
     try {
-        // Buscamos os produtos e inclusão da contagem de movimentações para cada um
+        // Buscando os produtos e inclusão da contagem de movimentações para cada um
         const produtos = await db.Produto.findAll({ 
             include: [{
                 model: db.MovimentacaoProduto,
@@ -83,13 +83,6 @@ async function cadastrarProduto(req, res) {
     return res.redirect("/estoque?erro=Erro interno ao cadastrar");
   }
 }
-
-/* buscar produto por nome
-function buscarProdutos(lista, termo) {
-  return lista.filter(produto =>
-    produto.nome.toLowerCase().includes(termo.toLowerCase())
-  );
-} */
 
 // Buscar produto por nome ou categoria
 function buscarProdutos(lista, termo) {

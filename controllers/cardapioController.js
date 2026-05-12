@@ -147,7 +147,7 @@ async function edicaoPrato(req, res) {
 
     // Busca ingredientes pelo prato_id 
     const ingredientes = await db.Ingrediente.findAll({
-      where: { prato_id: id }, // <-- corrigido
+      where: { prato_id: id }, 
       include: [{ model: db.Produto, as: 'produto' }] // traz os dados do produto junto
     });
 
