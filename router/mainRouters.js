@@ -5,7 +5,9 @@ const autenticacao = require("../config/autenticacao");
 //const upload = require("../config/upload");
 const mainController = require("../controllers/mainController");
 const produtoController = require("../controllers/produtoController");
-const cardapioController = require("../controllers/cardapioController")
+const cardapioController = require("../controllers/cardapioController");
+const comandaController = require("../controllers/comandaController");
+
 
 //rotas da home e logout
 router.get("/", loginController.renderizarHome);
@@ -49,6 +51,7 @@ router.post("/enviar-suporte", loginController.enviarSuporte);
 router.get("/cadastrarGrupo", mainController.renderizarCadastrarGrupo);
 router.post('/criarGrupo', mainController.criarGrupo);
 router.get('/listaGrupos', mainController.renderizarListaGrupos);
+router.post("/admin/grupos/editar/:id", mainController.editarGrupo);
 router.post('/admin/grupos/excluir/:id', mainController.excluirGrupo);
 
 //rotas cadastro de funcionário
@@ -66,7 +69,7 @@ router.get("/produtoAdicionar/:id", produtoController.mostrarEstoque);
 router.post("/admin/produto/editar/:id",produtoController.editarProduto);
 router.post("/admin/produto/excluir/:id", produtoController.excluirProduto);
 
-//rota do cardapio cadastro do prato e preço de venda da bebida
+//rotas do cardapio cadastro do prato e preço de venda da bebida
 router.get("/cardapio", cardapioController.mostrarCardapio);
 router.post("/cadastroCardapio", cardapioController.cadastrarItemCardapio);
 
@@ -79,9 +82,9 @@ router.post("/excluirPrato/:id", cardapioController.excluirPrato);
 router.post("/salvarEdicaoBebida/:id", cardapioController.atualizarBebida);
 router.post("/excluirBebida/:id", cardapioController.excluirBebida);
 
-
-
-
+//rotas da comanda
+router.get("/comanda", comandaController.mostrarComanda);
+router.post("/criarComanda", comandaController.criarComanda);
 
 
 

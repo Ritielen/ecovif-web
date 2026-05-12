@@ -2,355 +2,350 @@
 <html lang="pt-BR">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Estoque - ECOVIF</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="/css/style-raiz.css">
-    <link rel="stylesheet" href="/css/style-login.css">
-    <link rel="stylesheet" href="/css/style-area-gestor.css">
-    <link rel="stylesheet" href="/css/style-cardapio.css">
-    <link rel="stylesheet" href="/css/style-estoque.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Estoque - ECOVIF</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="/css/style-raiz.css">
+  <link rel="stylesheet" href="/css/style-login.css">
+  <link rel="stylesheet" href="/css/style-area-gestor.css">
+  <link rel="stylesheet" href="/css/style-cardapio.css">
+  <link rel="stylesheet" href="/css/style-estoque.css">
 </head>
 
 <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark">
-        <div class="container">
-            <a class="navbar-brand" href="/area-gestor">
-                <i class="fa-solid fa-utensils"></i> ECOVIF
-                <span class="tagline">Sistema de Gestão para Restaurantes</span>
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/area-gestor">
-                            <i class="fa-solid fa-user-shield"></i> Área do Gestor
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/login/suporte">Suporte</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/login" id="logoutBtn">
-                            <i class="fa-solid fa-sign-out-alt"></i>
-                            Sair
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-    <!-- Header da Área do Gestor -->
-    <section class="cabecalho-gestor">
-        <div class="container">
-            <div class="welcome-box">
-                <div class="user-info">
-                    <div class="user-avatar">
-                        <i class="fa-solid fa-boxes"></i>
-                    </div>
-                    <div>
-                        <h1>Cadastrar Produtos</h1>
-                        <p>Gerencie o estoque de produtos e bebidas do restaurante</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- Grid de Funcionalidades -->
-<section class="funcionalidades-grid">
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark">
     <div class="container">
-        <div class="row">
-            <!-- Seção Formulário -->
-            <section class="col-lg-5 secao-formulario">
-                <div class="caixa-formulario">
-                    <h2>Adicionar ao Estoque</h2>
-                    <%- include ('../partials/alerts') %>
-                        <form id="formEstoque" action="/estoqueCadastrar" method="POST">
-                            <!-- Seletor de Tipo -->
-                            <div class="grupo-formulario">
-                                <label class="label-formulario">Tipo</label>
-                                <select class="controle-formulario" name="tipo_item" data-required="true">
-                                    <option value="" disabled selected>Selecione...</option>
-                                    <option value="produto">Produto</option>
-                                    <option value="bebida">Bebida</option>
-                                </select>
-                            </div>
+      <a class="navbar-brand" href="/area-gestor">
+        <i class="fa-solid fa-utensils"></i> ECOVIF
+        <span class="tagline">Sistema de Gestão para Restaurantes</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="/area-gestor">
+              <i class="fa-solid fa-user-shield"></i> Área do Gestor
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/login/suporte">Suporte</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/login" id="logoutBtn">
+              <i class="fa-solid fa-sign-out-alt"></i>
+              Sair
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <!-- Header da Área do Gestor -->
+  <section class="cabecalho-gestor">
+    <div class="container">
+      <div class="welcome-box">
+        <div class="user-info">
+          <div class="user-avatar">
+            <i class="fa-solid fa-boxes"></i>
+          </div>
+          <div>
+            <h1>Cadastrar Produtos</h1>
+            <p>Gerencie o estoque de produtos e bebidas do restaurante</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Grid de Funcionalidades -->
+  <section class="funcionalidades-grid">
+    <div class="container">
+      <div class="row">
+        <!-- Seção Formulário -->
+        <section class="col-lg-5 secao-formulario">
+          <div class="caixa-formulario">
+            <h2>Adicionar ao Estoque</h2>
+            <%- include ('../partials/alerts') %>
+            <form id="formEstoque" action="/estoqueCadastrar" method="POST">
+              <!-- Seletor de Tipo -->
+              <div class="grupo-formulario">
+                <label class="label-formulario">Tipo</label>
+                <select class="controle-formulario" name="tipo_item" data-required="true">
+                  <option value="" disabled selected>Selecione...</option>
+                  <option value="produto">Produto</option>
+                  <option value="bebida">Bebida</option>
+                </select>
+              </div>
 
-                           
 
-                            <!-- Formulário para Produtos -->
-                            <div id="formProduto" class="formulario-tipo" style="display: none;">
-                                <div class="grupo-formulario">
-                                    <label class="label-formulario">Nome do Produto</label>
-                                    <input type="text" class="controle-formulario" name="nome" placeholder="Ex: Carne Bovina" data-required="true">
-                                </div>
-                                <div class="grupo-formulario">
-                                    <label class="label-formulario">Data de Validade</label>
-                                    <input type="date" class="controle-formulario" name="data_validade">
-                                    <small class="texto-ajuda">Opcional</small>
-                                </div>
-                                <div class="grupo-formulario">
-                                    <label class="label-formulario">Categoria</label>
-                                    <select class="controle-formulario" name="categoria">
-                                        <option value="" disabled selected>Selecione...</option>
-                                        <option value="alto_custo">Alto Custo</option>
-                                        <option value="medio_custo">Médio Custo</option>
-                                        <option value="baixo_custo">Baixo Custo</option>
-                                    </select>
-                                </div>
-                                <div class="grupo-formulario">
-                                    <label class="label-formulario">Unidade</label>
-                                    <select class="controle-formulario" name="unidade" data-required="true">
-                                        <option value="" disabled selected>Selecione...</option>
-                                        <option value="kg">kg</option>
-                                        <option value="g">g</option>
-                                        <option value="l">Litros(l)</option>
-                                        <option value="ml">Mililitros(ml)</option>
-                                        <option value="un">un</option>
-                                    </select>
-                                </div>
-                                <div class="linha-formulario">
-                                    <div class="grupo-formulario">
-                                        <label class="label-formulario">Quantidade (Unidades)</label>
-                                        <input type="number" class="controle-formulario" name="quantidade" placeholder="Ex: 10" data-required="true">
-                                    </div>
-                                    <div class="grupo-formulario">
-                                        <label class="label-formulario">Quantidade Mínima (no Estoque)</label>
-                                        <input type="number" class="controle-formulario" name="quantidade_minima" placeholder="Ex: 2" data-required="true">
-                                    </div>
-                                </div>
-                            </div>
 
-                            <!-- Formulário para Bebidas -->
-                            <div id="formBebida" class="formulario-tipo" style="display: none;">
-                                <div class="grupo-formulario">
-                                    <label class="label-formulario">Nome da Bebida</label>
-                                    <input type="text" class="controle-formulario" name="nome" placeholder="Ex: Refrigerante Coca-Cola" data-required="true">
-                                </div>
-                                <div class="grupo-formulario">
-                                    <label class="label-formulario">Data de Validade</label>
-                                    <input type="date" class="controle-formulario" name="data_validade">
-                                    <small class="texto-ajuda">Opcional</small>
-                                </div>
-                                <div class="linha-formulario">
-                                    <div class="grupo-formulario">
-                                        <label class="label-formulario">Tamanho</label>
-                                        <input type="number" class="controle-formulario" name="tamanho" placeholder="Ex: 350" min="0" step="0.01" data-required="true">
-                                    </div>
-                                    <div class="grupo-formulario">
-                                        <label class="label-formulario">Unidade</label>
-                                        <select class="controle-formulario" name="unidade" data-required="true">
-                                            <option value="" disabled selected>Selecione...</option>
-                                            <option value="ml">Mililitros (ml)</option>
-                                            <option value="l">Litros (l)</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="grupo-formulario">
-                                    <label for="tipoVinho" class="label-formulario">Tipo do Vinho</label>
-                                    <select name="tipo_vinho" id="tipo_vinho" class="controle-formulario">
-                                        <option value="" disabled selected>Selecione...</option>
-                                        <option value="tinto">Tinto</option>
-                                        <option value="branco">Branco</option>
-                                        <option value="rose">Rosé</option>
-                                        <option value="espumante">Espumante</option>
-                                    </select>
-                                </div>
-                                <div class="linha-formulario">
-                                    <div class="grupo-formulario">
-                                        <label class="label-formulario">Quantidade (unidades)</label>
-                                        <input type="number" class="controle-formulario" name="quantidade" placeholder="Ex: 24" data-required="true">
-                                    </div>
-                                    <div class="grupo-formulario">
-                                        <label class="label-formulario">Quantidade Mínima (no Estoque)</label>
-                                        <input type="number" class="controle-formulario" name="quantidade_minima" placeholder="Ex: 6" data-required="true">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Campos (comum aos dois) -->
-                             
-                    <div class="grupo-formulario">
-                        <label class="label-formulario">Código do produto</label>
-                        <input type="number" class="controle-formulario" name="codigo" data-required="true">
-                    </div>
-                    <div class="linha-formulario">
-                    <!-- Observação específica do Produto -->
+              <!-- Formulário para Produtos -->
+              <div id="formProduto" class="formulario-tipo" style="display: none;">
                 <div class="grupo-formulario">
-                    <label class="label-formulario">Observações do Produto</label>
-                    <textarea class="controle-formulario" name="observacoes" placeholder="Ex: 2 pacotes de 400g, lata, garra..."></textarea>
+                  <label class="label-formulario">Nome do Produto</label>
+                  <input type="text" class="controle-formulario" name="nome" placeholder="Ex: Carne Bovina" data-required="true">
                 </div>
-                    </div>
-                            <div class="grupo-formulario">
-                                <label class="label-formulario">Valor da Compra (R$)</label>
-                                <input type="number" class="controle-formulario" name="valor_compra"
-                                    placeholder="0,00" step="0.01">
-                                <small class="texto-ajuda">Opcional - registre o valor gasto na compra</small>
-                            </div>
-                            
-
-                            <!-- Botão de submit -->
-                            <button type="submit" class="btn-login">
-                                <i class="fa-solid fa-plus-circle"></i> <span id="textoBotao">Cadastrar Produto</span>
-                            </button>
-                        </form>
+                <div class="grupo-formulario">
+                  <label class="label-formulario">Data de Validade</label>
+                  <input type="date" class="controle-formulario" name="data_validade">
+                  <small class="texto-ajuda">Opcional</small>
                 </div>
-            </section>
-
-            <!--Seção lista-->
-            <section class="col-lg-7 secao-lista">
-                <!-- ========== BARRA DE PESQUISA ========== -->
-                <div class="barra-pesquisa-wrapper">
-                    <label for="inputPesquisa">
-                        <i class="fa-solid fa-magnifying-glass"></i> Pesquisar item do estoque
-                    </label>
-                    <div class="linha-pesquisa">
-                        <input type="text" id="inputPesquisa" class="input-pesquisa"
-                            placeholder="Ex.: Suco de Uva, Merlot, Filé Mignon..." autocomplete="off">
-                        <button type="button" class="btn-pesquisar" id="btnPesquisar">
-                            <i class="fa-solid fa-search"></i> Pesquisar
-                        </button>
-                        <button type="button" class="btn-limpar-filtro" id="btnLimparFiltro">
-                            <i class="fa-solid fa-broom"></i> Limpar Pesquisa
-                        </button>
-                    </div>
+                <div class="grupo-formulario">
+                  <label class="label-formulario">Categoria</label>
+                  <select class="controle-formulario" name="categoria">
+                    <option value="" disabled selected>Selecione...</option>
+                    <option value="alto_custo">Alto Custo</option>
+                    <option value="medio_custo">Médio Custo</option>
+                    <option value="baixo_custo">Baixo Custo</option>
+                  </select>
                 </div>
-                <div class="msg-sem-resultado" id="msgSemResultado">
-                    <i class="fa-solid fa-magnifying-glass"></i> Nenhum item encontrado para "<span
-                        id="termoPesquisado"></span>"
+                <div class="grupo-formulario">
+                  <label class="label-formulario">Unidade</label>
+                  <select class="controle-formulario" name="unidade" data-required="true">
+                    <option value="" disabled selected>Selecione...</option>
+                    <option value="kg">kg</option>
+                    <option value="g">g</option>
+                    <option value="l">Litros(l)</option>
+                    <option value="ml">Mililitros(ml)</option>
+                    <option value="un">un</option>
+                  </select>
                 </div>
-            
-       
+                <div class="linha-formulario">
+                  <div class="grupo-formulario">
+                    <label class="label-formulario">Quantidade (Unidades)</label>
+                    <input type="number" class="controle-formulario" name="quantidade" placeholder="Ex: 10" data-required="true">
+                  </div>
+                  <div class="grupo-formulario">
+                    <label class="label-formulario">Quantidade Mínima (no Estoque)</label>
+                    <input type="number" class="controle-formulario" name="quantidade_minima" placeholder="Ex: 2" data-required="true">
+                  </div>
+                </div>
+              </div>
 
-<!-- SEÇÃO DE PRODUTOS -->
-<div class="caixa-categoria">
-    <h3><i class="fa-solid fa-box"></i> Produtos</h3>
-    <div id="listaProdutos" class="lista-itens">
-        <% if (produtos && produtos.length > 0) { %> 
-            <% produtos.forEach(function(produto) { %>
-                <!-- FILTRO: Só mostra se NÃO for bebida -->
-                <% if (produto.tipo_item !== 'bebida') { %>
-                    <div class="conteudo-item">
-                        <h4><%= produto.nome %></h4>
-                        <div class="info-item">
-                            <div><strong>Código:</strong> <%= produto.codigo %></div>
-                            <div><strong>Categoria:</strong> 
-                                <span class="badge-categoria <%= produto.categoria %>">
-                                    <%= produto.categoria %>
-                                </span>
-                            </div>
-                            <div><strong>Estoque Total:</strong> <%= produto.quantidade %> <%= produto.unidade %></div>
-                            <div><strong>Quantidade Mínima:</strong> <%= produto.quantidade_minima %> <%= produto.unidade %></div>
-                            
-                            <% if (produto.observacoes) { %>
-                                <div class="obs-texto"><strong>Obs:</strong> <%= produto.observacoes %></div>
-                            <% } %>
+              <!-- Formulário para Bebidas -->
+              <div id="formBebida" class="formulario-tipo" style="display: none;">
+                <div class="grupo-formulario">
+                  <label class="label-formulario">Nome da Bebida</label>
+                  <input type="text" class="controle-formulario" name="nome" placeholder="Ex: Refrigerante Coca-Cola" data-required="true">
+                </div>
+                <div class="grupo-formulario">
+                  <label class="label-formulario">Data de Validade</label>
+                  <input type="date" class="controle-formulario" name="data_validade">
+                  <small class="texto-ajuda">Opcional</small>
+                </div>
+                <div class="linha-formulario">
+                  <div class="grupo-formulario">
+                    <label class="label-formulario">Tamanho</label>
+                    <input type="number" class="controle-formulario" name="tamanho" placeholder="Ex: 350" min="0" step="0.01" data-required="true">
+                  </div>
+                  <div class="grupo-formulario">
+                    <label class="label-formulario">Unidade</label>
+                    <select class="controle-formulario" name="unidade" data-required="true">
+                      <option value="" disabled selected>Selecione...</option>
+                      <option value="ml">Mililitros (ml)</option>
+                      <option value="l">Litros (l)</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="grupo-formulario">
+                  <label for="tipoVinho" class="label-formulario">Tipo do Vinho</label>
+                  <select name="tipo_vinho" id="tipo_vinho" class="controle-formulario">
+                    <option value="" disabled selected>Selecione...</option>
+                    <option value="tinto">Tinto</option>
+                    <option value="branco">Branco</option>
+                    <option value="rose">Rosé</option>
+                    <option value="espumante">Espumante</option>
+                  </select>
+                </div>
+                <div class="linha-formulario">
+                  <div class="grupo-formulario">
+                    <label class="label-formulario">Quantidade (unidades)</label>
+                    <input type="number" class="controle-formulario" name="quantidade" placeholder="Ex: 24" data-required="true">
+                  </div>
+                  <div class="grupo-formulario">
+                    <label class="label-formulario">Quantidade Mínima (no Estoque)</label>
+                    <input type="number" class="controle-formulario" name="quantidade_minima" placeholder="Ex: 6" data-required="true">
+                  </div>
+                </div>
+              </div>
 
-                            <div><strong>Data de Validade:</strong> <%= produto.data_validade %></div>
-                            <div><strong>Valor Total Investido:</strong> R$ <%= produto.valor_compra %></div>
-                        </div>
-                        <!--  CONTAGEM DE REGISTROS -->
-                          <div><strong>Itens no Estoque:</strong>
-                            <%= (produto.movimentacoes ? produto.movimentacoes.length : 0) + 1 %> Registro(s)
-                             </div>
-                                        <div class="acoes-item">
-                                          <a href="/produtoAdicionar/<%= produto.id %>" class="btn-adicionar-qtd">
-                                            <i class="fas fa-plus-circle"></i> Adicionar
-                                            </a>  
-               
-                                            <form action="/admin/produto/excluir/<%= produto.id %>" method="POST" ;>
-                                                <button type="submit" class="btn-excluir"
-                                                    onclick="return confirm('Deseja excluir este produto?');">
-                                                    <i class="fas fa-trash"></i> Excluir
-                                                </button>
-                                            </form>
-                                            <a href="/produtoAdicionar/<%= produto.id %>" class="btn-historico">
-                                                <i class="fas fa-history"></i>Movimentações
-                                            </a>
-                                        </div>
-                                    </div>
-                                   <% } %>
-            <% }) %>
-        <% } else { %>
-            <p class="texto-vazio">Nenhum produto cadastrado.</p>
-        <% } %>
-    </div>
-</div>
+              <!-- Campos (comum aos dois) -->
 
-  <!-- SEÇÃO DE BEBIDAS -->
-<div class="caixa-categoria">
-    <h3><i class="fa-solid fa-wine-bottle"></i> Bebidas</h3>
-    <div id="listaBebidas" class="lista-itens">
-        <% if (produtos && produtos.length > 0) { %> 
-            <% produtos.forEach(function(produto) { %>
-                <!-- FILTRO: Só mostra se FOR bebida -->
-                <% if (produto.tipo_item === 'bebida') { %>
-                    <div class="conteudo-item">
-                        <h4><%= produto.nome %></h4>
-                        <div class="info-item">
-                            <div><strong>Código:</strong> <%= produto.codigo %></div>
-                            <div><strong>Tamanho:</strong> <%= produto.tamanho %> <%= produto.unidade %></div>
-                            <div><strong>Estoque Total:</strong> <%= produto.quantidade %> un</div>
-                            <div><strong>Qtde Mínima:</strong> <%= produto.quantidade_minima %> un</div>
-                            
-                            <% if (produto.observacoes) { %>
-                                <div class="obs-texto"><strong>Obs:</strong> <%= produto.observacoes %></div>
-                            <% } %>
+              <div class="grupo-formulario">
+                <label class="label-formulario">Código do produto</label>
+                <input type="number" class="controle-formulario" name="codigo" data-required="true">
+              </div>
+              <div class="linha-formulario">
+                <!-- Observação específica do Produto -->
+                <div class="grupo-formulario">
+                  <label class="label-formulario">Observações do Produto</label>
+                  <textarea class="controle-formulario" name="observacoes" placeholder="Ex: 2 pacotes de 400g, lata, garra..."></textarea>
+                </div>
+              </div>
+              <div class="grupo-formulario">
+                <label class="label-formulario">Valor da Compra (R$)</label>
+                <input type="number" class="controle-formulario" name="valor_compra" placeholder="0,00" step="0.01">
+                <small class="texto-ajuda">Opcional - registre o valor gasto na compra</small>
+              </div>
 
-                            <div><strong>Valor Total Investido:</strong> R$ <%= produto.valor_compra %>
-                            </div>
-                            <!--  CONTAGEM DE REGISTROS -->
-                                             <div><strong>Itens no Estoque:</strong>
-                                                <%= (produto.movimentacoes ? produto.movimentacoes.length : 0) + 1 %> Registro(s)
-                                         </div>
-                        
-                                        <div class="acoes-item">
-                                            <a href="/produtoAdicionar/<%= produto.id %>" class="btn-adicionar-qtd" >
-                                            <i class="fas fa-plus-circle"></i> Adicionar
-                                            </a> 
-                                            <form action="/admin/produto/excluir/<%= produto.id %>" method="POST" >
-                                                <button type="submit" class="btn-excluir"
-                                                    onclick="return confirm('Deseja excluir esta bebida?');">
-                                                    <i class="fas fa-trash"></i> Excluir
-                                                </button>
-                                            </form>
-                                           <a href="/produtoAdicionar/<%= produto.id %>" class="btn-historico">
-                                            <i class="fas fa-history"></i>Movimentações
-                                           </a>
-                                        </div>
-                        </div>
-                    </div>
-                                
-                <% } %>
-            <% }) %>
-        <% } else { %>
-            <p class="texto-vazio">Nenhuma bebida cadastrada.</p>
-        <% } %>
-    </div>
-</div>
-                    <!-- Botão Voltar -->
-                    <div class="text-end mt-3">
-                        <a href="/area-gestor" class="btn btn-login-voltar">
-                            <i class="fa-solid fa-arrow-left"></i> Voltar
-                        </a>
-                    </div>
-                </section>
+
+              <!-- Botão de submit -->
+              <button type="submit" class="btn-login">
+                <i class="fa-solid fa-plus-circle"></i> <span id="textoBotao">Cadastrar Produto</span>
+              </button>
+            </form>
+          </div>
+        </section>
+
+        <!--Seção lista-->
+        <section class="col-lg-7 secao-lista">
+          <!-- ========== BARRA DE PESQUISA ========== -->
+          <div class="barra-pesquisa-wrapper">
+            <label for="inputPesquisa">
+              <i class="fa-solid fa-magnifying-glass"></i> Pesquisar item do estoque
+            </label>
+            <div class="linha-pesquisa">
+              <input type="text" id="inputPesquisa" class="input-pesquisa" placeholder="Ex.: Suco de Uva, Merlot, Filé Mignon..." autocomplete="off">
+              <button type="button" class="btn-pesquisar" id="btnPesquisar">
+                <i class="fa-solid fa-search"></i> Pesquisar
+              </button>
+              <button type="button" class="btn-limpar-filtro" id="btnLimparFiltro">
+                <i class="fa-solid fa-broom"></i> Limpar Pesquisa
+              </button>
             </div>
-        </div>
-    </section>
-    <!-- Rodapé -->
-    <footer class="rodape">
-        <div class="container">
-            <p>2026 Desenvolvido por Ritielen Rodrigues.</p>
-        </div>
-    </footer>
-    <script src="/js/estoqueScript.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+          </div>
+          <div class="msg-sem-resultado" id="msgSemResultado">
+            <i class="fa-solid fa-magnifying-glass"></i> Nenhum item encontrado para "<span id="termoPesquisado"></span>"
+          </div>
+
+
+
+          <!-- SEÇÃO DE PRODUTOS -->
+          <div class="caixa-categoria">
+            <h3><i class="fa-solid fa-box"></i> Produtos</h3>
+            <div id="listaProdutos" class="lista-itens">
+              <% if (produtos && produtos.length > 0) { %>
+              <% produtos.forEach(function(produto) { %>
+              <!-- FILTRO: Só mostra se NÃO for bebida -->
+              <% if (produto.tipo_item !== 'bebida') { %>
+              <div class="conteudo-item">
+                <h4><%= produto.nome %></h4>
+                <div class="info-item">
+                  <div><strong>Código:</strong> <%= produto.codigo %></div>
+                  <div><strong>Categoria:</strong>
+                    <span class="badge-categoria <%= produto.categoria %>">
+                      <%= produto.categoria %>
+                    </span>
+                  </div>
+                  <div><strong>Estoque Total:</strong> <%= produto.quantidade %> <%= produto.unidade %></div>
+                  <div><strong>Quantidade Mínima:</strong> <%= produto.quantidade_minima %> <%= produto.unidade %></div>
+
+                  <% if (produto.observacoes) { %>
+                  <div class="obs-texto"><strong>Obs:</strong> <%= produto.observacoes %></div>
+                  <% } %>
+
+                  <div><strong>Data de Validade:</strong> <%= produto.data_validade %></div>
+                  <div><strong>Valor Total Investido:</strong> R$ <%= produto.valor_compra %></div>
+                </div>
+                <!--  CONTAGEM DE REGISTROS -->
+                <div><strong>Itens no Estoque:</strong>
+                  <%= (produto.movimentacoes ? produto.movimentacoes.length : 0) + 1 %> Registro(s)
+                </div>
+                <div class="acoes-item">
+                  <a href="/produtoAdicionar/<%= produto.id %>" class="btn-adicionar-qtd">
+                    <i class="fas fa-plus-circle"></i> Adicionar
+                  </a>
+
+                  <form action="/admin/produto/excluir/<%= produto.id %>" method="POST" ;>
+                    <button type="submit" class="btn-excluir" onclick="return confirm('Deseja excluir este produto?');">
+                      <i class="fas fa-trash"></i> Excluir
+                    </button>
+                  </form>
+                  <a href="/produtoAdicionar/<%= produto.id %>" class="btn-historico">
+                    <i class="fas fa-history"></i>Movimentações
+                  </a>
+                </div>
+              </div>
+              <% } %>
+              <% }) %>
+              <% } else { %>
+              <p class="texto-vazio">Nenhum produto cadastrado.</p>
+              <% } %>
+            </div>
+          </div>
+
+          <!-- SEÇÃO DE BEBIDAS -->
+          <div class="caixa-categoria">
+            <h3><i class="fa-solid fa-wine-bottle"></i> Bebidas</h3>
+            <div id="listaBebidas" class="lista-itens">
+              <% if (produtos && produtos.length > 0) { %>
+              <% produtos.forEach(function(produto) { %>
+              <!-- FILTRO: Só mostra se FOR bebida -->
+              <% if (produto.tipo_item === 'bebida') { %>
+              <div class="conteudo-item">
+                <h4><%= produto.nome %></h4>
+                <div class="info-item">
+                  <div><strong>Código:</strong> <%= produto.codigo %></div>
+                  <div><strong>Tamanho:</strong> <%= produto.tamanho %> <%= produto.unidade %></div>
+                  <div><strong>Estoque Total:</strong> <%= produto.quantidade %> un</div>
+                  <div><strong>Qtde Mínima:</strong> <%= produto.quantidade_minima %> un</div>
+
+                  <% if (produto.observacoes) { %>
+                  <div class="obs-texto"><strong>Obs:</strong> <%= produto.observacoes %></div>
+                  <% } %>
+
+                  <div><strong>Valor Total Investido:</strong> R$ <%= produto.valor_compra %>
+                  </div>
+                  <!--  CONTAGEM DE REGISTROS -->
+                  <div><strong>Itens no Estoque:</strong>
+                    <%= (produto.movimentacoes ? produto.movimentacoes.length : 0) + 1 %> Registro(s)
+                  </div>
+
+                  <div class="acoes-item">
+                    <a href="/produtoAdicionar/<%= produto.id %>" class="btn-adicionar-qtd">
+                      <i class="fas fa-plus-circle"></i> Adicionar
+                    </a>
+                    <form action="/admin/produto/excluir/<%= produto.id %>" method="POST">
+                      <button type="submit" class="btn-excluir" onclick="return confirm('Deseja excluir esta bebida?');">
+                        <i class="fas fa-trash"></i> Excluir
+                      </button>
+                    </form>
+                    <a href="/produtoAdicionar/<%= produto.id %>" class="btn-historico">
+                      <i class="fas fa-history"></i>Movimentações
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <% } %>
+              <% }) %>
+              <% } else { %>
+              <p class="texto-vazio">Nenhuma bebida cadastrada.</p>
+              <% } %>
+            </div>
+          </div>
+          <!-- Botão Voltar -->
+          <div class="text-end mt-3">
+            <a href="/area-gestor" class="btn btn-login-voltar">
+              <i class="fa-solid fa-arrow-left"></i> Voltar
+            </a>
+          </div>
+        </section>
+      </div>
+    </div>
+  </section>
+  <!-- Rodapé -->
+  <footer class="rodape">
+    <div class="container">
+      <p>2026 Desenvolvido por Ritielen Rodrigues.</p>
+    </div>
+  </footer>
+  <script src="/js/estoqueScript.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

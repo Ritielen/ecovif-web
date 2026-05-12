@@ -32,12 +32,6 @@ const RelatorioMensal = sequelizeconnect.define(
       allowNull: false,
       defaultValue: 0.00
     },
-
-    lucro: {
-      type: DataTypes.DECIMAL(10, 2),
-      allowNull: false,
-    },
-//nível do estoque
     quantidade_total_produtos: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -48,7 +42,7 @@ const RelatorioMensal = sequelizeconnect.define(
       allowNull: false,
     },
 
-    // ranking dos mais vendidos no mes (melhor virar tabela depois 👇)
+    // ranking dos mais vendidos 
     posicao: {
     type: DataTypes.INTEGER,
     allowNull: false
@@ -56,41 +50,7 @@ const RelatorioMensal = sequelizeconnect.define(
     produtos_mais_vendidos: {
       type: DataTypes.STRING,
       allowNull: false
-    },
-    quantidade_vendida: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    faturamento_vendas: {
-      type: DataTypes.DECIMAL(10, 2),
-      allowNull: false,
-      defaultValue: 0.00
-    },
-//tabela 02 comparativo mensal
-    mes_anterior: {
-      type: DataTypes.INTEGER,
-      validate: { min: 1, max: 12 }
-    },
-    faturamento_mes_anterior: {
-    type: DataTypes.DECIMAL(10, 2),
-    allowNull: true,
-    defaultValue: 0.00
-    },
-    despesas_mes_anterior: {
-      type: DataTypes.DECIMAL(10, 2),
-      allowNull: true,
-      defaultValue: 0.00
-    },
-    lucro_mes_anterior: {
-      type: DataTypes.DECIMAL(10, 2),
-      allowNull: true,
-      defaultValue: 0.00
-    },
-    percentual_lucro_mes_anterior: {
-      type: DataTypes.DECIMAL(5, 2),
-      allowNull: true
-    },
-
+    },    
     usuario_id: {
       type: DataTypes.INTEGER,
       allowNull: false

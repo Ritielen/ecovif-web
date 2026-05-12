@@ -30,10 +30,6 @@ module.exports = {
               allowNull: false,
               defaultValue: 0.00
             },
-            lucro: {
-              type: Sequelize.DECIMAL(10, 2),
-              allowNull: false,
-            },
            quantidade_total_produtos: {
               type: Sequelize.INTEGER,
               allowNull: false,
@@ -49,41 +45,7 @@ module.exports = {
             produtos_mais_vendidos: {
               type: Sequelize.STRING,
               allowNull: false
-            },
-            quantidade_vendida: {
-              type: Sequelize.INTEGER,
-              allowNull: false
-            },
-            faturamento_vendas: {
-              type: Sequelize.DECIMAL(10, 2),
-              defaultValue: 0.00
-            },
-            mes_anterior: {
-              type: Sequelize.INTEGER,
-              validate: {
-                min: 1,
-                max: 12
-              }
-            },
-            faturamento_mes_anterior: {
-              type: Sequelize.DECIMAL(10, 2),
-              allowNull: true,
-              defaultValue: 0.00
-            },
-            despesas_mes_anterior: {
-              type: Sequelize.DECIMAL(10, 2),
-              allowNull: true,
-              defaultValue: 0.00
-            },
-            lucro_mes_anterior: {
-              type: Sequelize.DECIMAL(10, 2),
-              allowNull: true,
-              defaultValue: 0.00
-            },
-            percentual_lucro_mes_anterior: {
-              type: Sequelize.DECIMAL(5, 2),
-              allowNull: true
-            },
+            },                                   
             usuario_id: {
               type: Sequelize.INTEGER,
               allowNull: false

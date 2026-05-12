@@ -32,7 +32,6 @@ const bebidas = await db.Bebida.findAll({
 });
 
     const produtos = await db.Produto.findAll({
-      attributes: ['id', 'nome', 'unidade', 'tamanho'],
       order: [['nome', 'ASC']]
     });
 

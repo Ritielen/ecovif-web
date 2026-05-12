@@ -93,18 +93,39 @@
                       <input type="text" name="nome" id="nome" class="controle-formulario" placeholder="Ex.: Filé Mignon">
                     </div>
 
-                    <!-- Parte de Ingredientes -->
-                    <div id="container-ingredientes">
-                      <label class="label-formulario">Ingrediente e Qtd</label>
-                      <div class="linha-ingrediente" style="display: flex; gap: 5px; margin-bottom: 10px;">
-                        <select name="produto_id" class="controle-formulario select-busca">
-                          <option value="" disabled selected>Produto...</option>
-                          <% if (produtos && produtos.length > 0) { %>
-                          <% produtos.forEach(function(p) { %>
-                          <option value="<%= p.id %>"><%= p.nome %> <%= p.quantidade %> <%= p.unidade %></option>
-                          <% }) %>
-                          <% } %>
-                        </select>
+                    <!-- Parte de Ingredientes (Tela de Cardápio) -->
+<div id="container-ingredientes">
+    <label class="label-formulario">Ingrediente e Qtd</label>
+    <div class="linha-ingrediente" style="display: flex; gap: 5px; margin-bottom: 10px;">
+        <select name="produto_id" class="controle-formulario select-busca">
+            <option value="" disabled selected>Selecionar Insumo...</option>
+
+            <% if (produtos && produtos.length > 0) { %>
+                
+                <!-- Grupo de Produtos que são Ingredientes/Insumos -->
+                <optgroup label="Insumos / Cozinha">
+                    <% produtos.forEach(function(p) { %>
+                        <% if (p.tipo_item !== 'bebida') { %>
+                            <option value="<%= p.id %>">
+                                <%= p.nome %> <%= p.quantidade || '' %> <%= p.unidade %>
+                            </option>
+                        <% } %>
+                    <% }) %>
+                </optgroup>
+
+                <!-- Grupo de Produtos que são Bebidas -->
+                <optgroup label="Bebidas / Bar">
+                    <% produtos.forEach(function(p) { %>
+                        <% if (p.tipo_item === 'bebida') { %>
+                            <option value="<%= p.id %>">
+                                <%= p.nome %> <%= p.tamanho || '' %> <%= p.unidade %>
+                            </option>
+                        <% } %>
+                    <% }) %>
+                </optgroup>
+
+            <% } %>
+        </select>
                         <input type="number" name="quantidade_ingrediente" class="controle-formulario" style="width: 80px;" placeholder="0">
                         <div class="grupo-formulario">
                           <label class="label-formulario">Unidade</label>

@@ -2,132 +2,132 @@
 <html lang="pt-BR">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Novo Funcionário - ECOVIF</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="/css/style-raiz.css">
-    <link rel="stylesheet" href="/css/style-login.css">
-    <link rel="stylesheet" href="/css/style-area-gestor.css">
-    <link rel="stylesheet" href="/css/style-funcionario.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Novo Funcionário - ECOVIF</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="/css/style-raiz.css">
+  <link rel="stylesheet" href="/css/style-login.css">
+  <link rel="stylesheet" href="/css/style-area-gestor.css">
+  <link rel="stylesheet" href="/css/style-funcionario.css">
 </head>
 
 <body>
 
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark">
-        <div class="container">
-            <a class="navbar-brand" href="#ecovif"><i class="fa-solid fa-utensils"></i> ECOVIF
-                <span class="tagline">Sistema de Gestão para Restaurantes</span>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+      <a class="navbar-brand" href="#ecovif"><i class="fa-solid fa-utensils"></i> ECOVIF
+        <span class="tagline">Sistema de Gestão para Restaurantes</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="/area-gestor">
+              <i class="fa-solid fa-user-shield"></i> Área do Gestor
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/suporte">
+              <i class="fa-solid fa-headset"></i> Suporte
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/login" id="logoutBtn">
+              <i class="fa-solid fa-sign-out-alt"></i>
+              Sair</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+
+  <section class="cabecalho-gestor">
+    <div class="container">
+      <div class="welcome-box">
+        <div class="user-info">
+          <div class="user-avatar"><i class="fa-solid fa-user-plus"></i></div>
+          <div>
+            <h1>Novo Funcionário</h1>
+            <p>Cadastre os funcionários do restaurante</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main class="container mt-5">
+    <div class="row justify-content-center">
+      <section class="col-lg-6 secao-formulario">
+        <div class="caixa-formulario">
+          <h2>Cadastrar Funcionário</h2>
+          <form id="formCadastroFuncionario" action="/criar-funcionario" method="POST">
+            <div class="grupo-formulario">
+              <label class="label-formulario">Nome</label>
+              <input type="text" class="controle-formulario" name="nome" required>
+            </div>
+            <div class="grupo-formulario">
+              <label class="label-formulario">Sobrenome</label>
+              <input type="text" class="controle-formulario" name="sobrenome" required>
+            </div>
+            <div class="grupo-formulario">
+              <label class="label-formulario">Telefone</label>
+              <input type="tel" class="controle-formulario" name="telefone" required>
+            </div>
+            <div class="grupo-formulario">
+              <label class="label-formulario">Email</label>
+              <input type="email" class="controle-formulario" name="email" required>
+            </div>
+            <div class="grupo-formulario">
+              <label class="label-formulario">Senha</label>
+              <input type="password" class="controle-formulario" name="senha" required>
+            </div>
+            <div class="grupo-formulario">
+              <label class="label-formulario">Grupo</label>
+              <select class="controle-formulario" name="grupo" required>
+                <option value="">Selecione um grupo...</option>
+
+                <% if (grupos && grupos.length> 0) { %>
+                <% grupos.forEach(function(grupo) { %>
+                <option value="<%= grupo.nome_grupo %>">
+                  <%= grupo.nome_grupo %>
+                </option>
+                <% }) %>
+                <% } else { %>
+                <%# Se a lista estiver vazia ou nula, mostra esta opção %>
+                <option value="" disabled selected>Nenhum grupo cadastrado</option>
+                <% } %>
+              </select>
+            </div>
+            <button type="submit" class="btn-login w-100">
+              <i class="fa-solid fa-user-plus"></i> Cadastrar Funcionário
             </button>
-            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/area-gestor">
-                            <i class="fa-solid fa-user-shield"></i> Área do Gestor
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/suporte">
-                            <i class="fa-solid fa-headset"></i> Suporte
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/login" id="logoutBtn">
-                            <i class="fa-solid fa-sign-out-alt"></i>
-                            Sair</a>
-                    </li>
-                </ul>
-            </div>
+          </form>
+          <div class="text-center mt-3">
+            <a href="/listaFuncionarios" class="btn btn-primary">Ver Lista de Funcionários</a>
+          </div>
         </div>
-    </nav>
+      </section>
 
+      <!-- Botão Voltar -->
+      <div class="text-end mt-3">
+        <a href="/area-gestor" class="btn btn-login-voltar"><i class="fa-solid fa-arrow-left"></i>
+          Voltar</a>
+      </div>
+    </div>
+  </main>
 
-    <section class="cabecalho-gestor">
-        <div class="container">
-            <div class="welcome-box">
-                <div class="user-info">
-                    <div class="user-avatar"><i class="fa-solid fa-user-plus"></i></div>
-                    <div>
-                        <h1>Novo Funcionário</h1>
-                        <p>Cadastre os funcionários do restaurante</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <main class="container mt-5">
-        <div class="row justify-content-center">
-            <section class="col-lg-6 secao-formulario">
-                <div class="caixa-formulario">
-                    <h2>Cadastrar Funcionário</h2>
-                    <form id="formCadastroFuncionario" action="/criar-funcionario" method="POST">
-                        <div class="grupo-formulario">
-                            <label class="label-formulario">Nome</label>
-                            <input type="text" class="controle-formulario" name="nome" required>
-                        </div>
-                        <div class="grupo-formulario">
-                            <label class="label-formulario">Sobrenome</label>
-                            <input type="text" class="controle-formulario" name="sobrenome" required>
-                        </div>
-                        <div class="grupo-formulario">
-                            <label class="label-formulario">Telefone</label>
-                            <input type="tel" class="controle-formulario" name="telefone" required>
-                        </div>
-                        <div class="grupo-formulario">
-                            <label class="label-formulario">Email</label>
-                            <input type="email" class="controle-formulario" name="email" required>
-                        </div>
-                        <div class="grupo-formulario">
-                            <label class="label-formulario">Senha</label>
-                            <input type="password" class="controle-formulario" name="senha" required>
-                        </div>
-                        <div class="grupo-formulario">
-                            <label class="label-formulario">Grupo</label>
-                            <select class="controle-formulario" name="grupo" required>
-                                <option value="">Selecione um grupo...</option>
-
-                                <% if (grupos && grupos.length> 0) { %>
-                                    <% grupos.forEach(function(grupo) { %>
-                                        <option value="<%= grupo.nome_grupo %>">
-                                            <%= grupo.nome_grupo %>
-                                        </option>
-                                        <% }) %>
-                                            <% } else { %>
-                                                <%# Se a lista estiver vazia ou nula, mostra esta opção %>
-                                                    <option value="" disabled selected>Nenhum grupo cadastrado</option>
-                                                    <% } %>
-                            </select>
-                        </div>
-                        <button type="submit" class="btn-login w-100">
-                            <i class="fa-solid fa-user-plus"></i> Cadastrar Funcionário
-                        </button>
-                    </form>
-                    <div class="text-center mt-3">
-                        <a href="/listaFuncionarios" class="btn btn-primary">Ver Lista de Funcionários</a>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Botão Voltar -->
-            <div class="text-end mt-3">
-                <a href="/area-gestor" class="btn btn-login-voltar"><i class="fa-solid fa-arrow-left"></i>
-                    Voltar</a>
-            </div>
-        </div>
-    </main>
-
-    <footer class="rodape mt-5">
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-        <div class="container text-center">
-            <p>2026 Desenvolvido por Ritielen Rodrigues.</p>
-        </div>
-    </footer>
+  <footer class="rodape mt-5">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <div class="container text-center">
+      <p>2026 Desenvolvido por Ritielen Rodrigues.</p>
+    </div>
+  </footer>
 </body>
 
 </html>

@@ -13,7 +13,7 @@ const Grupo = sequelizeconnect.define("Grupo", {
   },
  
   descricao_grupo: { 
-    type: DataTypes.STRING,
+    type: DataTypes.TEXT,
     allowNull: true
   }
 }, 

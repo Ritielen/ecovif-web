@@ -15,7 +15,7 @@ module.exports = {
       },
       
       descricao_grupo: {
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT,
         allowNull: true
       },
       created_at: {

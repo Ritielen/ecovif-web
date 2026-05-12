@@ -9,20 +9,16 @@ const ItemComanda = sequelizeconnect.define(
         autoIncrement: true, 
         primaryKey: true 
     },
+     tipo_item: {
+  type: DataTypes.ENUM('prato', 'bebida'),
+  allowNull: false,
+  defaultValue: 'prato',
+},
      quantidade: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    preco_venda: {
-  type: DataTypes.DECIMAL(10, 2),
-  allowNull: false,
-  defaultValue: 0.0
-},
-subtotal: {
-      type: DataTypes.DECIMAL(10, 2),
-      allowNull: false,
-      defaultValue: 0.0
-    },
+   
   comanda_id: {
     type: DataTypes.INTEGER,
     allowNull: false,

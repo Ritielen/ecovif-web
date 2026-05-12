@@ -27,7 +27,7 @@ const Comanda = sequelizeconnect.define(
             allowNull: false,
         },
          status: {
-            type: DataTypes.ENUM ('pendente', 'em preparo', 'finalizada'),
+            type: DataTypes.ENUM ('pendente', 'em preparo', 'pronta', 'cancelada'),
             allowNull: false,
             defaultValue: 'pendente'
          },

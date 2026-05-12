@@ -27,16 +27,34 @@ async function renderizarListaGrupos(req, res) {
 
 // Função para criar grupo e redirecionar para a lista
 async function criarGrupo(req, res) {
-  const { nome_grupo } = req.body;
-  if (!nome_grupo) {
-    return res.redirect("/cadastrarGrupo?erro=Nome obrigatório");
+  const { nome_grupo, descricao_grupo } = req.body;
+  if (!nome_grupo || !descricao_grupo) {
+    return res.redirect("/cadastrarGrupo?erro=Todos os campos são obrigatórios");
   }
   try {
-    await db.Grupo.create({ nome_grupo });
+    await db.Grupo.create({ nome_grupo, descricao_grupo });
     return res.redirect("/listaGrupos?sucesso=Grupo cadastrado com sucesso!");
   } catch (error) {
     console.error(error);
     return res.redirect("/cadastrarGrupo?erro=Erro ao cadastrar");
+  }
+}
+
+//editar grupo
+
+async function editarGrupo(req, res) {
+  const { id } = req.params;
+  const { nome_grupo, descricao_grupo } = req.body;
+
+  try {
+    await db.Grupo.update(
+      { nome_grupo, descricao_grupo },
+      { where: { id } }
+    );
+    return res.status(200).json({ msg: "Atualizado com sucesso" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ erro: "Erro ao atualizar banco" });
   }
 }
 
@@ -60,22 +78,28 @@ async function renderizarCadastrarFuncionario(req, res) {
 
 //criar funcionario
 async function criarFuncionario(req, res) {
+  // 1. Pega os dados do formulário
   const { nome, sobrenome, telefone, email, senha, grupo } = req.body;
-  if (!nome || !sobrenome || !telefone || !email || !senha || !grupo) {
-    const grupos = await db.Grupo.findAll({ order: [['nome_grupo', 'ASC']] });
-    return res.render("admin/funcionarios", { 
-      grupos, 
-      msg: "Todos os campos são obrigatórios" 
-    });
-  }
-  if (senha.length < 6) {
-    const grupos = await db.Grupo.findAll({ order: [['nome_grupo', 'ASC']] });
-    return res.render("admin/funcionarios", { 
-      grupos, 
-      msg: "A senha deve ter no mínimo 6 caracteres!" 
-    });
-  }
+
   try {
+    // 2. VERIFICAÇÃO DE SESSÃO (Quem está criando?)
+    if (!req.session || !req.session.usuarioId) {
+      return res.redirect("/login?erro=Faça login para continuar");
+    }
+
+    // O ID  (quem está logado) vem da sessão
+    const criadoPorId = req.session.usuarioId;
+
+    // 3. Validações básicas de preenchimento
+    if (!nome || !sobrenome || !telefone || !email || !senha || !grupo) {
+      const grupos = await db.Grupo.findAll({ order: [['nome_grupo', 'ASC']] });
+      return res.render("admin/funcionarios", { 
+        grupos, 
+        msg: "Todos os campos são obrigatórios" 
+      });
+    }
+
+    // 4. Verifica se o e-mail já existe
     const usuarioExistente = await db.Usuario.findOne({ where: { email } });
     if (usuarioExistente) {
       const grupos = await db.Grupo.findAll({ order: [['nome_grupo', 'ASC']] });
@@ -84,19 +108,15 @@ async function criarFuncionario(req, res) {
         msg: "Este email já está cadastrado" 
       });
     }
-    // Busca o grupo pelo nome
+
+    // 5. Busca o grupo selecionado
     const grupoEncontrado = await db.Grupo.findOne({ where: { nome_grupo: grupo } });
-    if (!grupoEncontrado) {
-      const grupos = await db.Grupo.findAll({ order: [['nome_grupo', 'ASC']] });
-      return res.render("admin/funcionarios", { 
-        grupos, 
-        msg: "Grupo não encontrado" 
-      });
-    }
+
+    // 6. Criptografa a senha do novo funcionário (Ygor)
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(senha, salt);
 
-    //Cria o funcionário com grupo_id diretamente
+    // 7. CRIAÇÃO DO USUÁRIO
     const novoUsuario = await db.Usuario.create({
       nome,
       sobrenome,
@@ -104,19 +124,23 @@ async function criarFuncionario(req, res) {
       email,
       senha: hash,
       role: 'funcionario',
-      grupo_id: grupoEncontrado.id  // Direto na criação
+      grupo_id: grupoEncontrado ? grupoEncontrado.id : null,
+      criado_por: criadoPorId 
     });
-    console.log(`✅ Funcionário ${nome} criado e associado ao grupo ${grupo}`);
-    res.redirect("/listaFuncionarios");
+
+    console.log(`✅ Funcionário ${nome} criado com sucesso por ID: ${criadoPorId}`);
+    res.redirect("/admin/listaFuncionarios?sucesso=true");
+
   } catch (error) {
     console.error("Erro ao cadastrar funcionário:", error);
     const grupos = await db.Grupo.findAll({ order: [['nome_grupo', 'ASC']] });
     res.render("admin/funcionarios", { 
       grupos, 
-      msg: "Erro interno. Tente novamente." 
+      msg: "Erro interno no servidor." 
     });
   }
 }
+
 // Renderizar lista de funcionários 
 async function renderizarListaFuncionarios(req, res) {
   try {
@@ -245,6 +269,7 @@ module.exports = {
     renderizarCadastrarGrupo,
     criarGrupo,
     renderizarListaGrupos,
+    editarGrupo,
     excluirGrupo,
     renderizarCadastrarFuncionario,
     criarFuncionario,
