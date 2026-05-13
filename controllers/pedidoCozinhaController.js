@@ -3,7 +3,7 @@ const passport = require('../config/passport');
 const { sendMail, sendSupportContact } = require("../config/mailer");
 const {Op} = require("sequelize");
 
-//exibição da tela
+
 // Listar comandas
 async function listarComandas(req, res) {
   try {
@@ -51,24 +51,7 @@ function buscarComandas(lista, termo) {
   );
 } 
 
-async function atualizarStatus(req, res) {
-try {
-    const { id } = req.params;
-    const { status } = req.body;
 
-    const statusPermitidos = ["pendente", "em preparo", "pronta", "cancelada"];
-    if (!statusPermitidos.includes(status)) {
-      return res.status(400).json({ erro: "Status inválido" });
-    }
-
-    await db.Comanda.update({ status }, { where: { id } });
-
-    res.json({ sucesso: true, status });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ erro: "Erro ao atualizar status" });
-  }
-}
 
 // Rota para atualizar status da comanda
 async function atualizarStatus(req, res) {

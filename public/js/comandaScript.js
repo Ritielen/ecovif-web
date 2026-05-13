@@ -1,5 +1,3 @@
-// public/js/comandaScript.js
-
 const selectCardapio = document.getElementById("selectCardapio");
 const quantidadeItem = document.getElementById("quantidadeItem");
 const listaItensAdicionados = document.getElementById("listaItensAdicionados");

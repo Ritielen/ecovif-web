@@ -6,49 +6,80 @@ const {Op} = require("sequelize");
 //exibição da comanda
 async function mostrarComanda(req, res) {
   const { sucesso } = req.query;
+
   try {
-    // Busca os pratos 
+
+    // pratos
     const pratos = await db.Prato.findAll({
       include: [
         {
           model: db.Ingrediente,
-          as: 'ingredientes',
+          as: "ingredientes",
           include: [
             {
               model: db.Produto,
-              as: 'produto',
+              as: "produto",
             }
           ]
         }
       ]
     });
 
-    // Busca as bebidas 
+    // bebidas
     const bebidas = await db.Bebida.findAll({
       include: [
         {
           model: db.Produto,
-          as: 'produto',
+          as: "produto",
         }
       ]
     });
 
-    // Produtos gerais 
+    // produtos
     const produtos = await db.Produto.findAll({
-      order: [['nome', 'ASC']]
+      order: [["nome", "ASC"]]
     });
 
-    // Renderiza a página da comanda passando os dados
+    // comandas
+    const comandas = await db.Comanda.findAll({
+      include: [
+        {
+          model: db.ItemComanda,
+          as: "itens",
+          include: [
+            {
+              model: db.Prato,
+              as: "prato",
+            },
+            {
+              model: db.Bebida,
+              as: "bebida",
+              include: [
+                {
+                  model: db.Produto,
+                  as: "produto",
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      order: [["created_at", "DESC"]]
+    });
+
+    // render
     res.render("admin/comanda", {
       produtos,
       pratos,
       bebidas,
+      comandas,
       msgSucesso: sucesso
     });
 
   } catch (error) {
-    console.error("Erro ao carregar a página de comanda:", error);
-    res.redirect("/admin/area-gestor?erro=Erro ao carregar dados da comanda");
+    console.error(error);
+
+    res.redirect("/admin/area-gestor?erro=Erro ao carregar comanda");
   }
 }
 // Criar comanda
@@ -108,8 +139,19 @@ async function criarComanda(req, res) {
      
 
 
+
+// buscar comanda por nome 
+function buscarComandas(lista, termo) {
+  return lista.filter(comanda =>
+    comanda.nome_cliente.toLowerCase().includes(termo.toLowerCase())
+  );
+} 
+
+
+
 module.exports = {
     mostrarComanda,
-    criarComanda
+    criarComanda,
+    
   
 };

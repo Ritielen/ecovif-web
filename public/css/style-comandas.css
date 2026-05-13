@@ -1,25 +1,4 @@
-/* Botão Voltar */
-.btn-voltar {
-    background-color: rgba(255, 255, 255, 0.2);
-    color: white;
-    padding: 0.6rem 1.2rem;
-    border-radius: 8px;
-    text-decoration: none;
-    font-weight: 600;
-    transition: all 0.3s;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    backdrop-filter: blur(10px);
-}
-
-.btn-voltar:hover {
-    background-color: rgba(255, 255, 255, 0.3);
-    transform: translateX(-5px);
-    color: white;
-}
-
-/* Seção de Itens da Comanda */
+/* Seção de Itens da Comanda formulário*/
 .secao-itens-comanda {
     background-color: #f8f9fa;
     border: 2px solid #e0e0e0;
@@ -188,57 +167,25 @@
     font-size: 1.1rem;
 }
 
-/* Card da Comanda */
-.card-comanda {
-    background: white;
-    border: 2px solid #e0e0e0;
-    border-left: 5px solid var(--cor-primaria);
-    border-radius: 10px;
-    padding: 1.5rem;
-    margin-bottom: 1.5rem;
-    transition: all 0.3s;
-}
+/* Card do Cardapio */
 
-.card-comanda:hover {
-    border-color: var(--cor-primaria);
-    box-shadow: 0 5px 15px rgba(196, 30, 58, 0.15);
-}
-
-.cabecalho-comanda {
+/* Rodapé do Comanda */
+.rodape-comanda {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 1rem;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid #e0e0e0;
-}
-
-.info-comanda-principal {
-    flex: 1;
-}
-
-.numero-comanda {
-    font-size: 1.4rem;
-    font-weight: bold;
-    color: var(--cor-primaria);
-    margin-bottom: 0.3rem;
-}
-
-.cliente-mesa {
-    display: flex;
-    gap: 1.5rem;
-    margin-top: 0.5rem;
-    font-size: 0.95rem;
-}
-
-.cliente-mesa div {
-    display: flex;
     align-items: center;
-    gap: 0.4rem;
+    margin-top: 1.2rem;
+    padding-top: 1rem;
+    border-top: 2px solid #e0e0e0;
+    flex-wrap: wrap;
+    gap: 1rem;
 }
 
-.cliente-mesa i {
+.total-pedido-card {
+    font-size: 1.4rem;
+    font-weight: 800;
     color: var(--cor-primaria);
+    margin-bottom: 0.5rem;
 }
 
 .badge-status {
@@ -249,58 +196,23 @@
     display: inline-block;
 }
 
-.badge-status.em-preparo {
+.badge-status.pendente {
     background-color: #fff3cd;
     color: #856404;
+     
 }
 
-.badge-status.finalizado {
+.badge-status.em-preparo {   
+    background-color: #cfe2ff;
+    color: #084298;
+}
+
+.badge-status.pronto {
     background-color: #d4edda;
     color: #155724;
 }
 
-/* Itens da Comanda no Card */
-.itens-comanda-card {
-    margin: 1rem 0;
-    padding: 1rem;
-    background-color: #f8f9fa;
-    border-radius: 8px;
-}
-
-.itens-comanda-card h4 {
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--cor-escura);
-    margin-bottom: 0.8rem;
-}
-
-.item-comanda-linha {
-    display: flex;
-    justify-content: space-between;
-    padding: 0.5rem 0;
-    font-size: 0.9rem;
-    border-bottom: 1px dashed #dee2e6;
-}
-
-.item-comanda-linha:last-child {
-    border-bottom: none;
-}
-
-.item-comanda-nome {
-    color: var(--cor-escura);
-    font-weight: 500;
-}
-
-.item-comanda-qtd {
-    color: #666;
-}
-
-.item-comanda-preco {
-    color: var(--cor-primaria);
-    font-weight: 600;
-}
-
-/* Rodapé do Card */
+/* Rodapé da comanda */
 .rodape-comanda {
     display: flex;
     justify-content: space-between;
@@ -328,20 +240,8 @@
     color: var(--cor-primaria);
 }
 
-/* Ações da Comanda */
-.acoes-comanda {
-    display: flex;
-    gap: 0.8rem;
-    margin-top: 1rem;
-}
+/* Ações da Comanda usando acoes-item do cardapio */
 
-/* Texto de Ajuda */
-.texto-ajuda {
-    display: block;
-    margin-top: 0.3rem;
-    font-size: 0.85rem;
-    color: #666;
-}
 
 /* Responsivo */
 @media (max-width: 768px) {
@@ -353,24 +253,9 @@
         width: 100%;
     }
 
-    .cabecalho-comanda {
-        flex-direction: column;
-        gap: 1rem;
-    }
-
-    .cliente-mesa {
-        flex-direction: column;
-        gap: 0.5rem;
-    }
-
     .rodape-comanda {
         flex-direction: column;
         gap: 1rem;
         align-items: flex-start;
-    }
-
-    .acoes-comanda {
-        flex-direction: column;
-        width: 100%;
     }
 }

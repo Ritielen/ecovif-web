@@ -50,79 +50,6 @@
     font-size: 1.2rem;
 }
 
-/* Card de Pedido */
-.card-pedido {
-    background: white;
-    border: 3px solid #e0e0e0;
-    border-left: 6px solid var(--cor-primaria);
-    border-radius: 12px;
-    padding: 1.5rem;
-    margin-bottom: 1.5rem;
-    transition: all 0.3s;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
-}
-
-.card-pedido:hover {
-    border-color: var(--cor-primaria);
-    box-shadow: 0 8px 25px rgba(196, 30, 58, 0.2);
-    transform: translateY(-2px);
-}
-
-/* Cabeçalho do Pedido */
-.cabecalho-pedido {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 1.2rem;
-    padding-bottom: 1rem;
-    border-bottom: 2px solid #e0e0e0;
-}
-
-/* Itens do Pedido */
-.itens-pedido-card {
-    margin: 1.2rem 0;
-    padding: 1.2rem;
-    background-color: #f8f9fa;
-    border-radius: 10px;
-    border: 2px solid #e9ecef;
-}
-
-.itens-pedido-card h4 {
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: var(--cor-escura);
-    margin-bottom: 1rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.itens-pedido-card h4 i {
-    color: var(--cor-primaria);
-}
-
-.item-pedido-linha {
-    display: flex;
-    justify-content: space-between;
-    padding: 0.7rem 0;
-    font-size: 1rem;
-    border-bottom: 1px dashed #dee2e6;
-}
-
-.item-pedido-linha:last-child {
-    border-bottom: none;
-}
-
-.item-pedido-nome {
-    color: var(--cor-escura);
-    font-weight: 600;
-}
-
-.item-pedido-preco {
-    color: var(--cor-primaria);
-    font-weight: 700;
-    font-size: 1.05rem;
-}
 
 /* Rodapé do Pedido */
 .rodape-pedido {
@@ -232,6 +159,17 @@
 .btn-pronto i {
     font-size: 1.1rem;
 }
+.data-pedido {
+    font-size: 0.85rem;
+    color: #666;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.data-pedido i {
+    color: var(--cor-primaria);
+}
 
 /* Responsivo */
 @media (max-width: 768px) {
@@ -241,11 +179,6 @@
 
     .btn-filtro-cozinha {
         max-width: 100%;
-    }
-
-    .cabecalho-pedido {
-        flex-direction: column;
-        gap: 1rem;
     }
 
     .rodape-pedido {

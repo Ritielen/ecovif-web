@@ -299,22 +299,6 @@
     background: #e0e0e0;
 }
 
-/* Indicador de modo edição */
-.modo-edicao-indicador {
-    background: #e3f2fd;
-    color: #1976d2;
-    padding: 10px 15px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-weight: 600;
-}
-
-.modo-edicao-indicador i {
-    margin-right: 8px;
-}
 
 /*TEXTO VAZIO */
 .texto-vazio {
