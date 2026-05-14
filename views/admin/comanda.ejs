@@ -232,6 +232,14 @@
               <div>
                 <div class="total-pedido-card"> Total: R$ <%= comanda.total %> </div>
                 <div class="status"> Status: <span class="badge-status pendente"> <%= comanda.status %></span></div>
+                <div class="status"> Cancelar comanda: <button 
+  type="button" 
+  class="btn-excluir badge-status cancelada"
+  onclick="event.preventDefault(); atualizarStatusComanda('<%= comanda.id %>', 'cancelada')">
+  <i class="fa-solid fa-play"></i> Cancelar
+</button>
+   </div>  
+              
               <div> Data: <%= comanda.created_at.toLocaleDateString() %></div>
               </div>
               <div class="data-comanda">
@@ -241,13 +249,14 @@
 
             <div class="acoes-item">
               <!-- EDITAR -->
-                  <a href="#editarComanda" class="btn-editar">
+                  <a href="/editarComanda/<%= comanda.id %>" class="btn-editar">
                     <i class="fa-solid fa-edit"></i> Editar
                   </a> 
-
+ 
+                  
                   <!-- EXCLUIR -->
-                  <form action="#excluirComanda" method="POST">
-                    <button type="submit" class="btn-excluir" onclick="return confirm('Deseja excluir este prato?');">
+                  <form action="/excluirComanda/<%= comanda.id %>" method="POST">
+                    <button type="submit" class="btn-excluir" onclick="return confirm('Deseja excluir esta comanda?');">
                       <i class="fa-solid fa-trash"></i> Excluir
                     </button>
                   </form>

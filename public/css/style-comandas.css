@@ -212,6 +212,14 @@
     color: #155724;
 }
 
+.badge-status.cancelada {
+    background-color: #ffebee;
+    color: #d32f2f;
+}
+.badge-status.cancelada:hover {
+    background: #ffcdd2;
+}
+
 /* Rodapé da comanda */
 .rodape-comanda {
     display: flex;

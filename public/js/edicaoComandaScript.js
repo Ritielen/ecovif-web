@@ -117,13 +117,7 @@ function removerItem(id) {
 
 // ENVIAR FORMULÁRIO
 formComanda.addEventListener("submit", (e) => {
-  if (itensComanda.length === 0) {
-    e.preventDefault();
-    alert("Adicione pelo menos um item");
-    return;
-  }
-
-  // cria input hidden
+  // cria input hidden com itens (mesmo vazio)
   const inputItens = document.createElement("input");
   inputItens.type = "hidden";
   inputItens.name = "itens";
@@ -140,41 +134,47 @@ formComanda.addEventListener("submit", (e) => {
   formComanda.appendChild(inputTotal);
 });
 
+
+
 //função para remover item comanda (tela de edição)
 
 
+async function removerItemDoBanco(itemId, botao) {
+  if (!confirm('Deseja remover este item?')) {
+    return;
+  }
+  
+  try {
+    const response = await fetch(`/item-comanda/${itemId}`, {
+      method: 'DELETE'
+    });
+    
+    const data = await response.json();
+    
+    if (data.success) {
+      // Remove o item da tela
+      const itemInfo = botao.closest('.item-info');
+      itemInfo.remove();
+      
+      // Atualiza o total da comanda (você precisará recalcular)
+      atualizarTotalComanda();
+    } else {
+      alert('Erro ao remover item');
+    }
+  } catch (error) {
+    console.error('Erro:', error);
+    alert('Erro ao remover item');
+  }
+}
+
+function atualizarTotalComanda() {
+  // Aqui você recalcula o total baseado nos itens restantes
+  // Pode fazer uma chamada AJAX para buscar o novo total
+  // ou recalcular no frontend
+  location.reload(); // Opção simples: recarrega a página
+}
+
 
   
-//função para atualizar status da comanda
 
-  function atualizarStatusComanda(comandaId, novoStatus) {
-  // Mapear status para os valores corretos do ENUM
-  const statusMap = {
-    'Em Preparo': 'em preparo',
-    'Pronto': 'pronta',
-    'Pendente': 'pendente',
-    'Cancelada': 'cancelada'
-  };
 
-  const statusParaEnviar = statusMap[novoStatus] || novoStatus;
-
-  fetch(`/admin/comanda/${comandaId}/status`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ status: statusParaEnviar })
-  })
-  .then(response => response.json())
-  .then(data => {
-    if (data.success) {
-      location.reload();
-    } else {
-      alert('Erro ao atualizar status: ' + data.message);
-    }
-  })
-  .catch(error => {
-    console.error('Erro:', error);
-    alert('Erro ao conectar com o servidor');
-  });
-}

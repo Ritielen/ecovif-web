@@ -43,15 +43,12 @@ async function listarComandas(req, res) {
   }
 }
 
-
 // buscar comanda por nome 
 function buscarComandas(lista, termo) {
   return lista.filter(comanda =>
     comanda.nome_cliente.toLowerCase().includes(termo.toLowerCase())
   );
 } 
-
-
 
 // Rota para atualizar status da comanda
 async function atualizarStatus(req, res) {

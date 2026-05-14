@@ -86,7 +86,12 @@ router.post("/excluirBebida/:id", cardapioController.excluirBebida);
 //rotas da comanda
 router.get("/comanda", comandaController.mostrarComanda);
 router.post("/criarComanda", comandaController.criarComanda);
-//router.get("/comandas", comandaController.listarTodasComandas);
+
+router.get("/editarComanda/:id", comandaController.telaEdicaoComanda);
+
+router.post("/editarComanda/:id", comandaController.atualizarComanda);
+router.delete("/item-Comanda/:id", comandaController.deletarItemComanda);
+router.post("/excluirComanda/:id", comandaController.excluirComanda);
 
 //rotas da cozinha
 router.get("/pedidoCozinha", pedidoCozinhaController.listarComandas);

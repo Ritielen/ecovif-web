@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gestão de Comandas - ECOVIF</title>
+  <title>Edição da Comanda - ECOVIF</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="/css/style-raiz.css">
@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="/css/style-area-gestor.css">
   <link rel="stylesheet" href="/css/style-cardapio.css">
   <link rel="stylesheet" href="/css/style-comandas.css">
-    <link rel="stylesheet" href="/css/style-pedidos-cozinha.css">
+  <link rel="stylesheet" href="/css/style-pedidos-cozinha.css">
 
 </head>
 
@@ -54,7 +54,7 @@
             <i class="fa-solid fa-receipt"></i>
           </div>
           <div>
-            <h1>Registrar Comanda</h1>
+            <h1>Editar Comanda</h1>
             <p>Gerencie comandas, pedidos e controle total das mesas.</p>
           </div>
         </div>
@@ -67,20 +67,22 @@
     <div class="container">
       <div class="row">
         <!-- Seção Formulário -->
+        <%- include('../partials/alerts') %>
+
         <section class="col-lg-5 secao-formulario">
           <div class="caixa-formulario">
-            <h2>Nova Comanda</h2>
-            <%- include('../partials/alerts') %>
+            <h2>Editar Comanda</h2>
 
-            <form action="/criarComanda" method="post" id="formComanda">
+            <form action="/editarComanda/<%= comanda.id %>" method="post" id="formComanda">
 
               <div class="grupo-formulario">
                 <label class="label-formulario">Nome do Cliente</label>
-                <input type="text" name="nome_cliente" class="controle-formulario" id="nomeCliente" placeholder="Digite o nome do cliente" required>
+                <input type="text" name="nome_cliente" class="controle-formulario" id="nomeCliente" value="<%= comanda.nome_cliente %>">
               </div>
+
               <div class="grupo-formulario">
                 <label class="label-formulario">Número da Mesa</label>
-                <input type="number" name="mesa" class="controle-formulario" id="numeroMesa" placeholder="Ex: 5" min="1" required>
+                <input type="number" name="mesa" class="controle-formulario" id="numeroMesa" value="<%= comanda.mesa %>">
               </div>
 
               <!-- Seção Itens da Comanda -->
@@ -119,7 +121,7 @@
                 <div class="linha-formulario">
                   <div class="grupo-formulario">
                     <label class="label-formulario">Quantidade</label>
-                    <input type="number" name="quantidade" class="controle-formulario" id="quantidadeItem" min="1" value="1" required>
+                    <input type="number" name="quantidade" class="controle-formulario" id="quantidadeItem" min="1" value="1">
                   </div>
                   <div class="grupo-formulario" style="display: flex; align-items: flex-end;">
                     <button type="button" class="btn-adicionar-item">
@@ -127,40 +129,85 @@
                     </button>
                   </div>
                 </div>
+                <!--lista dos itens já cadastrados-->
+
+                <div class="comanda-itens">
+
+                  <% if (comanda.itens && comanda.itens.length > 0) { %>
+
+                  <% comanda.itens.forEach(item => { %>
+
+                  <div class="item-info" data-id="<%= item.id %>">
+
+                    <span class="item-nome">
+
+                      <% if (item.tipo_item === "prato") { %>
+
+                      <%= item.prato.nome %> -
+                      Qtd: <%= item.quantidade %>
+                      R$: <%= Number(item.prato.preco_venda).toFixed(2) %>
+
+                      <% } %>
+
+                      <% if (item.tipo_item === "bebida") { %>
+
+                      <%= item.bebida.produto.nome %> -
+                      <%= item.bebida.produto.tamanho %> -
+                      <%= item.bebida.produto.unidade %> -
+                      Qtd: <%= item.quantidade %> -
+                      R$: <%= Number(item.bebida.preco_venda).toFixed(2) %>
+
+                      <% } %>
+
+                    </span>
+
+                    <button type="button" class="btn-remover-item" onclick="removerItemDoBanco(<%= item.id %>, this)">
+                      <i class="fa-solid fa-minus"></i>
+                    </button>
+                    <div>
+                      Total Atual: R$ <%= comanda.total %>
+                    </div>
+                  </div>
+
+                  <% }) %>
+
+                  <% } %>
+
+                </div>
                 <!--caixa com a lista dos itens adicionados-->
-                 <div class="item-acoes">
-                <div class="lista-itens-adicionados" id="listaItensAdicionados">
-                  <p class="texto-vazio" id="vazioItens">Nenhum item adicionado</p>
+                <div class="item-acoes">
+                  <div class="lista-itens-adicionados" id="listaItensAdicionados">
+                    <p class="texto-vazio" id="vazioItens">Nenhum item adicionado</p>
+                  </div>
                 </div>
-                </div>
+
                 <!-- Total da Comanda -->
                 <div class="total-comanda">
                   <strong>Total:</strong>
                   <span id="totalComanda"> R$ </span>
                 </div>
-                <!-- OBSERVAÇÕES DA COMANDA -->
-                <div class="grupo-formulario">
-                  <label class="label-formulario">Observações do Pedido</label>
-                  <textarea class="controle-formulario" name="observacoes" id="observacoesComanda" placeholder="Ex: Aniversariante, restrições alimentares, preferências..." rows="3"><%= typeof observacoesExistentes !== 'undefined' ? observacoesExistentes : '' %></textarea>
-                  <small class="texto-ajuda">Observações gerais que serão repassadas para a
-                    cozinha</small>
-                </div>
-                <button type="submit" class="btn-login">
-                  <i class="fa-solid fa-check-circle"></i> <span id="textoBotao">Registrar
-                    Comanda</span>
-                </button>
+              </div>
+              <!-- OBSERVAÇÕES DA COMANDA -->
+              <div class="grupo-formulario">
+                <label class="label-formulario">Observações do Pedido</label>
+                <textarea class="controle-formulario" name="observacoes" id="observacoesComanda" rows="3"></textarea>
+                <small class="texto-ajuda">Observação atual: <%= comanda.observacoes || 'Não informada' %> </small>
+              </div>
+              <button type="submit" class="btn-login">
+                <i class="fa-solid fa-check-circle"></i> <span id="textoBotao">Atualizar Comanda</span>
+              </button>
             </form>
           </div>
-        </section> 
-       
-      <!-- Botão Voltar -->
-      <div class="text-end mt-3">
-        <a href="/area-gestor" class="btn btn-login-voltar">
-          <i class="fa-solid fa-arrow-left"></i> Voltar
-        </a>
+        </section>
+
+        <!-- Botão Voltar -->
+        <div class="text-end mt-3">
+          <a href="/comanda" class="btn btn-login-voltar">
+            <i class="fa-solid fa-arrow-left"></i> Voltar
+          </a>
+        </div>
+        </section>
       </div>
-    </section>
-    </div>
   </main>
   <!-- Rodapé -->
   <footer class="rodape">
@@ -169,8 +216,12 @@
     </div>
   </footer>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="/js/comandaScript.js"></script>
-<script src="/js/estoqueScript.js"></script>
+  <script src="/js/edicaoComandaScript.js"></script>
+  <script src="/js/estoqueScript.js"></script>
+
+  <script>
+
+  </script>
 </body>
 
 </html>
