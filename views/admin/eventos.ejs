@@ -17,7 +17,7 @@
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-dark">
     <div class="container">
-      <a class="navbar-brand" href="#ecovif"><i class="fa-solid fa-utensils"></i> ECOVIF
+      <a class="navbar-brand" href="/area-gestor"><i class="fa-solid fa-utensils"></i> ECOVIF
         <span class="tagline">Sistema de Gestão para Restaurantes</span>
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -26,14 +26,14 @@
       <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
         <ul class="navbar-nav">
           <li class="nav-item">
-            <a class="nav-link" href="/admin/area-gestor">
+            <a class="nav-link" href="/area-gestor">
               <i class="fa-solid fa-user-shield"></i>Área do Gestor</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/login/suporte">Suporte</a>
+            <a class="nav-link" href="/suporte">Suporte</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/login/login" id="logoutBtn">
+            <a class="nav-link" href="/login" id="logoutBtn">
               <i class="fa-solid fa-sign-out-alt"></i>
               Sair</a>
           </li>
@@ -70,28 +70,28 @@
           <div class="caixa-formulario">
             <h2>Registrar Evento</h2>
 
-            <form id="formEvento">
+            <form id="formEvento" action="/cadastrarEvento" method="POST">
               <!-- Campo Descrição -->
               <div class="grupo-formulario">
                 <label class="label-formulario">Descrição</label>
-                <input type="text" class="controle-formulario" id="descricao" placeholder="Ex: Show de MPB" required>
+                <input type="text" class="controle-formulario" id="descricao" name="descricao" placeholder="Ex: Show de MPB" required>
               </div>
 
               <!-- Campo Data -->
               <div class="grupo-formulario">
                 <label class="label-formulario">Data do Evento</label>
-                <input type="date" class="controle-formulario" id="dataEvento" required>
+                <input type="date" class="controle-formulario" id="dataEvento" name="data" required>
               </div>
 
               <!-- Campo Horário -->
               <div class="grupo-formulario">
                 <label class="label-formulario">Horário</label>
-                <input type="time" class="controle-formulario" id="horaEvento" required>
+                <input type="time" class="controle-formulario" id="horaEvento" name="horario" required>
               </div>
 
               <div class="grupo-formulario">
                 <label class="label-formulario">Valor do Couvert (R$)</label>
-                <input type="number" class="controle-formulario" id="valorCouvert" placeholder="0,00" step="0.01" min="0">
+                <input type="number" class="controle-formulario" id="valorCouvert" name="valor_couvert" placeholder="0,00" step="0.01">
                 <small class="texto-ajuda">Deixe em branco se não houver couvert</small>
               </div>
 
@@ -103,48 +103,125 @@
         </section>
 
         <!-- Seção Lista -->
-        <section class="col-lg-7 secao-lista">
-
-          <div class="caixa-categoria">
-            <h3><i class="fa-solid fa-calendar-alt"></i> Eventos</h3>
-            <div id="listaEventos" class="lista-itens"></div>
-            <div class="conteudo-item">
-              <h4>📅 aniversário</h4>
-              <div class="info-item">
-                <div class="info-evento-item">
-                  <i class="fas fa-calendar"></i>
-                  <strong>Data:</strong>
-                </div>
-                <div class="info-evento-item">
-                  <i class="fas fa-clock"></i>
-                  <strong>Horário:</strong>
-                </div>
-                <div class="info-evento-item">
-                  <span class="preco-destaque">Couvert: R$ </span>
+        <div class="col-lg-7 secao-lista">
+          <!-- ========== BARRA DE PESQUISA ========== -->
+          <div class="barra-pesquisa-wrapper">
+            <label for="inputPesquisa"><i class="fa-solid fa-magnifying-glass"></i> Pesquisar item do cardápio</label>
+            <div class="linha-pesquisa">
+              <input type="text" id="inputPesquisa" class="input-pesquisa" placeholder="Ex.: Suco de Uva, Merlot, Filé Mignon..." autocomplete="off">
+              <button class="btn-pesquisar" id="btnPesquisar">
+                <i class="fa-solid fa-search"></i> Pesquisar
+              </button>
+              <div class="filtro-wrapper">
+                <button class="btn-filtro" id="btnFiltro">
+                  <i class="fa-solid fa-filter"></i> Filtrar
+                </button>
+                <div class="filtro-dropdown" id="filtroDropdown">
+                  <button class="filtro-opcao ativo" data-filtro="todos">
+                    <i class="fa-solid fa-border-all"></i> Todos
+                  </button>
+                  <button class="filtro-opcao" data-filtro="cancelados">
+                    <i class="fa-regular fa-calendar"></i> Cancelados
+                  </button>
+                  <button class="filtro-opcao" data-filtro="eventos-ativo">
+                    <i class="fa-regular fa-calendar"></i> Evento Ativo
+                  </button>
                 </div>
               </div>
             </div>
-            <div class="acoes-item">
-              <button class="btn-editar">
-                <i class="fas fa-edit"></i> Editar
-              </button>
-              <button class="btn-excluir">
-                <i class="fas fa-trash-alt"></i> Excluir
-              </button>
+            <div class="filtro-ativo-tag" id="filtroAtivoTag">
+              <i class="fa-solid fa-tag"></i> Filtro ativo: <span id="filtroAtivoNome">Todos</span>
+              <button class="btn-limpar-filtro" id="btnLimparFiltro">Limpar</button>
             </div>
-            <p class="texto-vazio" id="vazioEventos">Nenhum evento cadastrado.</p>
+          </div>
+          <div class="msg-sem-resultado" id="msgSemResultado">
+            <i class="fa-solid fa-magnifying-glass"></i> Nenhum item encontrado para "<span id="termoPesquisado"></span>".
+          </div>
+          <div class="caixa-categoria">
+            <h3><i class="fa-solid fa-calendar-alt"></i> Eventos</h3>
+
+            <div id="listaEventos" class="lista-itens">
+
+              <% if(eventos.length > 0){ %>
+
+              <% eventos.forEach(evento => { %>
+
+              <div class="conteudo-item" data-filtro="<%= evento.status_evento %>">
+
+                <h4><%= evento.descricao %></h4>
+
+                <div class="info-item">
+
+                  <div class="info-evento-item">
+                    <i class="fas fa-calendar"></i>
+                    <strong> Data:</strong>
+                    <span><%= evento.data %></span>
+                  </div>
+
+                  <div class="info-evento-item">
+                    <i class="fas fa-clock"></i>
+                    <strong> Horário:</strong>
+                    <span><%= evento.horario %></span>
+                  </div>
+
+                  <div class="info-evento-item">
+                    <strong> ✅ Situação do Evento:</strong>
+                    <span><%= evento.status_evento %></span>
+                  </div>
+
+                  <div class="info-evento-item">
+
+                    <strong> 💰 Status do Couvert:</strong>
+                    <span><%= evento.status_couvert %></span>
+                  </div>
+                  <div class="info-evento-item">
+                    <span class="preco-destaque">
+                      Couvert: R$ <%= evento.valor_couvert %>
+                    </span>
+                  </div>
+                </div>
+
+                <div class="acoes-item">
+                  <a class="btn-editar" href="/editarEvento/<%= evento.id %>"> <i class="fas fa-edit"></i> Editar </a>
+
+                  <form action="/cancelarEvento/<%= evento.id %>" method="POST">
+                    <button class="btn-excluir" onclick="return confirm('Deseja cancelar o evento?');">
+                      <i class="fa-regular fa-calendar-xmark"></i> Cancelar </button>
+                  </form>
+
+                  <form action="/admin/eventos/<%= evento.status_couvert === 'ativo' ? 'inativar' : 'ativar' %>/<%= evento.id %>" method="POST">
+                    <button type="submit" class="btn <%= evento.status_couvert === 'ativo' ? 'btn-inativar' : 'btn-ativar' %>" onclick="return confirm('Deseja alterar o status do valor do couvert?');">
+                      <%= evento.status_couvert === 'ativo' ? 'Inativar' : 'Ativar' %> </button>
+                  </form>
+
+                  <form action="/excluirEvento/<%= evento.id %>" method="POST">
+                    <button class="btn-excluir" onclick="return confirm('Deseja excluir o evento?');">
+                      <i class="fas fa-trash-alt"></i> Excluir </button>
+                  </form>
+                </div>
+              </div>
+
+              <% }) %>
+
+              <% } else { %>
+
+              <p class="texto-vazio" id="vazioEventos">
+                Nenhum evento cadastrado.
+              </p>
+
+              <% } %>
+
+            </div>
+
           </div>
           <!-- Botão Voltar -->
           <div class="text-end mt-3">
-            <a href="/admin/area-gestor" class="btn btn-login-voltar"><i class="fa-solid fa-arrow-left"></i>
+            <a href="/area-gestor" class="btn btn-login-voltar"><i class="fa-solid fa-arrow-left"></i>
               Voltar</a>
           </div>
-        </section>
-
+        </div>
       </div>
-    </div>
   </main>
-
   <!-- Rodapé -->
   <footer class="rodape">
     <div class="container">
@@ -152,6 +229,7 @@
     </div>
   </footer>
 
+  <script src="/js/filtroEventoScript.js"></script>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

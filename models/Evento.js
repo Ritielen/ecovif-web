@@ -4,10 +4,10 @@ const sequelizeconnect = require("../config/connection");
 const Evento = sequelizeconnect.define(
   "Evento",
   {
-      id: { 
-        type: DataTypes.INTEGER, 
-        autoIncrement: true, 
-        primaryKey: true 
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
     },
     descricao: {
       type: DataTypes.TEXT,
@@ -21,35 +21,42 @@ const Evento = sequelizeconnect.define(
       type: DataTypes.TIME,
       allowNull: false,
     },
-    couvert_ativo: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-      defaultValue: false,
-     },
-      valor_couvert: {
-      type: DataTypes.DECIMAL(10, 2),
-      allowNull: true, 
+    status_couvert: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      defaultValue: "ativo",
     },
-       usuario_id: {
+    status_evento: {
+      type: DataTypes.ENUM("cancelado"),
+      allowNull: true,
+    },
+    valor_couvert: {
+      type: DataTypes.DECIMAL(10, 2),
+      allowNull: true,
+    },
+    usuario_id: {
       type: DataTypes.INTEGER,
-    allowNull: false,
-  },
+      allowNull: false,
+    },
   },
   {
-   
     tableName: "eventos",
-     timestamps: true,
-    createdAt: 'created_at',
-  updatedAt: 'updated_at',
-     underscored: true,
-  }
+    timestamps: true,
+    createdAt: "created_at",
+    updatedAt: "updated_at",
+    underscored: true,
+  },
 );
 
 // ASSOCIAÇÕES DO EVENTO
 Evento.associate = (models) => {
   Evento.belongsTo(models.Usuario, {
-    foreignKey: 'usuario_id',
-    as: 'usuario'
+    foreignKey: "usuario_id",
+    as: "usuario",
+  });
+  Evento.hasMany(models.Venda, {
+    foreignKey: 'evento_id',
+    as: 'vendas'
   });
 };
 module.exports = Evento;

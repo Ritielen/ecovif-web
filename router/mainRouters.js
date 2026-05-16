@@ -8,6 +8,7 @@ const produtoController = require("../controllers/produtoController");
 const cardapioController = require("../controllers/cardapioController");
 const comandaController = require("../controllers/comandaController");
 const pedidoCozinhaController = require("../controllers/pedidoCozinhaController");
+const eventoController = require("../controllers/eventoController");
 
 
 //rotas da home e logout
@@ -99,6 +100,14 @@ router.post("/excluirComanda/:id", comandaController.excluirComanda);
 router.get("/pedidoCozinha", pedidoCozinhaController.listarComandas);
 router.post("/admin/comanda/:id/status", pedidoCozinhaController.atualizarStatus);
 
-
+//rotas do cadastro de eventos
+router.get("/eventos", eventoController.telaEvento);
+router.post("/cadastrarEvento", eventoController.cadastrarEvento);
+router.post("/excluirEvento/:id", eventoController.excluirEvento);
+router.post("/admin/eventos/inativar/:id", eventoController.inativarCouvert);
+router.post("/admin/eventos/ativar/:id", eventoController.ativarCouvert);
+router.post("/cancelarEvento/:id", eventoController.cancelarEvento);
+router.get("/editarEvento/:id", eventoController.telaEdicaoEvento);
+router.post("/editarEvento/:id", eventoController.atualizarEvento);
 
 module.exports = router;
