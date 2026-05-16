@@ -57,6 +57,11 @@ module.exports = {
         type: Sequelize.TEXT,
         allowNull: true,
        },
+       status: {
+        type: Sequelize.ENUM("ativo", "inativo"),
+        allowNull:false,
+        defaultValue: "ativo",
+      },
        valor_compra: {
          type: Sequelize.DECIMAL(10, 2),
          allowNull: true,

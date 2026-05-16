@@ -5,7 +5,8 @@ const {Op} = require("sequelize");
 
  async function renderizarEstoque(req, res) {
     try {
-        // Buscando os produtos e inclusão da contagem de movimentações para cada um
+        // Buscando os produtos e inclusão da contagem de movimentações para cada um        
+
         const produtos = await db.Produto.findAll({ 
             include: [{
                 model: db.MovimentacaoProduto,
@@ -13,10 +14,16 @@ const {Op} = require("sequelize");
             }],
             order: [['id', 'DESC']] 
         });
-        res.render("admin/estoque", { produtos });
+        res.render("admin/estoque", { 
+          produtos, 
+          msg: req.query.msg,
+         error: req.query.error 
+        });
     } catch (error) {
         console.error("Erro ao buscar produtos:", error);
-        res.render("admin/estoque", { produtos: [] });
+        res.render("admin/estoque", { 
+          produtos: []          
+    });      
     }
 }
 
@@ -94,14 +101,77 @@ function buscarProdutos(lista, termo) {
 }
 
 async function excluirProduto(req, res) {
-  const { id } = req.params; 
+  const { id } = req.params;
+
   try {
-    await db.Produto.destroy({ where: { id } });
-    res.redirect("/estoque?sucesso=Produto excluído com sucesso!");
+
+    // verifica ingredientes do prato
+    const ingrediente = await db.Ingrediente.findOne({
+  where: { produto_id: id }
+});
+
+     // verifica se produto tem movimentações registradas
+    const movimentacao = await db.MovimentacaoProduto.findOne({ where: { produto_id: id } });
+
+    // verifica bebida
+    const bebida = await db.Bebida.findOne({
+      where: { produto_id: id }
+    });
+
+    // se estiver em uso
+    if (ingrediente || bebida  || movimentacao) {
+      return res.redirect(
+        "/estoque?error=Erro ao excluir produto. Ele está sendo usado no cardápio ou possui histórico."
+      );
+    }
+
+    // excluir produto
+    await db.Produto.destroy({
+      where: { id }
+    });
+
+    return res.redirect(
+      "/estoque?msg=Produto excluído com sucesso!"
+    );
+
   } catch (error) {
-    console.error("Erro ao excluir produto:", error);
-    res.redirect("/estoque?erro=Erro ao excluir produto");
+
+    console.error(error);
+
+    return res.redirect(
+      "/estoque?msg=Erro ao excluir produto, ele pode estar em uso no cardápio ou possui histórico."
+    );
   }
+}
+
+// Função de inativar Produto
+async function inativarProduto(req, res) {
+    try{
+        const { id } = req.params;
+        await db.Produto.update(
+            { status : "inativo" },
+            { where: { id } }
+        );
+        return res.redirect("/estoque?msg=Produto inativado com sucesso!");
+    } catch(error){
+        console.error(error);
+        return res.status(500).send("Erro ao inativar produto");
+    }
+}
+
+// Função de ativar Produto
+async function ativarProduto(req, res) {
+    try{
+        const { id } = req.params;
+        await db.Produto.update(
+            { status: "ativo" },
+            { where : { id }}
+        );
+        return res.redirect("/estoque?msg=Produto ativado com sucesso!");
+    } catch(error){
+        console.error(error);
+        return res.status(500).send("Erro ao ativar produto.");
+    }
 }
 
 //adicionar novas quantidades no estoque
@@ -141,8 +211,7 @@ async function editarProduto(req, res) {
     if (!produto) return res.redirect("/estoque?erro=Produto não encontrado");
 
     const usuarioId = req.session.usuarioId;
-
-     
+  
     //  Cálculos de Acúmulo
     const qtdAdicionada = Number(nova_quantidade) || 0;
     const valorAdicionado = Number(novo_valor_compra) || 0;
@@ -167,12 +236,14 @@ const observacoesFinal = observacoes !== "" ? observacoes.toString() : produto.o
     await db.MovimentacaoProduto.create({
       produto_id: produto.id,
       tipo: 'entrada',
+      origem: 'estoque',
       nova_data_validade: dataValidadeMovimentacao, 
       nova_quantidade: qtdAdicionada,
       novo_valor_compra: valorAdicionado,
       quantidade_total: estoqueAtualizado, // Saldo no momento da ação
       valor_total_gasto: valorTotalAtualizado,
-      usuario_id: usuarioId
+      usuario_id: usuarioId,
+       item_comanda_id: null
     });
     //  ATUALIZAR O PRODUTO 
     await produto.update({
@@ -193,12 +264,16 @@ const observacoesFinal = observacoes !== "" ? observacoes.toString() : produto.o
   }
 }
 
+
+
 module.exports = {
    
     renderizarEstoque,
     cadastrarProduto,
     mostrarEstoque,
     excluirProduto,
+    inativarProduto,
+    ativarProduto,
     editarProduto
 };
 

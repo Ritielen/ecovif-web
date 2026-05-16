@@ -69,6 +69,8 @@ router.post("/estoqueCadastrar", produtoController.cadastrarProduto);
 router.get("/produtoAdicionar/:id", produtoController.mostrarEstoque);
 router.post("/admin/produto/editar/:id",produtoController.editarProduto);
 router.post("/admin/produto/excluir/:id", produtoController.excluirProduto);
+router.post("/admin/produto/inativar/:id", produtoController.inativarProduto);
+router.post("/admin/produto/ativar/:id", produtoController.ativarProduto);
 
 //rotas do cardapio cadastro do prato e preço de venda da bebida
 router.get("/cardapio", cardapioController.mostrarCardapio);

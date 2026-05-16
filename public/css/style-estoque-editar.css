@@ -26,7 +26,7 @@
 /* COLUNAS */
 .form-col {
   width: 100%;
-   /* 🔥 evita quebrar o grid */
+   /* evita quebrar o grid */
 }
 
 .form-col .caixa-formulario {
@@ -51,10 +51,10 @@
 /* CAIXA DA TABELA */
 .caixa-formulario .table-responsive {
   
-  padding: 1rem; /* 🔥 reduzido */
+  padding: 1rem; /*  reduzido */
   border-radius: 10px;
   width: 100%;
-  overflow-x: auto; /* 🔥 só horizontal */
+  overflow-x: auto; /*  só horizontal */
   box-shadow: 0 2px 10px rgba(0,0,0,0.05);
 }
 
@@ -132,7 +132,7 @@
 
 /* BOTÕES */
 .btn-editar,
-.btn-excluir {
+.btn-excluir, .btn-inativar, .btn-ativar {
   padding: 0.4rem 0.6rem;
   border-radius: 8px;
   border: none;
@@ -145,6 +145,7 @@
   cursor: pointer;
   transition: 0.3s ease;
 }
+
 
 .btn-editar {
   background: #e3f2fd;
@@ -162,6 +163,22 @@
 
 .btn-excluir:hover {
   background: #ffcdd2;
+}
+
+.btn-inativar {
+  background: #fff3e0;
+  color: #f57c00;
+}
+.btn-inativar:hover {
+  background: #ffe0b2;
+}
+
+.btn-ativar {
+  background: #e8f5e9;
+  color: #388e3c;
+}
+.btn-ativar:hover {
+  background: #c8e6c9;
 }
 
 /* RESPONSIVO */

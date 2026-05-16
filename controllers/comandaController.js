@@ -82,9 +82,10 @@ async function mostrarComanda(req, res) {
     res.redirect("/admin/area-gestor?erro=Erro ao carregar comanda");
   }
 }
+
 // Criar comanda
 async function criarComanda(req, res) {
-     try {
+  try {
     const {
       nome_cliente,
       mesa,
@@ -110,27 +111,83 @@ async function criarComanda(req, res) {
 
     // salva itens
     for (const item of itens) {
+
       const dadosItem = {
         comanda_id: novaComanda.id,
         quantidade: item.quantidade,
         tipo_item: item.tipo_item,
       };
 
+      let produto = null;
+
       // prato
       if (item.tipo_item === "prato") {
+
+        const prato = await db.Prato.findByPk(item.item_id, {
+          include: [
+            {
+              model: db.Produto,
+              as: "produto"
+            }
+          ]
+        });
+
         dadosItem.prato_id = item.item_id;
+
+        produto = prato.produto;
       }
 
       // bebida
       if (item.tipo_item === "bebida") {
+
+        const bebida = await db.Bebida.findByPk(item.item_id, {
+          include: [
+            {
+              model: db.Produto,
+              as: "produto"
+            }
+          ]
+        });
+
         dadosItem.bebida_id = item.item_id;
+
+        produto = bebida.produto;
       }
 
-      await db.ItemComanda.create(dadosItem);
+      // salva item da comanda
+      const itemComanda = await db.ItemComanda.create(dadosItem);
+
+      // MOVIMENTAÇÃO DE SAÍDA
+      if (produto) {
+
+        const estoqueAtualizado =
+          Number(produto.quantidade) - Number(item.quantidade);
+
+        // atualiza estoque
+        await produto.update({
+          quantidade: estoqueAtualizado
+        });
+
+        // salva movimentação
+        await db.MovimentacaoProduto.create({
+          produto_id: produto.id,
+          item_comanda_id: itemComanda.id,
+          usuario_id: req.session.usuarioId,
+
+          tipo: "saida",
+          origem: "comanda", 
+
+          nova_quantidade: item.quantidade,
+
+          quantidade_total: estoqueAtualizado
+        });
+      }
     }
 
     return res.redirect("/comanda?sucesso=Comanda criada");
+
   } catch (error) {
+
     console.log(error);
 
     return res.redirect("/comanda?erro=Erro ao criar comanda");

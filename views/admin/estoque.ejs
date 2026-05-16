@@ -205,24 +205,39 @@
         <section class="col-lg-7 secao-lista">
           <!-- ========== BARRA DE PESQUISA ========== -->
           <div class="barra-pesquisa-wrapper">
-            <label for="inputPesquisa">
-              <i class="fa-solid fa-magnifying-glass"></i> Pesquisar item do estoque
-            </label>
-            <div class="linha-pesquisa">
-              <input type="text" id="inputPesquisa" class="input-pesquisa" placeholder="Ex.: Suco de Uva, Merlot, Filé Mignon..." autocomplete="off">
-              <button type="button" class="btn-pesquisar" id="btnPesquisar">
-                <i class="fa-solid fa-search"></i> Pesquisar
-              </button>
-              <button type="button" class="btn-limpar-filtro" id="btnLimparFiltro">
-                <i class="fa-solid fa-broom"></i> Limpar Pesquisa
-              </button>
-            </div>
-          </div>
-          <div class="msg-sem-resultado" id="msgSemResultado">
-            <i class="fa-solid fa-magnifying-glass"></i> Nenhum item encontrado para "<span id="termoPesquisado"></span>"
-          </div>
+                        <label for="inputPesquisa"><i class="fa-solid fa-magnifying-glass"></i> Pesquisar item do cardápio</label>
+                        <div class="linha-pesquisa">
+                            <input type="text" id="inputPesquisa" class="input-pesquisa" placeholder="Ex.: Suco de Uva, Merlot, Filé Mignon..." autocomplete="off">
+                            <button class="btn-pesquisar" id="btnPesquisar">
+                                <i class="fa-solid fa-search"></i> Pesquisar
+                            </button>
+                            <div class="filtro-wrapper">
+                                <button class="btn-filtro" id="btnFiltro">
+                                    <i class="fa-solid fa-filter"></i> Filtrar
+                                </button>
+                                <div class="filtro-dropdown" id="filtroDropdown">
+                                    <button class="filtro-opcao ativo" data-filtro="todos">
+                                        <i class="fa-solid fa-border-all"></i> Todos
+                                    </button>
+                                    <button class="filtro-opcao" data-filtro="produto">
+                                        <i class="fa-solid fa-drumstick-bite"></i> Produtos
+                                    </button>
+                                    <button class="filtro-opcao" data-filtro="bebida">
+                                        <i class="fa-solid fa-glass-cheers"></i> Bebidas
+                                    </button>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        <div class="filtro-ativo-tag" id="filtroAtivoTag">
+                            <i class="fa-solid fa-tag"></i> Filtro ativo: <span id="filtroAtivoNome">Todos</span>
+                            <button class="btn-limpar-filtro" id="btnLimparFiltro">Limpar</button>
+                        </div>
+                    </div>
 
-
+                    <div class="msg-sem-resultado" id="msgSemResultado">
+                        <i class="fa-solid fa-magnifying-glass"></i> Nenhum item encontrado para "<span id="termoPesquisado"></span>".
+                    </div>
 
           <!-- SEÇÃO DE PRODUTOS -->
           <div class="caixa-categoria">
@@ -230,9 +245,14 @@
             <div id="listaProdutos" class="lista-itens">
               <% if (produtos && produtos.length > 0) { %>
               <% produtos.forEach(function(produto) { %>
+                 
               <!-- FILTRO: Só mostra se NÃO for bebida -->
               <% if (produto.tipo_item !== 'bebida') { %>
-              <div class="conteudo-item">
+              <div class="conteudo-item"
+              data-tipo="produto" 
+     data-nome="<%= produto.nome.toLowerCase() %>" 
+     data-categoria="<%= produto.categoria ? produto.categoria.toLowerCase() : '' %>">
+              
                 <h4><%= produto.nome %></h4>
                 <div class="info-item">
                   <div><strong>Código:</strong> <%= produto.codigo %></div>
@@ -255,10 +275,24 @@
                 <div><strong>Itens no Estoque:</strong>
                   <%= (produto.movimentacoes ? produto.movimentacoes.length : 0) + 1 %> Registro(s)
                 </div>
+                <% if (produto.quantidade < produto.quantidade_minima) { %>
+                <div class="alerta-baixo">
+                  <i class="fas fa-exclamation-triangle"></i>
+                  Estoque Baixo!
+                </div>
+                <% } %>
+
                 <div class="acoes-item">
                   <a href="/produtoAdicionar/<%= produto.id %>" class="btn-adicionar-qtd">
                     <i class="fas fa-plus-circle"></i> Adicionar
                   </a>
+                   <!-- Botões Inativar e Excluir -->
+                    <form action="/admin/produto/<%= produto.status === 'ativo' ? 'inativar' : 'ativar' %>/<%= produto.id %>" method="POST">
+                      <button type="submit" class="btn <%= produto.status === 'ativo' ? 'btn-inativar' : 'btn-ativar' %>" onclick="return confirm('Deseja alterar o status deste produto?');">
+                        <%= produto.status === 'ativo' ? 'Inativar' : 'Ativar' %>
+                      </button>
+                    </form>
+
 
                   <form action="/admin/produto/excluir/<%= produto.id %>" method="POST" ;>
                     <button type="submit" class="btn-excluir" onclick="return confirm('Deseja excluir este produto?');">
@@ -275,7 +309,8 @@
               <% } else { %>
               <p class="texto-vazio">Nenhum produto cadastrado.</p>
               <% } %>
-            </div>
+            
+          </div>
           </div>
 
           <!-- SEÇÃO DE BEBIDAS -->
@@ -286,7 +321,10 @@
               <% produtos.forEach(function(produto) { %>
               <!-- FILTRO: Só mostra se FOR bebida -->
               <% if (produto.tipo_item === 'bebida') { %>
-              <div class="conteudo-item">
+              <div class="conteudo-item"
+                data-tipo="bebida" 
+     data-nome="<%= produto.nome.toLowerCase() %>"
+     data-categoria="bebida">
                 <h4><%= produto.nome %></h4>
                 <div class="info-item">
                   <div><strong>Código:</strong> <%= produto.codigo %></div>
@@ -304,11 +342,24 @@
                   <div><strong>Itens no Estoque:</strong>
                     <%= (produto.movimentacoes ? produto.movimentacoes.length : 0) + 1 %> Registro(s)
                   </div>
-
+                  <% if (produto.quantidade < produto.quantidade_minima) { %>
+                  <div class="alerta-baixo">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Estoque Baixo!
+                  </div>
+                  <% } %>
                   <div class="acoes-item">
                     <a href="/produtoAdicionar/<%= produto.id %>" class="btn-adicionar-qtd">
                       <i class="fas fa-plus-circle"></i> Adicionar
                     </a>
+                    <!-- Botões Inativar e Excluir -->
+                    <form action="/admin/produto/<%= produto.status === 'ativo' ? 'inativar' : 'ativar' %>/<%= produto.id %>" method="POST">
+                      <button type="submit" class="btn <%= produto.status === 'ativo' ? 'btn-inativar' : 'btn-ativar' %>" onclick="return confirm('Deseja alterar o status deste produto?');">
+                        <%= produto.status === 'ativo' ? 'Inativar' : 'Ativar' %>
+                      </button>
+                    </form>
+
+
                     <form action="/admin/produto/excluir/<%= produto.id %>" method="POST">
                       <button type="submit" class="btn-excluir" onclick="return confirm('Deseja excluir esta bebida?');">
                         <i class="fas fa-trash"></i> Excluir
@@ -344,8 +395,13 @@
       <p>2026 Desenvolvido por Ritielen Rodrigues.</p>
     </div>
   </footer>
-  <script src="/js/estoqueScript.js"></script>
+  <script src="/js/formularioEstoqueScript.js"></script>
+
+  <script src="/js/filtroEstoqueScript.js"></script>
+  
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+
 </body>
 
 </html>

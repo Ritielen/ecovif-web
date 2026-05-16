@@ -52,7 +52,7 @@ ItemComanda.associate = (models) => {
     foreignKey: 'comanda_id',
     as: 'comanda'
   });
-  
+ 
   ItemComanda.belongsTo(models.Prato, {
     foreignKey: 'prato_id',
     as: 'prato'
@@ -66,6 +66,9 @@ ItemComanda.associate = (models) => {
     foreignKey: 'produto_id', 
     as: 'produto' 
   });
-
+ItemComanda.hasMany(models.MovimentacaoProduto, { 
+    foreignKey: 'item_comanda_id', 
+    as: 'movimentacoes' 
+  });
 };
 module.exports = ItemComanda;

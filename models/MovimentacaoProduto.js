@@ -13,6 +13,10 @@ const MovimentacaoProduto = sequelizeconnect.define(
       type: DataTypes.ENUM('entrada', 'saida'),
       allowNull: false,
     },
+    origem: {
+      type: DataTypes.ENUM('estoque', 'comanda'),
+      allowNull: false,
+    },
     nova_data_validade: {
       type: DataTypes.DATEONLY,
       allowNull: true,
@@ -42,6 +46,10 @@ const MovimentacaoProduto = sequelizeconnect.define(
      usuario_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
+    },
+     item_comanda_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
     }
     },
   
@@ -65,7 +73,10 @@ MovimentacaoProduto.associate = (models) => {
 foreignKey: 'produto_id',
 as: 'produto'
   });
-
+MovimentacaoProduto.belongsTo(models.ItemComanda, {
+foreignKey: 'item_comanda_id',
+as: 'item_comanda'
+  });
 
 };
 

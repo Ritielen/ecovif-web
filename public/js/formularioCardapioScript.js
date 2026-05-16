@@ -41,7 +41,7 @@ const conteudoFormulario = document.getElementById('conteudoFormulario');
 if (categoriaSelect) {
     categoriaSelect.addEventListener('change', function () {
         const valor = this.value;
-        conteudoFormulario.style.display = 'block'; // <-- Corrigido
+        conteudoFormulario.style.display = 'block'; 
 
         if (valor === 'prato') {
             formPrato.style.display = 'block';
@@ -65,7 +65,7 @@ if (btnLimparForm) {
     btnLimparForm.addEventListener('click', function () {
         formPrincipal.reset();
         categoriaSelect.value = "";
-        conteudoFormulario.style.display = 'none'; // <-- Corrigido
+        conteudoFormulario.style.display = 'none'; 
         configurarCampos(formPrato, false);
         configurarCampos(formBebida, false);
         inputPrecoVenda.disabled = true;

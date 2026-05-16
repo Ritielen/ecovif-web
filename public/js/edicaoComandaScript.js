@@ -168,10 +168,8 @@ async function removerItemDoBanco(itemId, botao) {
 }
 
 function atualizarTotalComanda() {
-  // Aqui você recalcula o total baseado nos itens restantes
-  // Pode fazer uma chamada AJAX para buscar o novo total
-  // ou recalcular no frontend
-  location.reload(); // Opção simples: recarrega a página
+ 
+  location.reload(); //  recarrega a página
 }
 
 

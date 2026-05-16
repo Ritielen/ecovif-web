@@ -140,7 +140,6 @@ formComanda.addEventListener("submit", (e) => {
   formComanda.appendChild(inputTotal);
 });
 
-//função para remover item comanda (tela de edição)
 
 
 

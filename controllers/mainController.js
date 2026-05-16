@@ -128,7 +128,7 @@ async function criarFuncionario(req, res) {
       criado_por: criadoPorId 
     });
 
-    console.log(`✅ Funcionário ${nome} criado com sucesso por ID: ${criadoPorId}`);
+    console.log(` Funcionário ${nome} criado com sucesso por ID: ${criadoPorId}`);
     res.redirect("/listaFuncionarios?sucesso=true");
 
   } catch (error) {
@@ -167,7 +167,7 @@ async function renderizarListaFuncionarios(req, res) {
     });
   }
 }
-// Função para EXCLUIR funcionário (igual ao gestor)
+// Função para EXCLUIR funcionário 
 async function excluirFuncionario(req, res) {
   const { id } = req.params;
   try {

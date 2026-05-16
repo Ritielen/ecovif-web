@@ -84,6 +84,7 @@
               <td>Qtd Mínima</td>
               <td>Valor compra</td>
               <td>Ações</td>
+              <td></td>
             </tr>
 
             <!-- DADOS DO PRODUTO (Resumo Geral) -->
@@ -94,7 +95,7 @@
               <td><%= produto.data_validade || 'Não informada' %></td>
 
               <!-- QUANTIDADE INICIAL: Valor que não muda -->
-              <td style="color: #666;"><%= produto.quantidade_inicial %> <%= produto.unidade %></td>
+              <td style="color: #666;"><%= produto.quantidade_inicial %> (<%= produto.tamanho %> <%= produto.unidade %>)</td>
 
               <!-- ESTOQUE ATUAL: Saldo real somado no banco -->
               <td style="font-weight: bold; color: #007bff;">
@@ -112,21 +113,33 @@
               <td style="font-weight: bold;">R$ <%= Number(produto.valor_compra).toFixed(2) %></td>
 
               <td>
-                <form action="/admin/produto/excluir/<%= produto.id %>" method="POST" onsubmit="return confirm('Excluir este produto apagará todo o histórico. Deseja continuar?')">
+                 <!-- Botões Inativar e Excluir -->
+                    <form action="/admin/produto/<%= produto.status === 'ativo' ? 'inativar' : 'ativar' %>/<%= produto.id %>" method="POST">
+                      <button type="submit" class="btn <%= produto.status === 'ativo' ? 'btn-inativar' : 'btn-ativar' %>" onclick="return confirm('Deseja alterar o status deste produto?');">
+                        <%= produto.status === 'ativo' ? 'Inativar' : 'Ativar' %>
+                      </button>
+                    </form> 
+                    </td>
+                    <td>
+                <form action="/admin/produto/excluir/<%= produto.id %>" method="POST" onsubmit="return confirm('Este produto só pode ser excluído se não tiver histórico de movimentações. Deseja continuar?')">
                   <button type="submit" class="btn-excluir">Excluir</button>
-                </form>
+                </form> 
+             
+                
               </td>
+              
             </tr>
 
             <!-- ESPAÇADOR -->
             <tr style="height: 20px;">
-              <td colspan="10"></td>
+              <td colspan="11"></td>
             </tr>
 
             <!-- CABEÇALHO DAS MOVIMENTAÇÕES (Histórico de Lotes) -->
             <tr style="background-color: #e9ecef;">
               <th>Tipo</th>
-              <th>Qtd. Adicionada</th>
+              <th>Origem</th>
+              <th>Qtd. Movimentada</th>
               <th>Validade do Lote</th>
               <th>Saldo na Época</th>
               <th>Valor da Entrada</th>
@@ -140,7 +153,11 @@
             <% movimentacoes.forEach(mov => { %>
             <tr>
               <td><span class="badge-tipo"><%= mov.tipo %></span></td>
-              <td>+ <%= mov.nova_quantidade %></td>
+              <td><%= mov.origem %></td>
+
+              <td><span class="qtd <%= mov.tipo === 'entrada' ? 'qtd-entrada' : 'qtd-saida' %>">
+                  <%= mov.tipo === 'entrada' ? '+' : '-' %> <%= mov.nova_quantidade %>
+                </span></td>
               <td><%= mov.nova_data_validade || 'Mesma do cadastro' %></td>
               <td><%= mov.quantidade_total %></td>
               <td>R$ <%= Number(mov.novo_valor_compra).toFixed(2) %></td>
@@ -279,7 +296,8 @@
       <p>2026 Desenvolvido por Ritielen Rodrigues.</p>
     </div>
   </footer>
-  <script src="/js/estoqueScript.js"></script>
+  <script src="/js/formularioEstoqueScript.js"></script>
+  
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
