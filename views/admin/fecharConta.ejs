@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vendas - ECOVIF</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/style-raiz.css">
+    <link rel="stylesheet" href="/css/style-login.css">
+    <link rel="stylesheet" href="/css/style-area-gestor.css">
+    <link rel="stylesheet" href="/css/style-cardapio.css">
+    <link rel="stylesheet" href="/css/style-comandas.css">
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#ecovif"><i class="fa-solid fa-utensils"></i> ECOVIF
+                <span class="tagline">Sistema de Gestão para Restaurantes</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/area-gestor">
+                            <i class="fa-solid fa-user-shield"></i> Área do Gestor
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/vendas">
+                            <i class="fa-solid fa-cash-register"></i> Vendas
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/suporte">Suporte</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login" id="logoutBtn"><i class="fa-solid fa-sign-out-alt"></i>
+                            Sair</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <section class="cabecalho-gestor">
+        <div class="container">
+            <div class="welcome-box">
+                <div class="user-info">
+                    <div class="user-avatar">
+                        <i class="fa-solid fa-cash-register"></i>
+                    </div>
+                    <div>
+                        <h1>Finalizar Vendas</h1>
+                        <p>Feche as contas e finalize os pedidos</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <main class="container my-4">
+        <section class="col-lg-7 secao-lista">
+            <% if (msg) { %>
+                <div class="alert alert-success"><%= msg %></div>
+            <% } %>
+            <% if (erro) { %>
+                <div class="alert alert-danger"><%= erro %></div>
+            <% } %>
+            <div class="barra-pesquisa-wrapper">
+                <label for="inputPesquisa"><i class="fa-solid fa-magnifying-glass"></i> Pesquisar comandas</label>
+                <div class="linha-pesquisa">
+                    <input type="text" id="inputPesquisa" class="input-pesquisa" placeholder="Ex.: nome do cliente..." autocomplete="off">
+                    <button class="btn-pesquisar" id="btnPesquisar">
+                        <i class="fa-solid fa-search"></i> Pesquisar
+                    </button>
+                    <div class="filtro-ativo-tag" id="filtroAtivoTag">
+                        <button class="btn-limpar-filtro" id="btnLimparFiltro">Limpar</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="msg-sem-resultado" id="msgSemResultado" style="display: none;">
+                <i class="fa-solid fa-magnifying-glass"></i> Nenhum item encontrado para "<span id="termoPesquisado"></span>".
+            </div>
+
+            <div class="caixa-categoria">
+                <h3><i class="fa-solid fa-receipt"></i> Comandas Registradas</h3>
+                <div id="listaComandas" class="lista-itens">
+                    <% if (comandas && comandas.length > 0) { %>
+                        <% comandas.forEach(comanda => { %>
+                            <% const subtotal = parseFloat(comanda.total || 0); %>
+                            <% const taxaRemovida = removidosComanda[comanda.id]?.taxaServicoRemovida; %>
+                            <% const couvertRemovido = removidosComanda[comanda.id]?.couvertRemovido; %>
+                            <% const taxaServico = taxaRemovida ? 0 : subtotal * 0.1; %>
+                            <% const couvertAtivo = eventoAtivo && eventoAtivo.valor_couvert != null && !couvertRemovido; %>
+                            <% const valorCouvertAtual = couvertAtivo ? valorCouvert : 0; %>
+                            <% const totalComanda = subtotal + taxaServico + valorCouvertAtual; %>
+                            <article class="conteudo-item" data-id="<%= comanda.id %>" data-status="<%= comanda.status %>">
+                                <h4>Comanda #<%= comanda.id %></h4>
+
+                                <div class="info-item">
+                                    <div>
+                                        <strong>Cliente:</strong> <%= comanda.nome_cliente %>
+                                    </div>
+                                    <div>
+                                        <strong>Mesa:</strong> <%= comanda.mesa %>
+                                    </div>
+                                    <% if (comanda.observacoes) { %>
+                                        <div class="obs-texto"><strong>Obs:</strong> <%= comanda.observacoes %></div>
+                                    <% } %>
+                                </div>
+
+                                <div class="ingredientes-lista">
+                                    <strong>Itens do Pedido:</strong>
+                                    <ul>
+                                        <% comanda.itens.forEach(item => { %>
+                                            <li>
+                                                <strong><%= item.quantidade %>x</strong>
+                                                <%= item.tipo_item === "prato" ? item.prato.nome : item.bebida.produto.nome %>
+                                                - R$ <%= item.tipo_item === "prato" ? item.prato.preco_venda : item.bebida.preco_venda %>
+                                                <% if (item.observacoes) { %>
+                                                    <br><em>Obs.: <%= item.observacoes %></em>
+                                                <% } %>
+                                            </li>
+                                        <% }) %>
+                                    </ul>
+                                </div>
+
+                                <div class="rodape-comanda">
+                                    <div>
+                                        <div class="status">Status: <span class="badge-status pendente"><%= comanda.status %></span></div>
+                                        <div class="status">Subtotal: R$ <%= subtotal.toFixed(2).replace('.', ',') %></div>
+                                        <div class="status">Taxa de Serviço 10%: R$ <%= taxaServico.toFixed(2).replace('.', ',') %> <%= taxaRemovida ? '(removida)' : '' %></div>
+                                        <div class="status">Valor do Couvert: R$ <%= valorCouvertAtual.toFixed(2).replace('.', ',') %> <%= (!eventoAtivo || couvertRemovido) ? '(removido)' : '' %></div>
+                                        <div class="total-pedido-card">Total: R$ <%= totalComanda.toFixed(2).replace('.', ',') %></div>
+                                        <div>Data: <%= comanda.created_at.toLocaleDateString() %></div>
+                                    </div>
+                                    <div class="data-comanda">
+                                        <i class="fa-solid fa-clock"></i> <%= comanda.created_at.toLocaleTimeString() %>
+                                    </div>
+                                </div>
+
+                                <div class="acoes-item">
+                                    <% const vendaFechada = vendaMap && vendaMap[comanda.id]; %>
+                                    <div class="venda-status">Venda: <strong><%= vendaFechada ? 'Fechada' : 'Aberta' %></strong></div>
+
+                                    <% if (!vendaFechada) { %>
+                                        <form action="/removerTaxaServico/<%= comanda.id %>" method="POST" style="display:inline-block; margin-right:8px;">
+                                            <button type="submit" class="btn-excluir" onclick="return confirm('Deseja remover a taxa de serviço?');">
+                                                 Remover Taxa Serviço
+                                            </button>
+                                        </form>
+
+                                        <form action="/removerTaxaCouvert/<%= comanda.id %>" method="POST" style="display:inline-block; margin-right:8px;">
+                                            <button type="submit" class="btn-excluir" onclick="return confirm('Deseja remover o couvert?');">
+                                                 Remover Couvert
+                                            </button>
+                                        </form>
+
+                                        <form action="/finalizarVenda/<%= comanda.id %>" method="POST" style="display:inline-block;">
+                                            <button type="submit" class="btn-ativar" onclick="return confirm('Deseja finalizar a venda?');">
+                                                <i class="fa-solid fa-check"></i> Finalizar Venda
+                                            </button>
+                                        </form>
+                                    <% } else { %>
+                                        <button class="btn btn-secondary" disabled>Operações bloqueadas</button>
+                                    <% } %>
+                                </div>
+                            </article>
+                        <% }) %>
+                    <% } else { %>
+                        <p class="texto-vazio">Nenhuma comanda registrada.</p>
+                    <% } %>
+                </div>
+            </div>
+
+            <div class="text-end mt-3">
+                <a href="/area-gestor" class="btn btn-login-voltar"><i class="fa-solid fa-arrow-left"></i> Voltar</a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="rodape">
+        <div class="container">
+            <p>2026 Desenvolvido por Ritielen Rodrigues.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/filtroEstoqueScript.js"></script>
+</body>
+
+</html>

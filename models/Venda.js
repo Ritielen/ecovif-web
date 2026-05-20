@@ -14,10 +14,20 @@ const Venda = sequelizeconnect.define(
       allowNull: true, 
       defaultValue: 0.00
     },    
+    valor_couvert: {
+      type: DataTypes.DECIMAL(10, 2),
+      allowNull: true, 
+      defaultValue: 0.00
+    },
     total_final: {
       type: DataTypes.DECIMAL(10, 2),
       allowNull: false, 
       defaultValue: 0.00
+    },
+    status_venda: {
+      type: DataTypes.ENUM("aberta", "fechada"),
+      allowNull: false,
+      defaultValue: "aberta"
     },
     data_venda: {
       type: DataTypes.DATE,

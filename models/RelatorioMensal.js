@@ -1,19 +1,23 @@
 const { DataTypes } = require("sequelize");
-const sequelizeconnect = require("../config/connection");
+const sequelize = require("../config/connection");
 
-const RelatorioMensal = sequelizeconnect.define(
+const RelatorioMensal = sequelize.define(
   "RelatorioMensal",
   {
-    id: { 
-      type: DataTypes.INTEGER, 
-      autoIncrement: true, 
-      primaryKey: true 
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+      allowNull: false,
     },
 
     mes: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      validate: { min: 1, max: 12 }
+      validate: {
+        min: 1,
+        max: 12,
+      },
     },
 
     ano: {
@@ -21,62 +25,88 @@ const RelatorioMensal = sequelizeconnect.define(
       allowNull: false,
     },
 
-    faturamento_total: {
+    faturamento_bruto: {
       type: DataTypes.DECIMAL(10, 2),
       allowNull: false,
-      defaultValue: 0.00
+      defaultValue: 0.0,
     },
 
     despesas: {
       type: DataTypes.DECIMAL(10, 2),
       allowNull: false,
-      defaultValue: 0.00
-    },
-    quantidade_total_produtos: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
+      defaultValue: 0.0,
     },
 
-    quantidade_minima_produtos: {
-      type: DataTypes.INTEGER,
+    lucro_liquido: {
+      type: DataTypes.DECIMAL(10, 2),
       allowNull: false,
+      defaultValue: 0.0,
     },
 
-    // ranking dos mais vendidos 
-    posicao: {
-    type: DataTypes.INTEGER,
-    allowNull: false
+    margem_lucro: {
+      type: DataTypes.DECIMAL(5, 2),
+      allowNull: false,
+      defaultValue: 0.0,
+      comment: "Percentual de lucro do mês",
     },
-    produtos_mais_vendidos: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },    
+
+    ticket_medio: {
+      type: DataTypes.DECIMAL(10, 2),
+      allowNull: false,
+      defaultValue: 0.0,
+    },
+
+    estoque_critico: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0,
+      comment: "Quantidade de produtos abaixo do estoque mínimo",
+    },
+
+    total_vendas: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0,
+    },
+
     usuario_id: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: false,
+      references: {
+        model: "usuarios",
+        key: "id",
+      },
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
+    },
   },
-},
   {
     tableName: "relatorios_mensais",
     timestamps: true,
-    createdAt: 'created_at',
-    updatedAt: 'updated_at',
+    createdAt: "created_at",
+    updatedAt: "updated_at",
     underscored: true,
 
     indexes: [
       {
         unique: true,
-        fields: ['mes', 'ano', 'usuario_id']
-      }
-    ]
+        fields: ["mes", "ano", "usuario_id"],
+      },
+    ],
   }
 );
 
-// ASSOCIAÇÕES DO RELATORIOMENSAL
+// ASSOCIAÇÕES
 RelatorioMensal.associate = (models) => {
   RelatorioMensal.belongsTo(models.Usuario, {
-    foreignKey: 'usuario_id',
-    as: 'usuario'
+    foreignKey: "usuario_id",
+    as: "usuario",
+  });
+
+  RelatorioMensal.hasMany(models.RankingProdutosMensal, {
+    foreignKey: "relatorio_mensal_id",
+    as: "ranking_produtos",
   });
 };
+
 module.exports = RelatorioMensal;

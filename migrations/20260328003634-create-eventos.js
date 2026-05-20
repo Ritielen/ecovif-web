@@ -26,8 +26,9 @@ module.exports = {
         defaultValue: "ativo",
       },
       status_evento: {
-        type: Sequelize.ENUM("cancelado"),
+        type: Sequelize.ENUM("ativo", "cancelado"),
         allowNull: true,
+        defaultValue: "ativo"
       },
       valor_couvert: {
         type: Sequelize.DECIMAL(10, 2),

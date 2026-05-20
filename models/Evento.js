@@ -27,8 +27,9 @@ const Evento = sequelizeconnect.define(
       defaultValue: "ativo",
     },
     status_evento: {
-      type: DataTypes.ENUM("cancelado"),
+      type: DataTypes.STRING,
       allowNull: true,
+      defaultValue: "ativo"
     },
     valor_couvert: {
       type: DataTypes.DECIMAL(10, 2),

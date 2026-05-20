@@ -92,26 +92,37 @@ async function ativarCouvert(req, res) {
     }
 }
 
-// Função de cancelar evento
+
+// Função para cancelar evento
 async function cancelarEvento(req, res) {
-  try {
-    const { id } = req.params;
-
-    const [rowsUpdated] = await db.Evento.update(
-      { status_evento: "cancelado" },
-      { where: { id } }
-    );
-
-    if (rowsUpdated === 0) {
-      return res.redirect("/eventos?error=Evento não encontrado");
+    try{
+        const { id } = req.params;
+        await db.Evento.update(
+            { status_evento : "cancelado" },
+            { where: { id } }
+        );
+        return res.redirect("/eventos?msg=Evento cancelado com sucesso!");
+    } catch(error){
+        console.error(error);
+        return res.status(500).send("Erro ao cancelar evento");
     }
-
-    return res.redirect("/eventos?msg=Evento cancelado com sucesso!");
-  } catch (error) {
-    console.error("Erro ao cancelar evento:", error);
-    return res.status(500).send("Erro ao cancelar evento");
-  }
 }
+
+// Função para ativar evento
+async function ativarEvento(req, res) {
+    try{
+        const { id } = req.params;
+        await db.Evento.update(
+            { status_evento: "ativo" },
+            { where : { id }}
+        );
+        return res.redirect("/eventos?msg=Evento ativado com sucesso!");
+    } catch(error){
+        console.error(error);
+        return res.status(500).send("Erro ao ativar evento.");
+    }
+}
+
 
 async function telaEdicaoEvento(req, res) {
     try{
@@ -195,6 +206,15 @@ async function atualizarEvento(req, res) {
   }
 }
 
+// Buscar produto por nome ou categoria
+function buscarEventos(lista, termo) {
+  const termoNormalizado = termo.toLowerCase();
+  return lista.filter(evento =>
+    evento.descricao.toLowerCase().includes(termoNormalizado) ||
+    evento.status_evento.toLowerCase().includes(termoNormalizado)
+  );
+}
+
 module.exports = {
     telaEvento,
     cadastrarEvento,
@@ -202,6 +222,7 @@ module.exports = {
     inativarCouvert,
     ativarCouvert,
     cancelarEvento,
+    ativarEvento,
     telaEdicaoEvento,
     atualizarEvento
 };

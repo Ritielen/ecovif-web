@@ -182,12 +182,13 @@
                 </div>
 
                 <div class="acoes-item">
-                  <a class="btn-editar" href="/editarEvento/<%= evento.id %>"> <i class="fas fa-edit"></i> Editar </a>
 
-                  <form action="/cancelarEvento/<%= evento.id %>" method="POST">
-                    <button class="btn-excluir" onclick="return confirm('Deseja cancelar o evento?');">
-                      <i class="fa-regular fa-calendar-xmark"></i> Cancelar </button>
+                  <form action="/eventos/<%= evento.status_evento === 'ativo' ? 'cancelar' : 'ativar' %>/<%= evento.id %>" method="POST">
+                    <button type="submit" class="btn <%= evento.status_evento === 'ativo' ? 'btn-inativar' : 'btn-ativar' %>" onclick="return confirm('Deseja alterar o status do evento?');">
+                      <%= evento.status_evento === 'ativo' ? 'Cancelar' : 'Ativar' %> </button>
                   </form>
+
+                  <a class="btn-editar" href="/editarEvento/<%= evento.id %>"> <i class="fas fa-edit"></i> Editar </a>        
 
                   <form action="/admin/eventos/<%= evento.status_couvert === 'ativo' ? 'inativar' : 'ativar' %>/<%= evento.id %>" method="POST">
                     <button type="submit" class="btn <%= evento.status_couvert === 'ativo' ? 'btn-inativar' : 'btn-ativar' %>" onclick="return confirm('Deseja alterar o status do valor do couvert?');">

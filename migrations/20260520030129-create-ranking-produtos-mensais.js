@@ -2,7 +2,7 @@
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("relatorios_mensais", {
+    await queryInterface.createTable("ranking_produtos_mensais", {
       id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
@@ -10,64 +10,47 @@ module.exports = {
         allowNull: false,
       },
 
-      mes: {
+      posicao: {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
 
-      ano: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-      },
-
-      faturamento_bruto: {
-        type: Sequelize.DECIMAL(10, 2),
-        allowNull: false,
-        defaultValue: 0.0,
-      },
-
-      despesas: {
-        type: Sequelize.DECIMAL(10, 2),
-        allowNull: false,
-        defaultValue: 0.0,
-      },
-
-      lucro_liquido: {
-        type: Sequelize.DECIMAL(10, 2),
-        allowNull: false,
-        defaultValue: 0.0,
-      },
-
-      margem_lucro: {
-        type: Sequelize.DECIMAL(5, 2),
-        allowNull: false,
-        defaultValue: 0.0,
-      },
-
-      ticket_medio: {
-        type: Sequelize.DECIMAL(10, 2),
-        allowNull: false,
-        defaultValue: 0.0,
-      },
-
-      estoque_critico: {
+      quantidade_vendida: {
         type: Sequelize.INTEGER,
         allowNull: false,
         defaultValue: 0,
       },
 
-      total_vendas: {
-        type: Sequelize.INTEGER,
+      faturamento_produto: {
+        type: Sequelize.DECIMAL(10, 2),
         allowNull: false,
-        defaultValue: 0,
+        defaultValue: 0.0,
       },
 
-      usuario_id: {
+      tipo_item: {
+        type: Sequelize.ENUM("prato", "bebida"),
+        allowNull: false,
+      },
+
+      relatorio_mensal_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
 
         references: {
-          model: "usuarios",
+          model: "relatorios_mensais",
+          key: "id",
+        },
+
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
+      },
+
+      produto_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+
+        references: {
+          model: "produtos",
           key: "id",
         },
 
@@ -88,16 +71,16 @@ module.exports = {
 
     // ÍNDICE ÚNICO
     await queryInterface.addIndex(
-      "relatorios_mensais",
-      ["mes", "ano", "usuario_id"],
+      "ranking_produtos_mensais",
+      ["relatorio_mensal_id", "produto_id"],
       {
         unique: true,
-        name: "relatorio_mensal_unico",
+        name: "ranking_produto_mensal_unico",
       }
     );
   },
 
   async down(queryInterface) {
-    await queryInterface.dropTable("relatorios_mensais");
+    await queryInterface.dropTable("ranking_produtos_mensais");
   },
 };

@@ -9,6 +9,9 @@ const cardapioController = require("../controllers/cardapioController");
 const comandaController = require("../controllers/comandaController");
 const pedidoCozinhaController = require("../controllers/pedidoCozinhaController");
 const eventoController = require("../controllers/eventoController");
+const fecharContaController = require("../controllers/fecharContaController");
+const relatorioController = require("../controllers/relatorioController");
+
 
 
 //rotas da home e logout
@@ -106,8 +109,20 @@ router.post("/cadastrarEvento", eventoController.cadastrarEvento);
 router.post("/excluirEvento/:id", eventoController.excluirEvento);
 router.post("/admin/eventos/inativar/:id", eventoController.inativarCouvert);
 router.post("/admin/eventos/ativar/:id", eventoController.ativarCouvert);
-router.post("/cancelarEvento/:id", eventoController.cancelarEvento);
+
+router.post("/eventos/cancelar/:id", eventoController.cancelarEvento);
+router.post("/eventos/ativar/:id", eventoController.ativarEvento);
+
 router.get("/editarEvento/:id", eventoController.telaEdicaoEvento);
 router.post("/editarEvento/:id", eventoController.atualizarEvento);
+
+//fechamento de conta
+router.get("/fecharConta", fecharContaController.mostrarConta);
+router.post("/removerTaxaServico/:id", fecharContaController.removerTaxaServico);
+router.post("/removerTaxaCouvert/:id", fecharContaController.removerTaxaCouvert);
+router.post("/finalizarVenda/:id", fecharContaController.finalizarVenda);
+
+//relatório
+router.get("/relatorio", relatorioController.mostrarRelatorio);
 
 module.exports = router;

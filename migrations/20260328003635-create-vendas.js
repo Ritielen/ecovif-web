@@ -8,20 +8,10 @@ module.exports = {
             autoIncrement: true, 
             primaryKey: true 
         },       
-            total_comanda: {
-              type: Sequelize.DECIMAL(10, 2),
-              allowNull: false,
-              defaultValue: 0.00,
-            },
             taxa_servico: {
               type: Sequelize.DECIMAL(10, 2),
               allowNull: true, 
               defaultValue: 0.00
-            },
-            couvert_ativo: {
-              type: Sequelize.BOOLEAN,
-              allowNull: false,
-              defaultValue: false
             },
             valor_couvert: {
               type: Sequelize.DECIMAL(10, 2),
@@ -32,6 +22,11 @@ module.exports = {
               type: Sequelize.DECIMAL(10, 2),
               allowNull: false, 
               defaultValue: 0.00
+            },
+            status_venda: {
+              type: Sequelize.ENUM("aberta", "fechada"),
+              allowNull: false,
+              defaultValue: "aberta"
             },
             data_venda: {
               type: Sequelize.DATE,
