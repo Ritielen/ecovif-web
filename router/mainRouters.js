@@ -123,6 +123,8 @@ router.post("/removerTaxaCouvert/:id", fecharContaController.removerTaxaCouvert)
 router.post("/finalizarVenda/:id", fecharContaController.finalizarVenda);
 
 //relatório
-router.get("/relatorio", relatorioController.mostrarRelatorio);
+//router.get("/relatorio", relatorioController.mostrarRelatorio);
+
+router.get("/relatorioMensal", relatorioController.gerarRelatorio);
 
 module.exports = router;

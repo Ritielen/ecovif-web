@@ -56,23 +56,35 @@ module.exports = {
         defaultValue: 0,
       },
 
-      total_vendas: {
+      posicao: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+      },
+
+      quantidade_vendida: {
         type: Sequelize.INTEGER,
         allowNull: false,
         defaultValue: 0,
       },
 
+      tipo_item: {
+        type: Sequelize.ENUM("prato", "bebida"),
+        allowNull: false,
+      },
+
+      produto_id: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+      },
+
+      venda_id: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+      },
+
       usuario_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
-
-        references: {
-          model: "usuarios",
-          key: "id",
-        },
-
-        onUpdate: "CASCADE",
-        onDelete: "CASCADE",
       },
 
       created_at: {
@@ -93,7 +105,7 @@ module.exports = {
       {
         unique: true,
         name: "relatorio_mensal_unico",
-      }
+      },
     );
   },
 

@@ -47,7 +47,6 @@ const RelatorioMensal = sequelize.define(
       type: DataTypes.DECIMAL(5, 2),
       allowNull: false,
       defaultValue: 0.0,
-      comment: "Percentual de lucro do mês",
     },
 
     ticket_medio: {
@@ -59,25 +58,34 @@ const RelatorioMensal = sequelize.define(
     estoque_critico: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      defaultValue: 0,
-      comment: "Quantidade de produtos abaixo do estoque mínimo",
     },
 
-    total_vendas: {
+    posicao: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+
+    quantidade_vendida: {
       type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: 0,
+    },
+    tipo_item: {
+      type: DataTypes.ENUM("prato", "bebida"),
+      allowNull: false,
     },
 
     usuario_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      references: {
-        model: "usuarios",
-        key: "id",
-      },
-      onUpdate: "CASCADE",
-      onDelete: "CASCADE",
+    },
+    produto_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
+    venda_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
     },
   },
   {
@@ -93,7 +101,7 @@ const RelatorioMensal = sequelize.define(
         fields: ["mes", "ano", "usuario_id"],
       },
     ],
-  }
+  },
 );
 
 // ASSOCIAÇÕES
@@ -102,10 +110,13 @@ RelatorioMensal.associate = (models) => {
     foreignKey: "usuario_id",
     as: "usuario",
   });
-
-  RelatorioMensal.hasMany(models.RankingProdutosMensal, {
-    foreignKey: "relatorio_mensal_id",
-    as: "ranking_produtos",
+  RelatorioMensal.belongsTo(models.Venda, {
+    foreignKey: "venda_id",
+    as: "venda",
+  });
+  RelatorioMensal.belongsTo(models.Produto, {
+    foreignKey: "produto_id",
+    as: "produto",
   });
 };
 

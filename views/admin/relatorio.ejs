@@ -45,7 +45,7 @@
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/login/suporte">Suporte</a>
+              <a class="nav-link" href="/suporte">Suporte</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/login" id="logoutBtn"
@@ -77,6 +77,15 @@
     <!-- Dashboard Principal -->
     <main class="funcionalidades-grid">
       <div class="container">
+        
+        <!-- Mensagem de feedback -->
+        <% if (msg) { %>
+          <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <%= msg %>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        <% } %>
+
         <!-- Cards de Resumo -->
         <div class="row g-4 mb-4">
           <div class="col-md-3">
@@ -86,8 +95,11 @@
               </div>
               <div class="card-info">
                 <h3>Faturamento Bruto</h3>
-                <p class="valor" id="faturamentoTotal">R$ </p>
-                <small></small>
+                <p class="valor" id="faturamentoTotal">
+                R$ <%= Number(relatorio?.faturamento_bruto || 0).toFixed(2).replace('.', ',') %>
+
+                    </p>
+                <small>Total de vendas no período</small>
               </div>
             </div>
           </div>
@@ -98,7 +110,9 @@
               </div>
               <div class="card-info">
                 <h3>Despesas</h3>
-                <p class="valor" id="despesasTotal">R$ </p>
+                <p class="valor" id="despesasTotal">
+R$ <%= Number(relatorio?.despesas || 0).toFixed(2).replace('.', ',') %>
+                </p>
                 <small>Compras do mês</small>
               </div>
             </div>
@@ -110,8 +124,11 @@
               </div>
               <div class="card-info">
                 <h3>Lucro Líquido</h3>
-                <p class="valor" id="lucroTotal">R$ </p>
-                <small></small>
+                <p class="valor" id="lucroTotal">
+                  R$ <%= Number(relatorio?.lucro_liquido || 0).toFixed(2).replace('.', ',')  %>
+                </p> 
+
+                <small>Faturamento - Despesas</small>
               </div>
             </div>
           </div>
@@ -122,8 +139,10 @@
               </div>
               <div class="card-info">
                 <h3>Ticket Médio</h3>
-                <p class="valor" id="ticketMedio">R$ </p>
-                <small></small>
+                <p class="valor" id="ticketMedio">
+                  R$ <%= Number(relatorio?.ticket_medio || 0).toFixed(2).replace('.', ',')  %>
+                </p>
+                <small>Por venda realizada</small>
               </div>
             </div>
           </div>
@@ -135,105 +154,51 @@
             <i class="fa-solid fa-exclamation-triangle"></i> Alertas de Estoque
             Mínimo
           </h3>
-          <div id="alertasEstoque" class="alertas-container"></div>
-
-          <div class="alerta-info">
-            <h4><i class="fa-solid fa-exclamation-triangle"></i> nome</h4>
-            <p>
-              Estoque atual: quantidadeTotal g | Mínimo: quantidadeMinima kg
-            </p>
-          </div>
-          <div class="alerta-quantidade">qtg total</div>
-          <p class="texto-vazio" id="semAlertas">
-            Nenhum item com estoque baixo.
-          </p>
-        </div>
-        <!-- Itens Mais Vendidos -->
-        <div class="caixa-categoria mb-4">
-          <h3><i class="fa-solid fa-trophy"></i> Ranking de Produtos</h3>
-
-          <form class="seletor-mes row gy-3 gx-2 align-items-end" method="get" action="/relatorio">
-            <input type="hidden" name="relatorioMes" >
-            <input type="hidden" name="relatorioAno"  >
-            <div class="col-auto">
-              <label>Selecione o Mês:</label>
-              <select class="controle-formulario" name="rankingMes">
-                <% meses.forEach(function(mes) { %>
-                  <option value="<%= mes.valor %>" <%= mes.valor === selectedRankingMes.toString().padStart(2, '0') ? 'selected' : '' %>><%= mes.label %></option>
-                <% }); %>
-              </select>
-            </div>
-            <div class="col-auto">
-              <label>Selecione o Ano:</label>
-              <select class="controle-formulario" name="rankingAno">
-                <% anos.forEach(function(ano) { %>
-                  <option value="<%= ano %>" <%= ano === selectedRankingAno ? 'selected' : '' %>><%= ano %></option>
-                <% }); %>
-              </select>
-            </div>
-            <div class="col-auto">
-              <button type="submit" class="btn btn-primary">Aplicar Ranking</button>
-            </div>
-          </form>
-
-          <!-- Tabela de Itens Vendidos -->
-          <div class="tabela-vendidos">
-            <table class="tabela-dashboard">
-              <thead>
-                <tr>
-                  <th>Posição</th>
-                  <th>Produto</th>
-                  <th>Tipo</th>
-                  <th>Quantidade Vendida</th>
-                  <th>Faturamento</th>
-                </tr>
-              </thead>
-              <tbody id="tabelaVendidos">
-                <% if (rankingProdutos && rankingProdutos.length > 0) { %>
-                  <% rankingProdutos.forEach(function(item) { %>
-                    <tr>
-                      <td><%= item.posicao %></td>
-                      <td><%= item.nome %></td>
-                      <td><%= item.tipo === 'prato' ? 'Prato' : 'Bebida' %></td>
-                      <td><%= item.quantidade_vendida %></td>
-                      <td>R$ <%= item.faturamento_produto.toFixed(2).replace('.', ',') %></td>
-                    </tr>
-                  <% }); %>
-                <% } else { %>
-                  <tr>
-                    <td colspan="5" class="texto-vazio">
-                      Nenhum ranking disponível para este mês.
-                    </td>
-                  </tr>
-                <% } %>
-              </tbody>
-            </table>
+          <div id="alertasEstoque" class="alertas-container">
+            <% if (produtosEstoqueBaixo && produtosEstoqueBaixo.length > 0) { %>
+              <% produtosEstoqueBaixo.forEach(function(produto) { %>
+                <div class="alerta-info">
+                  <h4><i class="fa-solid fa-exclamation-triangle"></i> <%= produto.nome %></h4>
+                  <p>
+                    Estoque atual: <%= produto.quantidade_total %> <%= produto.unidade || 'un' %> | 
+                    Mínimo: <%= produto.quantidade_minima %> <%= produto.unidade || 'un' %>
+                  </p>
+                  <div class="alerta-quantidade"><%= produto.quantidade_total %></div>
+                </div>
+              <% }); %>
+            <% } else { %>
+              <p class="texto-vazio" id="semAlertas">
+                Nenhum item com estoque baixo.
+              </p>
+            <% } %>
           </div>
         </div>
 
-        <!-- Relatório Mensal -->
+        <!-- Relatório Mensal Unificado -->
         <div class="caixa-categoria mb-4">
           <h3>
             <i class="fa-solid fa-calendar-alt"></i> Relatório Mensal
           </h3>
 
-          <form class="seletor-mes row gy-3 gx-2 align-items-end" method="get" action="/relatorio">
-            <input type="hidden" name="rankingMes"  >
-            <input type="hidden" name="rankingAno" >
+          <form class="seletor-mes row gy-3 gx-2 align-items-end" method="get" action="/relatorioMensal">
             <div class="col-auto">
               <label>Selecione o Mês:</label>
-              <select class="controle-formulario" name="relatorioMes">
-                <% meses.forEach(function(mes) { %>
-                  <option value="<%= mes.valor %>" <%= mes.valor === selectedRelatorioMes.toString().padStart(2, '0') ? 'selected' : '' %>><%= mes.label %></option>
-                <% }); %>
+              <select class="controle-formulario" name="mes">
+                <% if (meses && meses.length > 0) { %>
+                  <% meses.forEach(function(mesItem) { %>
+                    <option value="<%= mesItem.valor %>" <%= mesItem.valor === selectedMes.toString().padStart(2, '0') ? 'selected' : '' %>><%= mesItem.label %></option>
+                  <% }); %>
+                <% } %>
               </select>
             </div>
             <div class="col-auto">
               <label>Selecione o Ano:</label>
-              <select class="controle-formulario" name="relatorioAno">
-                <% anos.forEach(function(ano) { %>
-                  <option value="<%= ano %>" <%= ano === selectedRelatorioAno ? 'selected' : '' %>><%= ano %></option>
-                <% }); %>
+              <select class="controle-formulario" name="ano">
+                <% if (anos && anos.length > 0) { %>
+                  <% anos.forEach(function(anoItem) { %>
+                    <option value="<%= anoItem %>" <%= anoItem === selectedAno ? 'selected' : '' %>><%= anoItem %></option>
+                  <% }); %>
+                <% } %>
               </select>
             </div>
             <div class="col-auto">
@@ -245,8 +210,11 @@
             <table class="tabela-dashboard">
               <thead>
                 <tr>
-                  <th>Mês</th>
                   <th>Ano</th>
+                  <th>Mês</th>
+                  <th>Posição</th>
+                  <th>Item</th>
+                  <th>Quantidade Vendida</th>
                   <th>Faturamento Bruto</th>
                   <th>Despesas</th>
                   <th>Lucro Líquido</th>
@@ -255,20 +223,25 @@
                 </tr>
               </thead>
               <tbody id="tabelaComparativo">
-                <% if (relatorioExiste) { %>
-                  <tr>
-                    <td></td>
-                    <td></td>
-                    <td>R$ </td>
-                    <td>R$ </td>
-                    <td>R$ </td>
-                    <td></td>
-                    <td>R$ </td>
-                  </tr>
+                <% if (relatorioExiste && rankingProdutos && rankingProdutos.length > 0) { %>
+                  <% rankingProdutos.forEach(function(item, index) { %>
+                    <tr>
+                      <td><%= relatorio.ano %></td>
+                      <td><%= String(relatorio.mes).padStart(2, '0') %></td>
+                      <td><%= index + 1 %></td>
+                      <td><%= item.nome %></td>
+                      <td><%= item.quantidade_vendida %></td>
+                      <td>R$ <%= Number(relatorio.faturamento_bruto).toFixed(2).replace('.', ',') %></td>
+                      <td>R$ <%= Number(relatorio.despesas).toFixed(2).replace('.', ',') %></td>
+                      <td>R$ <%= Number(relatorio.lucro_liquido).toFixed(2).replace('.', ',') %></td>
+                      <td><%= Number(relatorio.margem_lucro).toFixed(2).replace('.', ',') %>%</td>
+                      <td>R$ <%= Number(relatorio.ticket_medio).toFixed(2).replace('.', ',') %></td>
+                    </tr>
+                  <% }); %>
                 <% } else { %>
                   <tr>
-                    <td colspan="7" class="texto-vazio">
-                      Nenhum relatório mensal registrado para este mês.
+                    <td colspan="10" class="texto-vazio">
+                      Nenhum relatório mensal registrado para este período.
                     </td>
                   </tr>
                 <% } %>
@@ -299,7 +272,7 @@
     <!-- Rodapé -->
     <footer class="rodape">
       <div class="container">
-        <p>2026 Desenvolvido por Ritielen Rodrigues.</p>
+        <p>2026 ECOVIF - Todos os direitos reservados</p>
       </div>
     </footer>
 
