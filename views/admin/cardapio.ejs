@@ -329,7 +329,7 @@
                   <!-- EXCLUIR -->
                   <form action="/excluirPrato/<%= prato.id %>" method="POST">
 
-                    <button type="submit" class="btn-excluir" onclick="return confirm('Deseja excluir este prato?');">
+                    <button type="submit" class="btn-excluir" onclick="return confirm('O prato só pode ser excluído se não estiver em uma comanda.');">
                       <i class="fa-solid fa-trash"></i>
                       Excluir
                     </button>
@@ -385,7 +385,7 @@
                   </a>
 
                   <form action="/excluirBebida/<%= bebida.id %>" method="POST">
-                    <button type="submit" class="btn-excluir" onclick="return confirm('Deseja excluir esta bebida?');">
+                    <button type="submit" class="btn-excluir" onclick="return confirm('A bebida só pode ser excluída se não estiver em uma comanda.');">
                       <i class="fa-solid fa-trash"></i> Excluir
                     </button>
                   </form>

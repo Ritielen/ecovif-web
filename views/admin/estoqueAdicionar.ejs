@@ -99,7 +99,7 @@
 
               <!-- ESTOQUE ATUAL: Saldo real somado no banco -->
               <td style="font-weight: bold; color: #007bff;">
-                <%= produto.quantidade %>
+                <%= Number(produto.quantidade) %>
                 <% if (produto.tipo_item === 'bebida') { %>
                 (<%= produto.tamanho %> <%= produto.unidade %>)
                 <% } else { %>
@@ -159,7 +159,7 @@
                   <%= mov.tipo === 'entrada' ? '+' : '-' %> <%= mov.nova_quantidade %>
                 </span></td>
               <td><%= mov.nova_data_validade || 'Mesma do cadastro' %></td>
-              <td><%= mov.quantidade_total %></td>
+              <td><%= Number(mov.quantidade_total) %></td>
               <td>R$ <%= Number(mov.novo_valor_compra).toFixed(2) %></td>
               <td>R$ <%= Number(mov.valor_total_gasto).toFixed(2) %></td>
               <td colspan="2" style="font-size: 0.85em; color: #888;">

@@ -258,8 +258,8 @@
                       <%= produto.categoria %>
                     </span>
                   </div>
-                  <div><strong>Estoque Total:</strong> <%= produto.quantidade %> <%= produto.unidade %></div>
-                  <div><strong>Quantidade Mínima:</strong> <%= produto.quantidade_minima %> <%= produto.unidade %></div>
+                  <div><strong>Estoque Total:</strong> <%= Number(produto.quantidade) %> <%= produto.unidade %></div>
+                  <div><strong>Quantidade Mínima:</strong> <%= Number(produto.quantidade_minima) %> <%= produto.unidade %></div>
 
                   <% if (produto.observacoes) { %>
                   <div class="obs-texto"><strong>Obs:</strong> <%= produto.observacoes %></div>

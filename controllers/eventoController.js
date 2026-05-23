@@ -20,7 +20,7 @@ async function cadastrarEvento(req, res) {
     const {descricao, data, horario, valor_couvert} = req.body;
 
     if(!descricao || !data || !horario || !valor_couvert) {
-        return res.redirect("/eventos?msg=Todos os campos são obrigatórios");
+        return res.redirect("/eventos?erro=Todos os campos são obrigatórios");
     }
       const valor = valor_couvert ? parseFloat(valor_couvert.replace(",", ".")) : null;
       
@@ -32,7 +32,7 @@ async function cadastrarEvento(req, res) {
         const usuarioId = req.session.usuarioId;
         const usuarioRegistrado = await db.Usuario.findByPk(usuarioId);
         if (!usuarioRegistrado) {
-          return res.redirect("/login?error=Usuário não encontrado");
+          return res.redirect("/login?erro=Usuário não encontrado");
         }
     
         // Criação do produto

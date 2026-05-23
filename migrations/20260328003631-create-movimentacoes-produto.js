@@ -21,20 +21,20 @@ module.exports = {
         allowNull: true,
       },
       nova_quantidade: {
-        type: Sequelize.DECIMAL(10, 3),
+        type: Sequelize.DECIMAL(10, 2),
         allowNull: true,
       },
       novo_valor_compra: {
-        type: Sequelize.DECIMAL(10, 3),
+        type: Sequelize.DECIMAL(10, 2),
         allowNull: true,
         defaultValue: 0.0,
       },
       quantidade_total: {
-        type: Sequelize.DECIMAL(10, 3),
+        type: Sequelize.DECIMAL(10, 2),
         allowNull: true,
       },
       valor_total_gasto: {
-        type: Sequelize.DECIMAL(10, 3),
+        type: Sequelize.DECIMAL(10, 2),
         allowNull: true,
         defaultValue: 0.0,
       },

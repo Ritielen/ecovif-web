@@ -267,6 +267,12 @@ async function excluirPrato(req, res) {
       return res.redirect("/cardapio?erro=Prato não encontrado");
     }
 
+    // Verifica se o prato está em alguma comanda
+    const itemComanda = await db.ItemComanda.findOne({ where: { prato_id: id } });
+    if (itemComanda) {
+      return res.redirect("/cardapio?msg=Prato está em uma comanda e não pode ser excluído");
+    }
+
     // Exclui os ingredientes primeiro (chave estrangeira)
     await db.Ingrediente.destroy({ where: { prato_id: id } });
 
@@ -308,6 +314,12 @@ async function excluirBebida(req, res) {
     const bebida = await db.Bebida.findByPk(id);
     if (!bebida) {
       return res.redirect("/cardapio?erro=Bebida não encontrada");
+    }
+
+    // Verifica se o prato está em alguma comanda
+    const itemComanda = await db.ItemComanda.findOne({ where: { bebida_id: id } });
+    if (itemComanda) {
+      return res.redirect("/cardapio?msg=Bebida está em uma comanda e não pode ser excluída");
     }
 
     await bebida.destroy();

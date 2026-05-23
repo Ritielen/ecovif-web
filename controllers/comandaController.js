@@ -74,7 +74,9 @@ async function mostrarComanda(req, res) {
       pratos,
       bebidas,
       comandas,
-      msgSucesso: sucesso
+      //msgSucesso: sucesso
+      msg: req.query.msg,
+         error: req.query.error 
     });
 
   } catch (error) {
@@ -146,10 +148,13 @@ for (const item of itens) {
 
   if (item.tipo_item === "prato") {
     dadosItem.prato_id = item.item_id;
+    
   }
 
   if (item.tipo_item === "bebida") {
     dadosItem.bebida_id = item.item_id;
+  
+  
   }
 
   const novoItem = await db.ItemComanda.create(dadosItem);
@@ -162,7 +167,7 @@ for (const item of itens) {
   novaComanda.id
 );
 
-    return res.redirect("/comanda?sucesso=Comanda criada");
+    return res.redirect("/comanda?msg=Comanda criada");
   } catch (error) {
     console.log(error);
 
@@ -215,6 +220,8 @@ async function telaEdicaoComanda(req, res) {
       pratos,
       bebidas,
       itens: comanda.itens,
+      msg: req.query.msg,
+         error: req.query.error 
     });
   } catch (error) {
     console.error(error);
@@ -322,7 +329,7 @@ async function atualizarComanda(req, res) {
     // Recalcula total com todos os itens (antigos + novos)
     await recalcularTotalComanda(id);
 
-    return res.redirect(`/editarComanda/${id}?sucesso=Comanda atualizada com sucesso`);
+    return res.redirect(`/editarComanda/${id}?msg=Comanda atualizada com sucesso`);
   } catch (error) {
     console.error("Erro ao atualizar comanda:", error);
     return res.redirect(`/editarComanda/${id}?erro=Erro ao atualizar comanda`);
@@ -334,7 +341,7 @@ async function excluirComanda(req, res) {
   const { id } = req.params;
   try {
     await db.Comanda.destroy({ where: { id } });
-    res.redirect("/comanda?sucesso=Comanda excluída com sucesso!");
+    res.redirect("/comanda?msg=Comanda excluída com sucesso!");
   } catch (error) {
     console.error("Erro ao excluir comanda:", error);
     res.redirect("/comanda?erro=Erro ao excluir comanda");

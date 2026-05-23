@@ -18,6 +18,7 @@ const ItemComanda = sequelizeconnect.define(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    
    
   comanda_id: {
     type: DataTypes.INTEGER,
