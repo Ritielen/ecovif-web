@@ -43,15 +43,15 @@ const Produto = sequelizeconnect.define(
       allowNull: true,
     },
     quantidade_inicial: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.DECIMAL(10, 3),
       allowNull: true,
     },
     quantidade: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.DECIMAL(10, 3),
       allowNull: true,
     },
     quantidade_minima: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.DECIMAL(10, 3),
       allowNull: true,
     },
     observacoes: {
@@ -64,7 +64,7 @@ const Produto = sequelizeconnect.define(
       defaultValue: 'ativo'
     },
     valor_compra: {
-      type: DataTypes.DECIMAL(10, 2),
+      type: DataTypes.DECIMAL(10, 3),
       allowNull: true,
       defaultValue: 0.0,
     },

@@ -1,4 +1,5 @@
 const db = require("../models");
+const { baixarEstoqueComanda } = require("../services/movimentacaoService");
 const passport = require('../config/passport');
 const { sendMail, sendSupportContact } = require("../config/mailer");
 const {Op} = require("sequelize");
@@ -85,7 +86,7 @@ async function mostrarComanda(req, res) {
 
 // Criar comanda
 async function criarComanda(req, res) {
-  try {
+     try {
     const {
       nome_cliente,
       mesa,
@@ -109,91 +110,68 @@ async function criarComanda(req, res) {
       status: "pendente",
     });
 
-    // salva itens
+    /*/ salva itens
     for (const item of itens) {
-
       const dadosItem = {
         comanda_id: novaComanda.id,
         quantidade: item.quantidade,
         tipo_item: item.tipo_item,
       };
 
-      let produto = null;
-
       // prato
       if (item.tipo_item === "prato") {
-
-        const prato = await db.Prato.findByPk(item.item_id, {
-          include: [
-            {
-              model: db.Produto,
-              as: "produto"
-            }
-          ]
-        });
-
         dadosItem.prato_id = item.item_id;
-
-        produto = prato.produto;
       }
 
       // bebida
       if (item.tipo_item === "bebida") {
-
-        const bebida = await db.Bebida.findByPk(item.item_id, {
-          include: [
-            {
-              model: db.Produto,
-              as: "produto"
-            }
-          ]
-        });
-
         dadosItem.bebida_id = item.item_id;
-
-        produto = bebida.produto;
       }
 
-      // salva item da comanda
-      const itemComanda = await db.ItemComanda.create(dadosItem);
+      
 
-      // MOVIMENTAÇÃO DE SAÍDA
-      if (produto) {
+      await db.ItemComanda.create(dadosItem);
+       
+    }*/
+   
+    const itensSalvos = [];
 
-        const estoqueAtualizado =
-          Number(produto.quantidade) - Number(item.quantidade);
+for (const item of itens) {
 
-        // atualiza estoque
-        await produto.update({
-          quantidade: estoqueAtualizado
-        });
+  const dadosItem = {
+    comanda_id: novaComanda.id,
+    quantidade: item.quantidade,
+    tipo_item: item.tipo_item,
+  };
 
-        // salva movimentação
-        await db.MovimentacaoProduto.create({
-          produto_id: produto.id,
-          item_comanda_id: itemComanda.id,
-          usuario_id: req.session.usuarioId,
+  if (item.tipo_item === "prato") {
+    dadosItem.prato_id = item.item_id;
+  }
 
-          tipo: "saida",
-          origem: "comanda", 
+  if (item.tipo_item === "bebida") {
+    dadosItem.bebida_id = item.item_id;
+  }
 
-          nova_quantidade: item.quantidade,
+  const novoItem = await db.ItemComanda.create(dadosItem);
 
-          quantidade_total: estoqueAtualizado
-        });
-      }
-    }
+  itensSalvos.push(novoItem.get({ plain: true }));
+}
+    await baixarEstoqueComanda(
+  itensSalvos,
+  req.session.usuarioId,
+  novaComanda.id
+);
 
     return res.redirect("/comanda?sucesso=Comanda criada");
-
   } catch (error) {
-
     console.log(error);
 
     return res.redirect("/comanda?erro=Erro ao criar comanda");
   }
 }
      
+
+    
 // buscar comanda por nome 
 function buscarComandas(lista, termo) {
   return lista.filter(comanda =>

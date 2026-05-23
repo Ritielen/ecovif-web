@@ -27,12 +27,12 @@ async function cadastrarEvento(req, res) {
     try {
         // VERIFICAÇÃO DE SESSÃO
         if (!req.session || !req.session.usuarioId) {
-          return res.redirect("/login?msg=Faça login para continuar");
+          return res.redirect("/login?error=Faça login para continuar");
         }
         const usuarioId = req.session.usuarioId;
         const usuarioRegistrado = await db.Usuario.findByPk(usuarioId);
         if (!usuarioRegistrado) {
-          return res.redirect("/login?msg=Usuário não encontrado");
+          return res.redirect("/login?error=Usuário não encontrado");
         }
     
         // Criação do produto

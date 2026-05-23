@@ -22,20 +22,20 @@ const MovimentacaoProduto = sequelizeconnect.define(
       allowNull: true,
     },
     nova_quantidade:{
-    type: DataTypes.INTEGER,
+    type: DataTypes.DECIMAL(10, 3),
     allowNull: true,
     },
     novo_valor_compra: {
-      type: DataTypes.DECIMAL(10, 2),
+      type: DataTypes.DECIMAL(10, 3),
       allowNull: true,
       defaultValue: 0.0,
     },
      quantidade_total: {   //soma quantidade e nova_quantidade
-     type: DataTypes.INTEGER,
+     type: DataTypes.DECIMAL(10, 3),
       allowNull: true, 
     },
     valor_total_gasto: {  //soma valor_compra e novo_valor_compra
-      type: DataTypes.DECIMAL(10, 2),
+      type: DataTypes.DECIMAL(10, 3),
       allowNull: true, 
       defaultValue: 0.0,
     },
@@ -50,8 +50,12 @@ const MovimentacaoProduto = sequelizeconnect.define(
      item_comanda_id: {
       type: DataTypes.INTEGER,
       allowNull: true,
-    }
     },
+      comanda_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    }
+  },
   
   {
     tableName: "movimentacoes_produto",
@@ -77,6 +81,10 @@ MovimentacaoProduto.belongsTo(models.ItemComanda, {
 foreignKey: 'item_comanda_id',
 as: 'item_comanda'
   });
+  MovimentacaoProduto.belongsTo(models.Comanda, {
+  foreignKey: "comanda_id",
+  as: "comanda"
+});
 
 };
 

@@ -25,9 +25,9 @@ const Venda = sequelizeconnect.define(
       defaultValue: 0.00
     },
     status_venda: {
-      type: DataTypes.ENUM("aberta", "fechada"),
+      type: DataTypes.ENUM("fechada"),
       allowNull: false,
-      defaultValue: "aberta"
+      defaultValue: "fechada"
     },
     data_venda: {
       type: DataTypes.DATE,

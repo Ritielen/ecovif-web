@@ -84,7 +84,7 @@ async function cadastrarProduto(req, res) {
       tamanho: tamanhoFinal,
       usuario_id: usuarioRegistrado.id,
     });
-    return res.redirect("/estoque?sucesso=Produto cadastrado com sucesso!");
+    return res.redirect("/estoque?msg=Produto cadastrado com sucesso!");
   } catch (error) {
     console.error("Erro ao cadastrar produto:", error.message);
     return res.redirect("/estoque?erro=Erro interno ao cadastrar");

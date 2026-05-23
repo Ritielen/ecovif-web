@@ -34,12 +34,14 @@ async function listarComandas(req, res) {
     });
 
     res.render("admin/pedidoCozinha", {
-      comandas
+      comandas,
+       msg: req.query.msg,
+         error: req.query.error
     });
 
   } catch (error) {
     console.log(error);
-    res.redirect("/comanda?erro=Erro ao listar comandas");
+    res.redirect("/comanda?msg=Erro ao listar comandas");
   }
 }
 

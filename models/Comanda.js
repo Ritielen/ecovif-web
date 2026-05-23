@@ -60,5 +60,9 @@ Comanda.associate = (models) => {
     foreignKey: 'comanda_id',
     as: 'itens'
   });
+  Comanda.hasMany(models.MovimentacaoProduto, {
+  foreignKey: "comanda_id",
+  as: "movimentacoes"
+});
 };
 module.exports = Comanda;

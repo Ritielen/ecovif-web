@@ -24,9 +24,9 @@ module.exports = {
               defaultValue: 0.00
             },
             status_venda: {
-              type: Sequelize.ENUM("aberta", "fechada"),
+              type: Sequelize.ENUM("fechada"),
               allowNull: false,
-              defaultValue: "aberta"
+              defaultValue: "fechada"
             },
             data_venda: {
               type: Sequelize.DATE,

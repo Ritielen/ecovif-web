@@ -5,7 +5,7 @@ const {Op} = require("sequelize");
 
 //exibição da tela
 async function mostrarCardapio(req, res) {
-  const { sucesso } = req.query;
+  
   try {
     
     const pratos = await db.Prato.findAll({
@@ -40,12 +40,13 @@ const bebidas = await db.Bebida.findAll({
       produtos,
       pratos,
       bebidas,
-      msgSucesso: sucesso
+       msg: req.query.msg,
+         error: req.query.error
     }); 
     
   } catch (error) {
     console.error("Erro ao carregar a página de cardápio:", error);
-    res.redirect("/admin/area-gestor?erro=Erro ao carregar dados do cardápio");
+    res.redirect("/admin/area-gestor?error=Erro ao carregar dados do cardápio");
   }
 }
 
@@ -116,7 +117,7 @@ async function cadastrarItemCardapio(req, res) {
       });
     }
 
-    res.redirect("/cardapio?sucesso=Item cadastrado com sucesso!");
+    res.redirect("/cardapio?msg=Item cadastrado com sucesso!");
   } catch (error) {
     console.error("Erro ao salvar item no cardápio:", error);
     res.status(500).send("Erro ao salvar.");
@@ -137,7 +138,7 @@ function buscarProdutos(lista, termo) {
 
 async function edicaoPrato(req, res) {
   const { id } = req.params;
-  const { sucesso } = req.query;
+  
 
   try {
     const prato = await db.Prato.findByPk(id);
@@ -161,7 +162,8 @@ async function edicaoPrato(req, res) {
       prato,
       produtos,
       ingredientes, // array com os ingredientes do prato
-      msgSucesso: sucesso
+       msg: req.query.msg,
+         error: req.query.error
     });
   } catch (error) {
     console.error("Erro ao carregar edição de prato:", error);
@@ -172,7 +174,7 @@ async function edicaoPrato(req, res) {
 //edição da bebida
 async function edicaoBebida(req, res) {
   const { id } = req.params;
-  const { sucesso } = req.query;
+  
 
   try {
     // Uma única busca
@@ -193,7 +195,8 @@ async function edicaoBebida(req, res) {
       categoria: { categoria: "bebida" },
       bebida,
       produtos,
-      msgSucesso: sucesso
+      msg: req.query.msg,
+      error: req.query.error
     });
   } catch (error) {
     console.error("Erro ao carregar edição de bebida:", error);
@@ -248,7 +251,7 @@ async function edicaoBebida(req, res) {
       await db.Ingrediente.bulkCreate(novosIngredientes);
     }
 
-    res.redirect(`/editarPrato/${id}?sucesso=Prato atualizado com sucesso`);
+    res.redirect(`/editarPrato/${id}?msg=Prato atualizado com sucesso`);
   } catch (error) {
     console.error("Erro ao atualizar prato:", error);
     res.redirect(`/editarPrato/${id}?error=Erro ao processar`);

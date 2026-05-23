@@ -30,7 +30,7 @@ module.exports = {
          allowNull: true,
        },
        tamanho: {
-        type: Sequelize.DECIMAL(10, 2),
+        type: Sequelize.DECIMAL(10, 3),
          allowNull: true,
        },
        unidade: {
@@ -42,15 +42,15 @@ module.exports = {
          allowNull: true,
        },
        quantidade_inicial: {
-         type: Sequelize.INTEGER,
+         type: Sequelize.DECIMAL(10, 3),
          allowNull: true,
        },
        quantidade: {
-         type: Sequelize.INTEGER,
+         type: Sequelize.DECIMAL(10, 3),
          allowNull: true,
        },
        quantidade_minima: {
-         type: Sequelize.INTEGER,
+         type: Sequelize.DECIMAL(10, 3),
          allowNull: true,
        },
        observacoes: {
