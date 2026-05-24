@@ -7,6 +7,8 @@ const {Op} = require("sequelize");
 async function mostrarCardapio(req, res) {
   
   try {
+    const produtosAtivos = await db.Produto.findAll({ where: { status: 'ativo' } });
+
     
     const pratos = await db.Prato.findAll({
   include: [
@@ -40,6 +42,7 @@ const bebidas = await db.Bebida.findAll({
       produtos,
       pratos,
       bebidas,
+      produtosAtivos,
        msg: req.query.msg,
          error: req.query.error
     }); 
@@ -59,6 +62,7 @@ async function cadastrarItemCardapio(req, res) {
 
     const usuarioId = req.session.usuarioId;
     const { categoria, produto_id, preco_venda, nome, rendimento, custo_prato, quantidade_ingrediente, unidade_ingrediente } = req.body;
+
 
     // cada usuário tem um cardápio único
     // cardapio_id = 1 ou buscar pelo usuario_id
@@ -89,6 +93,10 @@ async function cadastrarItemCardapio(req, res) {
 } = req.body;
 
   for (let i = 0; i < produto_id.length; i++) {
+   const produto = await db.Produto.findByPk(produto_id[i]);
+        if (!produto || produto.status !== 'ativo') {
+          return res.redirect("/cardapio?erro=Ingrediente inativo não pode ser usado");
+        }
 
   await db.Ingrediente.create({
     produto_id: produto_id[i],
@@ -108,6 +116,12 @@ async function cadastrarItemCardapio(req, res) {
 }
 
     } else if (categoria === 'bebida') {
+      // Valida produto da bebida
+      const produto = await db.Produto.findByPk(produto_id);
+      if (!produto || produto.status !== 'ativo') {
+        return res.redirect("/cardapio?erro=Produto inativo não pode ser usado");
+      }
+      
       const bebida = await db.Bebida.create({
         nome,
         produto_id,

@@ -6,7 +6,7 @@ const {Op} = require("sequelize");
 
 //exibição da comanda
 async function mostrarComanda(req, res) {
-  const { sucesso } = req.query;
+  
 
   try {
 
@@ -74,7 +74,6 @@ async function mostrarComanda(req, res) {
       pratos,
       bebidas,
       comandas,
-      //msgSucesso: sucesso
       msg: req.query.msg,
          error: req.query.error 
     });
@@ -112,30 +111,6 @@ async function criarComanda(req, res) {
       status: "pendente",
     });
 
-    /*/ salva itens
-    for (const item of itens) {
-      const dadosItem = {
-        comanda_id: novaComanda.id,
-        quantidade: item.quantidade,
-        tipo_item: item.tipo_item,
-      };
-
-      // prato
-      if (item.tipo_item === "prato") {
-        dadosItem.prato_id = item.item_id;
-      }
-
-      // bebida
-      if (item.tipo_item === "bebida") {
-        dadosItem.bebida_id = item.item_id;
-      }
-
-      
-
-      await db.ItemComanda.create(dadosItem);
-       
-    }*/
-   
     const itensSalvos = [];
 
 for (const item of itens) {

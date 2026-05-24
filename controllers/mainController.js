@@ -8,7 +8,10 @@ const {Op} = require("sequelize");
 async function renderizarCadastrarGrupo(req, res) {
   try {
     const grupos = await db.Grupo.findAll({ order: [['id', 'DESC']] });    
-    res.render("admin/cadastrarGrupo", { grupos });
+    res.render("admin/cadastrarGrupo", { grupos, 
+    msg: req.query.msg,
+    error: req.query.error
+    });
   } catch (error) {
     console.error("Erro ao buscar grupos:", error);
     res.render("admin/cadastrarGrupo", { grupos: [] });
@@ -33,7 +36,7 @@ async function criarGrupo(req, res) {
   }
   try {
     await db.Grupo.create({ nome_grupo, descricao_grupo });
-    return res.redirect("/listaGrupos?sucesso=Grupo cadastrado com sucesso!");
+    return res.redirect("/listaGrupos?msg=Grupo cadastrado com sucesso!");
   } catch (error) {
     console.error(error);
     return res.redirect("/cadastrarGrupo?erro=Erro ao cadastrar");
@@ -63,17 +66,20 @@ async function excluirGrupo(req, res) {
   const { id } = req.params;
   try {
     await db.Grupo.destroy({ where: { id } });
-    return res.redirect("/listaGrupos?sucesso=Grupo excluído com sucesso!");
+    return res.redirect("/listaGrupos?msg=Grupo excluído com sucesso!");
   } catch (error) {
     console.error(error);
-    return res.redirect("/listaGrupos?erro=Erro ao excluir grupo");
+    return res.redirect("/listaGrupos?erro=Erro ao excluir grupo, ele está em uso por mais de um funcionário.");
   }
 }
 
 // Função para renderizar tela de CADASTRO de funcionário
 async function renderizarCadastrarFuncionario(req, res) {
   const grupos = await db.Grupo.findAll({ order: [['nome_grupo', 'ASC']] });
-  res.render("admin/funcionarios", { grupos });
+  res.render("admin/funcionarios", { grupos,
+    msg: req.query.msg,
+         error: req.query.error
+   });
 }
 
 //criar funcionario
@@ -175,7 +181,7 @@ async function excluirFuncionario(req, res) {
     res.redirect("/listaFuncionarios?sucesso=Funcionário excluído com sucesso!");
   } catch (error) {
     console.error("Erro ao excluir funcionário:", error);
-    res.redirect("/listaFuncionarios?erro=Erro ao excluir funcionário");
+    res.redirect("/listaFuncionarios?msg=Erro ao excluir funcionário");
   }
 }
 
@@ -261,7 +267,7 @@ async function editarFuncionario(req, res) {
     }   
     // Atualiza o funcionário
     await funcionario.update(dadosAtualizados);   
-    res.redirect("/listaFuncionarios?sucesso=Funcionário atualizado com sucesso");
+    res.redirect("/listaFuncionarios?msg=Funcionário atualizado com sucesso");
   } catch (error) {
     console.error("Erro ao editar funcionário:", error);
     res.redirect("/listaFuncionarios?erro=Erro ao atualizar funcionário");

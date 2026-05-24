@@ -103,7 +103,7 @@
                 </button>
 
                 <form action="/admin/grupos/excluir/<%= grupo.id %>" method="POST" style="display:inline;">
-                  <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Excluir grupo?')">
+                  <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Este grupo só pode ser excluido se não estiver sendo utilizado por outros funcionários.')">
                     <i class="fa-solid fa-trash"></i>
                   </button>
                 </form>

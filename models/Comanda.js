@@ -58,7 +58,8 @@ Comanda.associate = (models) => {
   // modelo ItemComanda 
   Comanda.hasMany(models.ItemComanda, {
     foreignKey: 'comanda_id',
-    as: 'itens'
+    as: 'itens',
+    onDelete: 'CASCADE'  //serve para excluir os itens junto com a comanda.
   });
   Comanda.hasMany(models.MovimentacaoProduto, {
   foreignKey: "comanda_id",

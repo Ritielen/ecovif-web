@@ -11,7 +11,13 @@ module.exports = {
       comanda_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
+        references: {
+          model: "comandas",
+          key: "id",
+        },
+        onDelete: "CASCADE", //serve para excluir os meus itens caso a comanda seja excluída.
       },
+
       tipo_item: {
         type: Sequelize.ENUM("prato", "bebida"),
         allowNull: false,
@@ -21,7 +27,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
-      
+
       prato_id: {
         type: Sequelize.INTEGER,
         allowNull: true,

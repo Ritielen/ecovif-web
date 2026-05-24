@@ -7,7 +7,7 @@ async function telaEvento(req, res) {
     try{
         const eventos = await db.Evento.findAll({ order: [['id', 'DESC']]});
         res.render("admin/eventos", {eventos,
-            msg: req.query.msg,
+          msg: req.query.msg,
          error: req.query.error 
         });
     }catch(error) {
@@ -27,7 +27,7 @@ async function cadastrarEvento(req, res) {
     try {
         // VERIFICAÇÃO DE SESSÃO
         if (!req.session || !req.session.usuarioId) {
-          return res.redirect("/login?error=Faça login para continuar");
+          return res.redirect("/login?erro=Faça login para continuar");
         }
         const usuarioId = req.session.usuarioId;
         const usuarioRegistrado = await db.Usuario.findByPk(usuarioId);
@@ -46,7 +46,7 @@ async function cadastrarEvento(req, res) {
         res.redirect("/eventos?msg=Evento cadastrado com sucesso");
     } catch (error) {
         console.error("Erro ao cadastrar evento:", error);
-        res.redirect("/eventos?error=Erro ao cadastrar evento");
+        res.redirect("/eventos?erro=Erro ao cadastrar evento");
     }
 }
 
@@ -58,7 +58,7 @@ async function excluirEvento(req, res) {
     return res.redirect("/eventos?msg=Evento excluído com sucesso!");
   } catch (error) {
     console.error(error);
-    return res.redirect("/eventos?error=Erro ao excluir evento");
+    return res.redirect("/eventos?erro=Erro ao excluir evento");
   }
 }
 
@@ -146,7 +146,7 @@ async function atualizarEvento(req, res) {
 
     // Verifica sessão
     if (!req.session || !req.session.usuarioId) {
-      return res.redirect("/login?msg=Faça login para continuar");
+      return res.redirect("/login?error=Faça login para continuar");
     }
 
     const usuarioId = req.session.usuarioId;
@@ -155,7 +155,7 @@ async function atualizarEvento(req, res) {
     const usuario = await db.Usuario.findByPk(usuarioId);
 
     if (!usuario) {
-      return res.redirect("/login?msg=Usuário não encontrado");
+      return res.redirect("/login?error=Usuário não encontrado");
     }
 
     // Busca evento
@@ -199,10 +199,10 @@ async function atualizarEvento(req, res) {
       { where: { id } }
     );
 
-    return res.redirect("/editarEvento?msg=Evento atualizado com sucesso");
+    return res.redirect("/editarEvento/${id}?msg=Evento atualizado com sucesso");
   } catch (error) {
     console.error("Erro ao atualizar evento:", error);
-    return res.redirect("/editarEvento?error=Erro ao atualizar evento");
+    return res.redirect("/editarEvento/${id}?error=Erro ao atualizar evento");
   }
 }
 

@@ -18,8 +18,6 @@ const ItemComanda = sequelizeconnect.define(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    
-   
   comanda_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
@@ -51,7 +49,8 @@ const ItemComanda = sequelizeconnect.define(
 ItemComanda.associate = (models) => {
   ItemComanda.belongsTo(models.Comanda, {
     foreignKey: 'comanda_id',
-    as: 'comanda'
+    as: 'comanda',
+    onDelete: 'CASCADE'
   });
  
   ItemComanda.belongsTo(models.Prato, {
