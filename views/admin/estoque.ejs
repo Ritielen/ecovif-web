@@ -34,26 +34,26 @@
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/cardapio">
-            <i class="fa-solid fa-clipboard-list"></i> Cardápio
+              <i class="fa-solid fa-clipboard-list"></i> Cardápio
             </a>
-            </li>
-            
-          
+          </li>
+
+
           <li class="nav-item">
             <a class="nav-link" href="/fecharConta">
-            <i class="fa-solid fa-cash-register"></i> Fechar Conta
+              <i class="fa-solid fa-cash-register"></i> Fechar Conta
             </a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/relatorioMensal">
-            <i class="fa-solid fa-receipt"></i> Relatório Mensal
+              <i class="fa-solid fa-receipt"></i> Relatório Mensal
             </a>
           </li>
-          
+
           <li class="nav-item">
             <a class="nav-link" href="/suporte">Suporte</a>
           </li>
-           
+
           <li class="nav-item">
             <a class="nav-link" href="/login" id="logoutBtn">
               <i class="fa-solid fa-sign-out-alt"></i>
@@ -133,7 +133,7 @@
                     <option value="un">un</option>
                   </select>
                 </div>
-                
+
               </div>
 
               <!-- Formulário para Bebidas -->
@@ -172,23 +172,23 @@
                     <option value="espumante">Espumante</option>
                   </select>
                 </div>
-               
-               
+
+
               </div>
 
               <!-- Campos (comum aos dois) -->
-                <div class="linha-formulario" id="camposQuantidade">
-                  <div class="grupo-formulario">
-                    <label class="label-formulario">Quantidade (inicial)</label>
-                    <input type="number" class="controle-formulario" name="quantidade" placeholder="Ex: 24" data-required="true">
-                    <small class="texto-ajuda">Digite valores inteiros</small>
-                  </div>
-                  <div class="grupo-formulario">
-                    <label class="label-formulario">Qtd Mínima (estoque)</label>
-                    <input type="number" class="controle-formulario" name="quantidade_minima" placeholder="Ex: 6" data-required="true">
-                    <small class="texto-ajuda">Digite valores inteiros</small>
-                  </div>
+              <div class="linha-formulario" id="camposQuantidade">
+                <div class="grupo-formulario">
+                  <label class="label-formulario">Quantidade (inicial)</label>
+                  <input type="number" class="controle-formulario" name="quantidade" placeholder="Ex: 24" data-required="true">
+                  <small class="texto-ajuda">Digite valores inteiros</small>
                 </div>
+                <div class="grupo-formulario">
+                  <label class="label-formulario">Qtd Mínima (estoque)</label>
+                  <input type="number" class="controle-formulario" name="quantidade_minima" placeholder="Ex: 6" data-required="true">
+                  <small class="texto-ajuda">Digite valores inteiros</small>
+                </div>
+              </div>
 
               <div class="grupo-formulario">
                 <label class="label-formulario">Código do produto</label>
@@ -199,8 +199,8 @@
                 <div class="grupo-formulario">
                   <label class="label-formulario">Observações do Produto</label>
                   <textarea class="controle-formulario" name="observacoes" placeholder="Ex: 2 pacotes de 400g, lata, garra..."></textarea>
-                
-              </div>
+
+                </div>
               </div>
               <div class="grupo-formulario">
                 <label class="label-formulario">Valor da Compra (R$)</label>
@@ -219,7 +219,7 @@
 
         <!--Seção lista-->
         <section class="col-lg-7 secao-lista">
-          
+
           <!-- ========== BARRA DE PESQUISA ========== -->
           <div class="barra-pesquisa-wrapper">
             <label for="inputPesquisa"><i class="fa-solid fa-magnifying-glass"></i> Pesquisar item do cardápio</label>
@@ -245,20 +245,20 @@
 
                 </div>
               </div>
-             
+
             </div>
             <div class="filtro-ativo-tag" id="filtroAtivoTag">
               <i class="fa-solid fa-tag"></i> Filtro ativo: <span id="filtroAtivoNome">Todos</span>
               <button class="btn-limpar-filtro" id="btnLimparFiltro">Limpar</button>
             </div>
-             
+
           </div>
 
           <div class="msg-sem-resultado" id="msgSemResultado">
             <i class="fa-solid fa-magnifying-glass"></i> Nenhum item encontrado para "<span id="termoPesquisado"></span>".
           </div>
-           
-          
+
+
 
           <!-- SEÇÃO DE PRODUTOS -->
           <div class="caixa-categoria">

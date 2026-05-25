@@ -1,279 +1,282 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Comprovante de Venda #<%= venda.id_venda %></title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Comprovante de Venda #<%= venda.id_venda %></title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-        body {
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 14px;
-            line-height: 1.4;
-            color: #000;
-            background: #fff;
-            padding: 20px;
-        }
+    body {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 14px;
+      line-height: 1.4;
+      color: #000;
+      background: #fff;
+      padding: 20px;
+    }
 
-        .container {
-            max-width: 350px;
-            margin: 0 auto;
-        }
+    .container {
+      max-width: 350px;
+      margin: 0 auto;
+    }
 
-        .header {
-            text-align: center;
-            margin-bottom: 20px;
-            border-bottom: 1px dashed #000;
-            padding-bottom: 10px;
-        }
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+      border-bottom: 1px dashed #000;
+      padding-bottom: 10px;
+    }
 
-        .header h1 {
-            font-size: 18px;
-            margin-bottom: 5px;
-        }
+    .header h1 {
+      font-size: 18px;
+      margin-bottom: 5px;
+    }
 
-        .header p {
-            font-size: 12px;
-        }
+    .header p {
+      font-size: 12px;
+    }
 
-        .info-section {
-            margin-bottom: 15px;
-            border-bottom: 1px dashed #000;
-            padding-bottom: 10px;
-        }
+    .info-section {
+      margin-bottom: 15px;
+      border-bottom: 1px dashed #000;
+      padding-bottom: 10px;
+    }
 
-        .info-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 3px;
-            font-size: 13px;
-        }
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 3px;
+      font-size: 13px;
+    }
 
-        .info-label {
-            font-weight: bold;
-        }
+    .info-label {
+      font-weight: bold;
+    }
 
-        .items-section {
-            margin-bottom: 15px;
-        }
+    .items-section {
+      margin-bottom: 15px;
+    }
 
-        .items-section h3 {
-            text-align: center;
-            margin-bottom: 10px;
-            font-size: 15px;
-            border-bottom: 1px solid #000;
-            padding-bottom: 5px;
-        }
+    .items-section h3 {
+      text-align: center;
+      margin-bottom: 10px;
+      font-size: 15px;
+      border-bottom: 1px solid #000;
+      padding-bottom: 5px;
+    }
 
-        .item {
-            margin-bottom: 8px;
-            font-size: 13px;
-        }
+    .item {
+      margin-bottom: 8px;
+      font-size: 13px;
+    }
 
-        .item-header {
-            display: flex;
-            justify-content: space-between;
-            font-weight: bold;
-        }
+    .item-header {
+      display: flex;
+      justify-content: space-between;
+      font-weight: bold;
+    }
 
-        .item-details {
-            margin-left: 10px;
-            font-size: 12px;
-            color: #333;
-        }
+    .item-details {
+      margin-left: 10px;
+      font-size: 12px;
+      color: #333;
+    }
 
-        .totals-section {
-            border-top: 1px dashed #000;
-            padding-top: 10px;
-            margin-bottom: 15px;
-        }
+    .totals-section {
+      border-top: 1px dashed #000;
+      padding-top: 10px;
+      margin-bottom: 15px;
+    }
 
-        .total-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 5px;
-            font-size: 13px;
-        }
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 5px;
+      font-size: 13px;
+    }
 
-        .total-row.final {
-            font-weight: bold;
-            font-size: 16px;
-            border-top: 1px solid #000;
-            padding-top: 5px;
-            margin-top: 5px;
-        }
+    .total-row.final {
+      font-weight: bold;
+      font-size: 16px;
+      border-top: 1px solid #000;
+      padding-top: 5px;
+      margin-top: 5px;
+    }
 
-        .footer {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 12px;
-            border-top: 1px dashed #000;
-            padding-top: 10px;
-        }
+    .footer {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 12px;
+      border-top: 1px dashed #000;
+      padding-top: 10px;
+    }
 
-        .status-badge {
-            display: inline-block;
-            padding: 3px 8px;
-            border: 1px solid #000;
-            font-size: 11px;
-            margin-top: 5px;
-        }
+    .status-badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border: 1px solid #000;
+      font-size: 11px;
+      margin-top: 5px;
+    }
 
-        @media print {
-            body {
-                padding: 0;
-            }
-            
-            .no-print {
-                display: none;
-            }
-        }
+    @media print {
+      body {
+        padding: 0;
+      }
 
-        .btn-imprimir {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            background: #000;
-            color: #fff;
-            border: none;
-            cursor: pointer;
-            margin: 20px 0 10px;
-            font-size: 16px;
-            border-radius: 4px;
-        }
+      .no-print {
+        display: none;
+      }
+    }
 
-        .btn-imprimir:hover {
-            background: #333;
-        }
+    .btn-imprimir {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      background: #000;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      margin: 20px 0 10px;
+      font-size: 16px;
+      border-radius: 4px;
+    }
 
-        .btn-voltar {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            background: #666;
-            color: #fff;
-            border: none;
-            cursor: pointer;
-            font-size: 14px;
-            text-align: center;
-            text-decoration: none;
-            border-radius: 4px;
-        }
-    </style>
+    .btn-imprimir:hover {
+      background: #333;
+    }
+
+    .btn-voltar {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      background: #666;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      text-align: center;
+      text-decoration: none;
+      border-radius: 4px;
+    }
+  </style>
 </head>
+
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>COMPROVANTE DE VENDA</h1>
-            <p>Venda #<%= venda.id_venda %></p>
-            <p><%= new Date(venda.data_venda).toLocaleString('pt-BR') %></p>
-            <div class="status-badge"><%= venda.status %></div>
-        </div>
-
-        <div class="info-section">
-            <div class="info-row">
-                <span class="info-label">Comanda:</span>
-                <span>#<%= venda.comanda.id %></span>
-            </div>
-            <% if (venda.comanda.mesa) { %>
-            <div class="info-row">
-                <span class="info-label">Mesa:</span>
-                <span><%= venda.comanda.mesa %></span>
-            </div>
-            <% } %>
-            <% if (venda.comanda.nome_cliente) { %>
-            <div class="info-row">
-                <span class="info-label">Cliente:</span>
-                <span><%= venda.comanda.nome_cliente %></span>
-            </div>
-            <% } %>
-            <div class="info-row">
-                <span class="info-label">Atendente:</span>
-                <span><%= venda.atendente %></span>
-            </div>
-            <% if (venda.evento) { %>
-            <div class="info-row">
-                <span class="info-label">Evento:</span>
-                <span><%= venda.evento.nome %></span>
-            </div>
-            <% } %>
-        </div>
-
-        <div class="items-section">
-            <h3>ITENS DO PEDIDO</h3>
-            <% venda.itens.forEach(function(item) { %>
-            <div class="item">
-                <div class="item-header">
-                    <span><%= item.nome %></span>
-                    <span>R$ <%= item.subtotal.toFixed(2) %></span>
-                </div>
-                <div class="item-details">
-                    <%= item.tipo %> | Qtd: <%= item.quantidade %> x R$ <%= item.precoVenda.toFixed(2) %>
-                </div>
-            </div>
-            <% }); %>
-        </div>
-
-        <div class="totals-section">
-            
-            
-            <% if (venda.taxa_servico > 0) { %>
-            <div class="total-row">
-                <span>Taxa de Serviço (10%):</span>
-                <span>R$ <%= venda.taxa_servico.toFixed(2) %></span>
-            </div>
-            <% } else { %>
-            <div class="total-row">
-                <span>Taxa de Serviço:</span>
-                <span>Isento</span>
-            </div>
-            <% } %>
-            
-            <% if (venda.valor_couvert > 0) { %>
-            <div class="total-row">
-                <span>Couvert Artístico:</span>
-                <span>R$ <%= venda.valor_couvert.toFixed(2) %></span>
-            </div>
-            <% } else { %>
-            <div class="total-row">
-                <span>Couvert Artístico:</span>
-                <span>Isento</span>
-            </div>
-            <% } %>
-            
-            <div class="total-row final">
-                <span>TOTAL:</span>
-                <span>R$ <%= venda.total_final.toFixed(2) %></span>
-            </div>
-        </div>
-
-        <div class="footer">
-            <p>Obrigado pela preferência!</p>
-            <p>Volte sempre!</p>
-            <p style="margin-top: 10px; font-size: 10px;">
-                Documento gerado em <%= new Date().toLocaleString('pt-BR') %>
-            </p>
-        </div>
-
-        <button class="btn-imprimir no-print" onclick="window.print()">
-            🖨️ IMPRIMIR COMPROVANTE
-        </button>
-        
-        <a href="/fecharConta" class="btn-voltar no-print">
-            ← VOLTAR
-        </a>
+  <div class="container">
+    <div class="header">
+      <h1>COMPROVANTE DE VENDA</h1>
+      <p>Venda #<%= venda.id_venda %></p>
+      <p><%= new Date(venda.data_venda).toLocaleString('pt-BR') %></p>
+      <div class="status-badge"><%= venda.status %></div>
     </div>
 
-    <script>
-        // Opcional: Abre automaticamente o diálogo de impressão
-        // window.onload = function() {
-        //     window.print();
-        // }
-    </script>
+    <div class="info-section">
+      <div class="info-row">
+        <span class="info-label">Comanda:</span>
+        <span>#<%= venda.comanda.id %></span>
+      </div>
+      <% if (venda.comanda.mesa) { %>
+      <div class="info-row">
+        <span class="info-label">Mesa:</span>
+        <span><%= venda.comanda.mesa %></span>
+      </div>
+      <% } %>
+      <% if (venda.comanda.nome_cliente) { %>
+      <div class="info-row">
+        <span class="info-label">Cliente:</span>
+        <span><%= venda.comanda.nome_cliente %></span>
+      </div>
+      <% } %>
+      <div class="info-row">
+        <span class="info-label">Atendente:</span>
+        <span><%= venda.atendente %></span>
+      </div>
+      <% if (venda.evento) { %>
+      <div class="info-row">
+        <span class="info-label">Evento:</span>
+        <span><%= venda.evento.nome %></span>
+      </div>
+      <% } %>
+    </div>
+
+    <div class="items-section">
+      <h3>ITENS DO PEDIDO</h3>
+      <% venda.itens.forEach(function(item) { %>
+      <div class="item">
+        <div class="item-header">
+          <span><%= item.nome %></span>
+          <span>R$ <%= item.subtotal.toFixed(2) %></span>
+        </div>
+        <div class="item-details">
+          <%= item.tipo %> | Qtd: <%= item.quantidade %> x R$ <%= item.precoVenda.toFixed(2) %>
+        </div>
+      </div>
+      <% }); %>
+    </div>
+
+    <div class="totals-section">
+
+
+      <% if (venda.taxa_servico > 0) { %>
+      <div class="total-row">
+        <span>Taxa de Serviço (10%):</span>
+        <span>R$ <%= venda.taxa_servico.toFixed(2) %></span>
+      </div>
+      <% } else { %>
+      <div class="total-row">
+        <span>Taxa de Serviço:</span>
+        <span>Isento</span>
+      </div>
+      <% } %>
+
+      <% if (venda.valor_couvert > 0) { %>
+      <div class="total-row">
+        <span>Couvert Artístico:</span>
+        <span>R$ <%= venda.valor_couvert.toFixed(2) %></span>
+      </div>
+      <% } else { %>
+      <div class="total-row">
+        <span>Couvert Artístico:</span>
+        <span>Isento</span>
+      </div>
+      <% } %>
+
+      <div class="total-row final">
+        <span>TOTAL:</span>
+        <span>R$ <%= venda.total_final.toFixed(2) %></span>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p>Obrigado pela preferência!</p>
+      <p>Volte sempre!</p>
+      <p style="margin-top: 10px; font-size: 10px;">
+        Documento gerado em <%= new Date().toLocaleString('pt-BR') %>
+      </p>
+    </div>
+
+    <button class="btn-imprimir no-print" onclick="window.print()">
+      🖨️ IMPRIMIR COMPROVANTE
+    </button>
+
+    <a href="/fecharConta" class="btn-voltar no-print">
+      ← VOLTAR
+    </a>
+  </div>
+
+  <script>
+    // Opcional: Abre automaticamente o diálogo de impressão
+    // window.onload = function() {
+    //     window.print();
+    // }
+  </script>
 </body>
+
 </html>

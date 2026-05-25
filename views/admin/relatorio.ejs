@@ -1,459 +1,438 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dashboard - ECOVIF</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
-    <link rel="stylesheet" href="/css/style-raiz.css" />
-    <link rel="stylesheet" href="/css/style-login.css" />
-    <link rel="stylesheet" href="/css/style-area-gestor.css" />
-    <link rel="stylesheet" href="/css/style-dashboard.css" />
-  </head>
 
-  <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark">
-      <div class="container">
-        <a class="navbar-brand" href="/area-gestor"
-          ><i class="fa-solid fa-utensils"></i> ECOVIF
-          <span class="tagline">Sistema de Gestão para Restaurantes</span>
-        </a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div
-          class="collapse navbar-collapse justify-content-end"
-          id="navbarNav"
-        >
-          <ul class="navbar-nav">
-            <li class="nav-item">
-              <a class="nav-link" href="/area-gestor">
-                <i class="fa-solid fa-user-shield"></i> Área do Gestor
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/suporte">Suporte</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/estoque">Voltar</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/login" id="logoutBtn"
-                ><i class="fa-solid fa-sign-out-alt"></i> Sair</a
-              >
-            </li>
-          </ul>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard - ECOVIF</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="/css/style-raiz.css" />
+  <link rel="stylesheet" href="/css/style-login.css" />
+  <link rel="stylesheet" href="/css/style-area-gestor.css" />
+  <link rel="stylesheet" href="/css/style-dashboard.css" />
+</head>
+
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+      <a class="navbar-brand" href="/area-gestor"><i class="fa-solid fa-utensils"></i> ECOVIF
+        <span class="tagline">Sistema de Gestão para Restaurantes</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="/area-gestor">
+              <i class="fa-solid fa-user-shield"></i> Área do Gestor
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/suporte">Suporte</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/estoque">Voltar</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/login" id="logoutBtn"><i class="fa-solid fa-sign-out-alt"></i> Sair</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Header -->
+  <section class="cabecalho-gestor">
+    <div class="container">
+      <div class="welcome-box">
+        <div class="user-info">
+          <div class="user-avatar">
+            <i class="fa-solid fa-chart-line"></i>
+          </div>
+          <div>
+            <h1>Dashboard</h1>
+            <p>Relatórios e análises do restaurante</p>
+          </div>
         </div>
       </div>
-    </nav>
+    </div>
+  </section>
 
-    <!-- Header -->
-    <section class="cabecalho-gestor">
-      <div class="container">
-        <div class="welcome-box">
-          <div class="user-info">
-            <div class="user-avatar">
+  <!-- Dashboard Principal -->
+  <main class="funcionalidades-grid">
+    <div class="container">
+
+      <!-- Mensagem de feedback -->
+      <% if (msg) { %>
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <%= msg %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      <% } %>
+
+      <!-- Cards de Resumo -->
+      <div class="row g-4 mb-4">
+        <div class="col-md-3">
+          <div class="card-resumo card-faturamento">
+            <div class="card-icone">
+              <i class="fa-solid fa-dollar-sign"></i>
+            </div>
+            <div class="card-info">
+              <h3>Faturamento Bruto</h3>
+              <p class="valor" id="faturamentoTotal">
+                R$ <%= Number(relatorio?.faturamento_bruto || 0).toFixed(2).replace('.', ',') %>
+              </p>
+              <small>Total de vendas no período</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card-resumo card-despesas">
+            <div class="card-icone">
+              <i class="fa-solid fa-shopping-cart"></i>
+            </div>
+            <div class="card-info">
+              <h3>Despesas</h3>
+              <p class="valor" id="despesasTotal">
+                R$ <%= Number(relatorio?.despesas || 0).toFixed(2).replace('.', ',') %>
+              </p>
+              <small>Compras do mês</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card-resumo card-lucro">
+            <div class="card-icone">
               <i class="fa-solid fa-chart-line"></i>
             </div>
-            <div>
-              <h1>Dashboard</h1>
-              <p>Relatórios e análises do restaurante</p>
+            <div class="card-info">
+              <h3>Lucro Líquido</h3>
+              <p class="valor" id="lucroTotal">
+                R$ <%= Number(relatorio?.lucro_liquido || 0).toFixed(2).replace('.', ',') %>
+              </p>
+              <small>Faturamento - Despesas</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card-resumo card-ticket">
+            <div class="card-icone">
+              <i class="fa-solid fa-receipt"></i>
+            </div>
+            <div class="card-info">
+              <h3>Ticket Médio</h3>
+              <p class="valor" id="ticketMedio">
+                R$ <%= Number(relatorio?.ticket_medio || 0).toFixed(2).replace('.', ',') %>
+              </p>
+              <small>Por venda realizada</small>
             </div>
           </div>
         </div>
       </div>
-    </section>
 
-    <!-- Dashboard Principal -->
-    <main class="funcionalidades-grid">
-      <div class="container">
-
-        <!-- Mensagem de feedback -->
-        <% if (msg) { %>
-          <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <%= msg %>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      <!-- Alertas de Estoque -->
+      <div class="caixa-categoria mb-4">
+        <h3>
+          <i class="fa-solid fa-exclamation-triangle"></i> Alertas de Estoque Mínimo
+        </h3>
+        <div id="alertasEstoque" class="alertas-container">
+          <% if (produtosEstoqueBaixo && produtosEstoqueBaixo.length > 0) { %>
+          <% produtosEstoqueBaixo.forEach(function(produto) { %>
+          <div class="alerta-info">
+            <h4><i class="fa-solid fa-exclamation-triangle"></i> <%= produto.nome %></h4>
+            <p>
+              Estoque atual: <%= produto.quantidade_total %> <%= produto.unidade || 'un' %> |
+              Mínimo: <%= produto.quantidade_minima %> <%= produto.unidade || 'un' %>
+            </p>
+            <div class="alerta-quantidade"><%= produto.quantidade_total %></div>
           </div>
-        <% } %>
-
-        <!-- Cards de Resumo -->
-        <div class="row g-4 mb-4">
-          <div class="col-md-3">
-            <div class="card-resumo card-faturamento">
-              <div class="card-icone">
-                <i class="fa-solid fa-dollar-sign"></i>
-              </div>
-              <div class="card-info">
-                <h3>Faturamento Bruto</h3>
-                <p class="valor" id="faturamentoTotal">
-                  R$ <%= Number(relatorio?.faturamento_bruto || 0).toFixed(2).replace('.', ',') %>
-                </p>
-                <small>Total de vendas no período</small>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-3">
-            <div class="card-resumo card-despesas">
-              <div class="card-icone">
-                <i class="fa-solid fa-shopping-cart"></i>
-              </div>
-              <div class="card-info">
-                <h3>Despesas</h3>
-                <p class="valor" id="despesasTotal">
-                  R$ <%= Number(relatorio?.despesas || 0).toFixed(2).replace('.', ',') %>
-                </p>
-                <small>Compras do mês</small>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-3">
-            <div class="card-resumo card-lucro">
-              <div class="card-icone">
-                <i class="fa-solid fa-chart-line"></i>
-              </div>
-              <div class="card-info">
-                <h3>Lucro Líquido</h3>
-                <p class="valor" id="lucroTotal">
-                  R$ <%= Number(relatorio?.lucro_liquido || 0).toFixed(2).replace('.', ',') %>
-                </p>
-                <small>Faturamento - Despesas</small>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-3">
-            <div class="card-resumo card-ticket">
-              <div class="card-icone">
-                <i class="fa-solid fa-receipt"></i>
-              </div>
-              <div class="card-info">
-                <h3>Ticket Médio</h3>
-                <p class="valor" id="ticketMedio">
-                  R$ <%= Number(relatorio?.ticket_medio || 0).toFixed(2).replace('.', ',') %>
-                </p>
-                <small>Por venda realizada</small>
-              </div>
-            </div>
-          </div>
+          <% }); %>
+          <% } else { %>
+          <p class="texto-vazio" id="semAlertas">
+            Nenhum item com estoque baixo.
+          </p>
+          <% } %>
         </div>
+      </div>
 
-        <!-- Alertas de Estoque -->
-        <div class="caixa-categoria mb-4">
-          <h3>
-            <i class="fa-solid fa-exclamation-triangle"></i> Alertas de Estoque Mínimo
-          </h3>
-          <div id="alertasEstoque" class="alertas-container">
-            <% if (produtosEstoqueBaixo && produtosEstoqueBaixo.length > 0) { %>
-              <% produtosEstoqueBaixo.forEach(function(produto) { %>
-                <div class="alerta-info">
-                  <h4><i class="fa-solid fa-exclamation-triangle"></i> <%= produto.nome %></h4>
-                  <p>
-                    Estoque atual: <%= produto.quantidade_total %> <%= produto.unidade || 'un' %> |
-                    Mínimo: <%= produto.quantidade_minima %> <%= produto.unidade || 'un' %>
-                  </p>
-                  <div class="alerta-quantidade"><%= produto.quantidade_total %></div>
-                </div>
+      <!-- Relatório Mensal Unificado -->
+      <div class="caixa-categoria mb-4">
+        <h3>
+          <i class="fa-solid fa-calendar-alt"></i> Relatório Mensal
+        </h3>
+
+        <form class="seletor-mes row gy-3 gx-2 align-items-end" method="get" action="/relatorioMensal" id="form-periodo">
+          <div class="col-auto">
+            <label>Selecione o Mês:</label>
+            <select class="controle-formulario" name="mes" id="select-mes">
+              <% if (meses && meses.length > 0) { %>
+              <% meses.forEach(function(mesItem) { %>
+              <option value="<%= mesItem.valor %>" <%= mesItem.valor === selectedMes ? 'selected' : '' %>>
+                <%= mesItem.label %>
+              </option>
               <% }); %>
-            <% } else { %>
-              <p class="texto-vazio" id="semAlertas">
-                Nenhum item com estoque baixo.
-              </p>
-            <% } %>
+              <% } %>
+            </select>
           </div>
-        </div>
 
-        <!-- Relatório Mensal Unificado -->
-        <div class="caixa-categoria mb-4">
-          <h3>
-            <i class="fa-solid fa-calendar-alt"></i> Relatório Mensal
-          </h3>
-
-          <form class="seletor-mes row gy-3 gx-2 align-items-end" method="get" action="/relatorioMensal" id="form-periodo">
-            <div class="col-auto">
-              <label>Selecione o Mês:</label>
-              <select class="controle-formulario" name="mes" id="select-mes">
-                <% if (meses && meses.length > 0) { %>
-                  <% meses.forEach(function(mesItem) { %>
-                    <option value="<%= mesItem.valor %>" <%= mesItem.valor === selectedMes ? 'selected' : '' %>>
-                      <%= mesItem.label %>
-                    </option>
-                  <% }); %>
-                <% } %>
-              </select>
-            </div>
-
-            <div class="col-auto">
-              <label>Selecione o Ano:</label>
-              <select class="controle-formulario" name="ano" id="select-ano">
-                <%
+          <div class="col-auto">
+            <label>Selecione o Ano:</label>
+            <select class="controle-formulario" name="ano" id="select-ano">
+              <%
                   // `anos` é gerado dinamicamente pelo controller:
                   // Array.from({ length: 6 }, (_, i) => anoAtual + i)
                   // Nunca hardcode anos aqui — sempre vem do servidor.
                 %>
-                <% if (anos && anos.length > 0) { %>
-                  <% anos.forEach(function(anoItem) { %>
-                    <option value="<%= anoItem %>" <%= anoItem === selectedAno ? 'selected' : '' %>>
-                      <%= anoItem %>
-                    </option>
-                  <% }); %>
-                <% } else { %>
-                  <option value="">Nenhum ano disponível</option>
-                <% } %>
-              </select>
-            </div>
+              <% if (anos && anos.length > 0) { %>
+              <% anos.forEach(function(anoItem) { %>
+              <option value="<%= anoItem %>" <%= anoItem === selectedAno ? 'selected' : '' %>>
+                <%= anoItem %>
+              </option>
+              <% }); %>
+              <% } else { %>
+              <option value="">Nenhum ano disponível</option>
+              <% } %>
+            </select>
+          </div>
 
-            <div class="col-auto">
-              <button type="submit" class="btn btn-primary">Aplicar Relatório</button>
-            </div>
-          </form>
+          <div class="col-auto">
+            <button type="submit" class="btn btn-primary">Aplicar Relatório</button>
+          </div>
+        </form>
 
-          <!--
+        <!--
             TABELA DE RANKING
             Renderizada pelo servidor via EJS (SSR).
             O controller já envia rankingProdutos e relatorio preenchidos
             com base no mes/ano atual (ou selecionado pelo usuário).
           -->
-          <div class="tabela-comparativo mt-4">
-            <table class="tabela-dashboard">
-              <thead>
-                <tr>
-                  <th>Ano</th>
-                  <th>Mês</th>
-                  <th>Posição</th>
-                  <th>Item</th>
-                  <th>Quantidade Vendida</th>
-                  <th>Faturamento Bruto</th>
-                  <th>Despesas</th>
-                  <th>Lucro Líquido</th>
-                  <th>% Margem</th>
-                  <th>Ticket Médio</th>
-                </tr>
-              </thead>
-              <tbody id="tabelaComparativo">
-                <% if (relatorioExiste && rankingProdutos && rankingProdutos.length > 0) { %>
-                  <% rankingProdutos.forEach((item, index) => { %>
-                    <tr>
-                      <td><%= selectedAno %></td>
-                      <td><%= selectedMes %></td>
-                      <td><%= index + 1 %>º</td>
-                      <td>
-                        <span class="badge<%= item.tipo_item %>">
-                          <%= item.nome %>
-                        </span>
-                        <small class="text-muted d-block"><%= item.tipo_item %></small>
-                      </td>
-                      <td><%= item.quantidade_vendida %></td>
-                      <td>R$ <%= Number(relatorio.faturamento_bruto).toFixed(2).replace('.', ',') %></td>
-                      <td>R$ <%= Number(relatorio.despesas).toFixed(2).replace('.', ',') %></td>
-                      <td>R$ <%= Number(relatorio.lucro_liquido).toFixed(2).replace('.', ',') %></td>
-                      <td><%= Number(relatorio.margem_lucro).toFixed(2).replace('.', ',') %>%</td>
-                      <td>R$ <%= Number(relatorio.ticket_medio).toFixed(2).replace('.', ',') %></td>
-                    </tr>
-                  <% }); %>
+        <div class="tabela-comparativo mt-4">
+          <table class="tabela-dashboard">
+            <thead>
+              <tr>
+                <th>Ano</th>
+                <th>Mês</th>
+                <th>Posição</th>
+                <th>Item</th>
+                <th>Quantidade Vendida</th>
+                <th>Faturamento Bruto</th>
+                <th>Despesas</th>
+                <th>Lucro Líquido</th>
+                <th>% Margem</th>
+                <th>Ticket Médio</th>
+              </tr>
+            </thead>
+            <tbody id="tabelaComparativo">
+              <% if (relatorioExiste && rankingProdutos && rankingProdutos.length > 0) { %>
+              <% rankingProdutos.forEach((item, index) => { %>
+              <tr>
+                <td><%= selectedAno %></td>
+                <td><%= selectedMes %></td>
+                <td><%= index + 1 %>º</td>
+                <td>
+                  <span class="badge<%= item.tipo_item %>">
+                    <%= item.nome %>
+                  </span>
+                  <small class="text-muted d-block"><%= item.tipo_item %></small>
+                </td>
+                <td><%= item.quantidade_vendida %></td>
+                <td>R$ <%= Number(relatorio.faturamento_bruto).toFixed(2).replace('.', ',') %></td>
+                <td>R$ <%= Number(relatorio.despesas).toFixed(2).replace('.', ',') %></td>
+                <td>R$ <%= Number(relatorio.lucro_liquido).toFixed(2).replace('.', ',') %></td>
+                <td><%= Number(relatorio.margem_lucro).toFixed(2).replace('.', ',') %>%</td>
+                <td>R$ <%= Number(relatorio.ticket_medio).toFixed(2).replace('.', ',') %></td>
+              </tr>
+              <% }); %>
 
-                  <!-- Linha de totais -->
-                  <tr class="linha-total">
-                    <td colspan="4"><strong>TOTAL DO PERÍODO</strong></td>
-                    <td><strong><%= quantidadeVendida %></strong></td>
-                    <td><strong>R$ <%= Number(relatorio.faturamento_bruto).toFixed(2).replace('.', ',') %></strong></td>
-                    <td><strong>R$ <%= Number(relatorio.despesas).toFixed(2).replace('.', ',') %></strong></td>
-                    <td><strong>R$ <%= Number(relatorio.lucro_liquido).toFixed(2).replace('.', ',') %></strong></td>
-                    <td><strong><%= Number(relatorio.margem_lucro).toFixed(2).replace('.', ',') %>%</strong></td>
-                    <td><strong>R$ <%= Number(relatorio.ticket_medio).toFixed(2).replace('.', ',') %></strong></td>
-                  </tr>
-                <% } else { %>
-                  <tr>
-                    <td colspan="10" class="text-center">
-                      <i class="fa-solid fa-chart-bar"></i>
-                      Nenhum dado encontrado para o período selecionado
-                    </td>
-                  </tr>
-                <% } %>
-              </tbody>
-            </table>
-          </div>
+              <!-- Linha de totais -->
+              <tr class="linha-total">
+                <td colspan="4"><strong>TOTAL DO PERÍODO</strong></td>
+                <td><strong><%= quantidadeVendida %></strong></td>
+                <td><strong>R$ <%= Number(relatorio.faturamento_bruto).toFixed(2).replace('.', ',') %></strong></td>
+                <td><strong>R$ <%= Number(relatorio.despesas).toFixed(2).replace('.', ',') %></strong></td>
+                <td><strong>R$ <%= Number(relatorio.lucro_liquido).toFixed(2).replace('.', ',') %></strong></td>
+                <td><strong><%= Number(relatorio.margem_lucro).toFixed(2).replace('.', ',') %>%</strong></td>
+                <td><strong>R$ <%= Number(relatorio.ticket_medio).toFixed(2).replace('.', ',') %></strong></td>
+              </tr>
+              <% } else { %>
+              <tr>
+                <td colspan="10" class="text-center">
+                  <i class="fa-solid fa-chart-bar"></i>
+                  Nenhum dado encontrado para o período selecionado
+                </td>
+              </tr>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
 
-          <!--
+        <!--
             TABELA DE MOVIMENTAÇÃO DIÁRIA
             Carregada via fetch (AJAX) ao clicar no botão abaixo.
             Rota: GET /admin/relatorio/diario?mes=XX&ano=XXXX
             JSON retornado: { dadosDiarios: [{dia, qtd_vendas, faturamento, despesas, lucro}] }
           -->
-          <div class="mt-4">
-            <button class="btn btn-outline-secondary btn-sm mb-3" id="btn-toggle-diario">
-              <i class="fa-solid fa-table"></i> Ver movimentação diária
-            </button>
+        <div class="mt-4">
+          <button class="btn btn-outline-secondary btn-sm mb-3" id="btn-toggle-diario">
+            <i class="fa-solid fa-table"></i> Ver movimentação diária
+          </button>
 
-            <div id="secao-diaria" style="display: none;">
-              <table class="tabela-dashboard">
-                <thead>
-                  <tr>
-                    <th>Data</th>
-                    <th>Qtd. de Vendas</th>
-                    <th>Faturamento</th>
-                    <th>Despesas</th>
-                    <th>Lucro do Dia</th>
-                  </tr>
-                </thead>
-                <tbody id="tbody-diario">
-                  <tr>
-                    <td colspan="5" class="text-center text-muted py-3">
-                      Clique em "Ver movimentação diária" para carregar.
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+          <div id="secao-diaria" style="display: none;">
+            <table class="tabela-dashboard">
+              <thead>
+                <tr>
+                  <th>Data</th>
+                  <th>Qtd. de Vendas</th>
+                  <th>Faturamento</th>
+                  <th>Despesas</th>
+                  <th>Lucro do Dia</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-diario">
+                <tr>
+                  <td colspan="5" class="text-center text-muted py-3">
+                    Clique em "Ver movimentação diária" para carregar.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
-
-        </div>
-
-        <!-- Botão Voltar -->
-        <div class="text-end mt-3">
-          <a href="/area-gestor" class="btn btn-login-voltar"
-            ><i class="fa-solid fa-arrow-left"></i> Voltar</a
-          >
-        </div>
-
-        <!-- Botões de Exportação -->
-        <div class="acoes-exportacao">
-          <a href="/admin/relatorio/pdf?mes=<%= selectedMes %>&ano=<%= selectedAno %>" 
-   class="btn-login" 
-   target="_blank">
-    <i class="fa-solid fa-file-pdf"></i> Baixar PDF
-</a>
-          <a href="/admin/relatorio/excel?mes=<%= selectedMes %>&ano=<%= selectedAno %>" 
-     class="btn-login" 
-     target="_blank">
-     <i class="fas fa-file-excel"></i> Baixar Excel
-  </a>
         </div>
 
       </div>
-    </main>
 
-    <!-- Rodapé -->
-    <footer class="rodape">
-      <div class="container">
-        <p>2026 ECOVIF - Todos os direitos reservados</p>
+      <!-- Botão Voltar -->
+      <div class="text-end mt-3">
+        <a href="/area-gestor" class="btn btn-login-voltar"><i class="fa-solid fa-arrow-left"></i> Voltar</a>
       </div>
-    </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+      <!-- Botões de Exportação -->
+      <div class="acoes-exportacao">
+        <a href="/admin/relatorio/pdf?mes=<%= selectedMes %>&ano=<%= selectedAno %>" class="btn-login" target="_blank">
+          <i class="fa-solid fa-file-pdf"></i> Baixar PDF
+        </a>
+        <a href="/admin/relatorio/excel?mes=<%= selectedMes %>&ano=<%= selectedAno %>" class="btn-login" target="_blank">
+          <i class="fas fa-file-excel"></i> Baixar Excel
+        </a>
+      </div>
 
-    <script>
-      // ── Período atual injetado pelo servidor ──────────────────────────────────
-      const MES_ATUAL = "<%= selectedMes %>";
-      const ANO_ATUAL = "<%= selectedAno %>";
+    </div>
+  </main>
 
-      // ── Formata número para BRL ───────────────────────────────────────────────
-      function fmtBRL(valor) {
-        return "R$ " + Number(valor).toLocaleString("pt-BR", {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2
-        });
-      }
+  <!-- Rodapé -->
+  <footer class="rodape">
+    <div class="container">
+      <p>2026 ECOVIF - Todos os direitos reservados</p>
+    </div>
+  </footer>
 
-      // ── Toggle da seção diária + carregamento único via fetch ─────────────────
-      let diarioCarregado = false;
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-      document.getElementById("btn-toggle-diario").addEventListener("click", function () {
-        const secao = document.getElementById("secao-diaria");
-        const aberto = secao.style.display !== "none";
+  <script>
+    // ── Período atual injetado pelo servidor ──────────────────────────────────
+    const MES_ATUAL = "<%= selectedMes %>";
+    const ANO_ATUAL = "<%= selectedAno %>";
 
-        if (aberto) {
-          secao.style.display = "none";
-          this.innerHTML = '<i class="fa-solid fa-table"></i> Ver movimentação diária';
-        } else {
-          secao.style.display = "block";
-          this.innerHTML = '<i class="fa-solid fa-table"></i> Ocultar movimentação diária';
-          // Só busca uma vez por período — evita chamadas repetidas
-          if (!diarioCarregado) {
-            carregarDadosDiarios(MES_ATUAL, ANO_ATUAL);
-            diarioCarregado = true;
-          }
+    // ── Formata número para BRL ───────────────────────────────────────────────
+    function fmtBRL(valor) {
+      return "R$ " + Number(valor).toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
+    }
+
+    // ── Toggle da seção diária + carregamento único via fetch ─────────────────
+    let diarioCarregado = false;
+
+    document.getElementById("btn-toggle-diario").addEventListener("click", function() {
+      const secao = document.getElementById("secao-diaria");
+      const aberto = secao.style.display !== "none";
+
+      if (aberto) {
+        secao.style.display = "none";
+        this.innerHTML = '<i class="fa-solid fa-table"></i> Ver movimentação diária';
+      } else {
+        secao.style.display = "block";
+        this.innerHTML = '<i class="fa-solid fa-table"></i> Ocultar movimentação diária';
+        // Só busca uma vez por período — evita chamadas repetidas
+        if (!diarioCarregado) {
+          carregarDadosDiarios(MES_ATUAL, ANO_ATUAL);
+          diarioCarregado = true;
         }
-      });
+      }
+    });
 
-      // ── Ao trocar período, reseta o flag para forçar nova busca ──────────────
-      document.getElementById("form-periodo").addEventListener("change", function () {
-        diarioCarregado = false;
-      });
+    // ── Ao trocar período, reseta o flag para forçar nova busca ──────────────
+    document.getElementById("form-periodo").addEventListener("change", function() {
+      diarioCarregado = false;
+    });
 
-      // ── Busca os dados diários e preenche a tabela ────────────────────────────
-      async function carregarDadosDiarios(mes, ano) {
-        const tbody = document.getElementById("tbody-diario");
-        tbody.innerHTML = `
+    // ── Busca os dados diários e preenche a tabela ────────────────────────────
+    async function carregarDadosDiarios(mes, ano) {
+      const tbody = document.getElementById("tbody-diario");
+      tbody.innerHTML = `
           <tr>
             <td colspan="5" class="text-center py-3">
               <span class="spinner-border spinner-border-sm me-2"></span> Carregando...
             </td>
           </tr>`;
 
-        try {
-          const resp = await fetch("/admin/relatorio/diario?mes=" + mes + "&ano=" + ano);
-          if (!resp.ok) throw new Error("Falha na requisição");
-          const data = await resp.json();
-          const dias = data.dadosDiarios;
+      try {
+        const resp = await fetch("/admin/relatorio/diario?mes=" + mes + "&ano=" + ano);
+        if (!resp.ok) throw new Error("Falha na requisição");
+        const data = await resp.json();
+        const dias = data.dadosDiarios;
 
-          if (!dias || dias.length === 0) {
-            tbody.innerHTML = `
+        if (!dias || dias.length === 0) {
+          tbody.innerHTML = `
               <tr>
                 <td colspan="5" class="text-center text-muted py-3">
                   Sem movimentação no período.
                 </td>
               </tr>`;
-            return;
-          }
+          return;
+        }
 
-          tbody.innerHTML = dias.map(function (d) {
-            const dd   = String(d.dia).padStart(2, "0");
-            const data = dd + "/" + mes + "/" + ano;
-            const cor  = d.lucro >= 0
-              ? "color: #198754; font-weight: 500"
-              : "color: #dc3545; font-weight: 500";
+        tbody.innerHTML = dias.map(function(d) {
+          const dd = String(d.dia).padStart(2, "0");
+          const data = dd + "/" + mes + "/" + ano;
+          const cor = d.lucro >= 0 ?
+            "color: #198754; font-weight: 500" :
+            "color: #dc3545; font-weight: 500";
 
-            return "<tr>" +
-              "<td>" + data + "</td>" +
-              "<td>" + d.qtd_vendas + "</td>" +
-              "<td>" + fmtBRL(d.faturamento) + "</td>" +
-              "<td>" + fmtBRL(d.despesas) + "</td>" +
-              "<td style='" + cor + "'>" + fmtBRL(d.lucro) + "</td>" +
+          return "<tr>" +
+            "<td>" + data + "</td>" +
+            "<td>" + d.qtd_vendas + "</td>" +
+            "<td>" + fmtBRL(d.faturamento) + "</td>" +
+            "<td>" + fmtBRL(d.despesas) + "</td>" +
+            "<td style='" + cor + "'>" + fmtBRL(d.lucro) + "</td>" +
             "</tr>";
-          }).join("");
+        }).join("");
 
-        } catch (err) {
-          console.error("[carregarDadosDiarios]", err);
-          tbody.innerHTML = `
+      } catch (err) {
+        console.error("[carregarDadosDiarios]", err);
+        tbody.innerHTML = `
             <tr>
               <td colspan="5" class="text-center text-danger py-3">
                 Erro ao carregar dados. Tente novamente.
               </td>
             </tr>`;
-        }
       }
+    }
 
-      // ── Exportação ────────────────────────────────────────────────────────────
-      // Descomente o window.open quando implementar as rotas no backend
-      function exportarRelatorio(tipo) {
-        const mes = document.getElementById("select-mes").value;
-        const ano = document.getElementById("select-ano").value;
-        // window.open("/admin/relatorio/exportar/" + tipo + "?mes=" + mes + "&ano=" + ano);
-        alert("Rota a implementar: /admin/relatorio/exportar/" + tipo + "?mes=" + mes + "&ano=" + ano);
-      }
-    </script>
+    // ── Exportação ────────────────────────────────────────────────────────────
+    // Descomente o window.open quando implementar as rotas no backend
+    function exportarRelatorio(tipo) {
+      const mes = document.getElementById("select-mes").value;
+      const ano = document.getElementById("select-ano").value;
+      // window.open("/admin/relatorio/exportar/" + tipo + "?mes=" + mes + "&ano=" + ano);
+      alert("Rota a implementar: /admin/relatorio/exportar/" + tipo + "?mes=" + mes + "&ano=" + ano);
+    }
+  </script>
 
-  </body>
+</body>
+
 </html>

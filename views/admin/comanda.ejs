@@ -34,12 +34,12 @@
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/pedidoCozinha">
-            <i class="fa-solid fa-utensils"></i> Pedidos da Cozinha
+              <i class="fa-solid fa-utensils"></i> Pedidos da Cozinha
             </a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/fecharConta">
-            <i class="fa-solid fa-cash-register"></i> Fechar Conta
+              <i class="fa-solid fa-cash-register"></i> Fechar Conta
             </a>
           </li>
           <li class="nav-item">
@@ -140,10 +140,10 @@
                   </div>
                 </div>
                 <!--caixa com a lista dos itens adicionados-->
-                 <div class="item-acoes">
-                <div class="lista-itens-adicionados" id="listaItensAdicionados">
-                  <p class="texto-vazio" id="vazioItens">Nenhum item adicionado</p>
-                </div>
+                <div class="item-acoes">
+                  <div class="lista-itens-adicionados" id="listaItensAdicionados">
+                    <p class="texto-vazio" id="vazioItens">Nenhum item adicionado</p>
+                  </div>
                 </div>
                 <!-- Total da Comanda -->
                 <div class="total-comanda">
@@ -166,141 +166,136 @@
         </section>
         <!--Seção lista de comandas-->
         <section class="col-lg-7 secao-lista">
-         <div class="filtro-comandas">
-  
+          <div class="filtro-comandas">
 
-          
 
-  <button class="btn-filtro active filtro-opcao" data-filtro="todas">
-    <i class="fa-solid fa-list"></i> Todas
-  </button>
 
-  <button class="btn-filtro filtro-opcao" data-filtro="em preparo">
-    <i class="fa-solid fa-clock"></i> Em Preparo
-  </button>
 
-  <button class="btn-filtro filtro-opcao" data-filtro="finalizada">
-    <i class="fa-solid fa-check"></i> Finalizadas
-  </button>
+            <button class="btn-filtro active filtro-opcao" data-filtro="todas">
+              <i class="fa-solid fa-list"></i> Todas
+            </button>
 
-  <button class="btn-filtro filtro-opcao" data-filtro="cancelada">
-    <i class="fa-solid fa-xmark"></i> Canceladas
-  </button>
+            <button class="btn-filtro filtro-opcao" data-filtro="em preparo">
+              <i class="fa-solid fa-clock"></i> Em Preparo
+            </button>
 
-</div>
+            <button class="btn-filtro filtro-opcao" data-filtro="finalizada">
+              <i class="fa-solid fa-check"></i> Finalizadas
+            </button>
 
-          
+            <button class="btn-filtro filtro-opcao" data-filtro="cancelada">
+              <i class="fa-solid fa-xmark"></i> Canceladas
+            </button>
 
-          
+          </div>
 
-              <!-- ========== BARRA DE PESQUISA ========== -->
-      <div class="barra-pesquisa-wrapper">
-        <label for="inputPesquisa">
-          <i class="fa-solid fa-magnifying-glass"></i> Pesquisar comanda
-        </label>
-        <div class="linha-pesquisa">
-          <input type="text" id="inputPesquisa" class="input-pesquisa" placeholder="Ex.: Nome do cliente, número da mesa..." autocomplete="off">
-          <button type="button" class="btn-pesquisar" id="btnPesquisar">
-            <i class="fa-solid fa-search"></i> Pesquisar
-          </button>
-          <button type="button" class="btn-limpar-filtro" id="btnLimparFiltro">
-            <i class="fa-solid fa-broom"></i> Limpar Pesquisa
-          </button>
-        </div>
-      </div>
 
-      <div class="msg-sem-resultado" id="msgSemResultado">
-        <i class="fa-solid fa-magnifying-glass"></i> Nenhuma comanda encontrada para "<span id="termoPesquisado"></span>"
-      </div>
 
-      <!-- ================= COMANDA ================= -->
-      <div class="caixa-categoria">
+
+
+          <!-- ========== BARRA DE PESQUISA ========== -->
+          <div class="barra-pesquisa-wrapper">
+            <label for="inputPesquisa">
+              <i class="fa-solid fa-magnifying-glass"></i> Pesquisar comanda
+            </label>
+            <div class="linha-pesquisa">
+              <input type="text" id="inputPesquisa" class="input-pesquisa" placeholder="Ex.: Nome do cliente, número da mesa..." autocomplete="off">
+              <button type="button" class="btn-pesquisar" id="btnPesquisar">
+                <i class="fa-solid fa-search"></i> Pesquisar
+              </button>
+              <button type="button" class="btn-limpar-filtro" id="btnLimparFiltro">
+                <i class="fa-solid fa-broom"></i> Limpar Pesquisa
+              </button>
+            </div>
+          </div>
+
+          <div class="msg-sem-resultado" id="msgSemResultado">
+            <i class="fa-solid fa-magnifying-glass"></i> Nenhuma comanda encontrada para "<span id="termoPesquisado"></span>"
+          </div>
+
+          <!-- ================= COMANDA ================= -->
+          <div class="caixa-categoria">
             <h3><i class="fa-solid fa-receipt"></i> Comandas Registradas</h3>
             <div id="listaComandas" class="lista-itens">
 
-        <div class="lista-itens">
-          <% comandas.forEach(comanda => { %>
+              <div class="lista-itens">
+                <% comandas.forEach(comanda => { %>
 
-          <div class="conteudo-item" 
-          data-id="<%= comanda.id %>" 
-          data-status="<%= comanda.status %>">
-            <h4>Comanda #<%= comanda.id %></h4>
+                <div class="conteudo-item" data-id="<%= comanda.id %>" data-status="<%= comanda.status %>">
+                  <h4>Comanda #<%= comanda.id %></h4>
 
-            <div class="info-item">
-              <div>
-                <strong>Cliente:</strong> <%= comanda.nome_cliente %>
-              </div>
-              <div>
-                <strong>Mesa:</strong> <%= comanda.mesa %>
-              </div>
-              <div>
-                <% if (comanda.observacoes) { %>
-                <div class="obs-texto"><strong>Obs:</strong> <%= comanda.observacoes %></div>
-                <% } %>
-              </div>
-            </div>
+                  <div class="info-item">
+                    <div>
+                      <strong>Cliente:</strong> <%= comanda.nome_cliente %>
+                    </div>
+                    <div>
+                      <strong>Mesa:</strong> <%= comanda.mesa %>
+                    </div>
+                    <div>
+                      <% if (comanda.observacoes) { %>
+                      <div class="obs-texto"><strong>Obs:</strong> <%= comanda.observacoes %></div>
+                      <% } %>
+                    </div>
+                  </div>
 
-            <div class="ingredientes-lista">
-              <strong>Itens do Pedido:</strong>
-              <ul>
-                <% comanda.itens.forEach(item => { %>
-                <li>
-                  <strong><%= item.quantidade %>x</strong>
-                  <%= item.tipo_item === "prato" ? item.prato.nome : item.bebida.produto.nome %>
-                  - R$ <%= item.tipo_item === "prato" ? item.prato.preco_venda : item.bebida.preco_venda %>
-                  <% if (item.observacoes) { %>
-                  <br><em>Obs.: <%= item.observacoes %></em>
-                  <% } %>
-                </li>
+                  <div class="ingredientes-lista">
+                    <strong>Itens do Pedido:</strong>
+                    <ul>
+                      <% comanda.itens.forEach(item => { %>
+                      <li>
+                        <strong><%= item.quantidade %>x</strong>
+                        <%= item.tipo_item === "prato" ? item.prato.nome : item.bebida.produto.nome %>
+                        - R$ <%= item.tipo_item === "prato" ? item.prato.preco_venda : item.bebida.preco_venda %>
+                        <% if (item.observacoes) { %>
+                        <br><em>Obs.: <%= item.observacoes %></em>
+                        <% } %>
+                      </li>
+                      <% }) %>
+                    </ul>
+                  </div>
+
+                  <div class="rodape-comanda">
+                    <div>
+                      <div class="total-pedido-card"> Total: R$ <%= comanda.total %> </div>
+                      <div class="status"> Status: <span class="badge-status pendente"> <%= comanda.status %></span></div>
+                      <div class="status"> Cancelar comanda: <button type="button" class="btn-excluir badge-status cancelada" onclick="event.preventDefault(); atualizarStatusComanda('<%= comanda.id %>', 'cancelada')"> Cancelar
+                        </button>
+                      </div>
+
+                      <div> Data: <%= comanda.created_at.toLocaleDateString() %></div>
+                    </div>
+                    <div class="data-comanda">
+                      <i class="fa-solid fa-clock"></i> <%= comanda.created_at.toLocaleTimeString() %>
+                    </div>
+                  </div>
+
+                  <div class="acoes-item">
+                    <!-- EDITAR -->
+                    <a href="/editarComanda/<%= comanda.id %>" class="btn-editar">
+                      <i class="fa-solid fa-edit"></i> Editar
+                    </a>
+
+
+                    <!-- EXCLUIR -->
+                    <form action="/excluirComanda/<%= comanda.id %>" method="POST">
+                      <button type="submit" class="btn-excluir" onclick="return confirm('Deseja excluir esta comanda?');">
+                        <i class="fa-solid fa-trash"></i> Excluir
+                      </button>
+                    </form>
+                  </div>
+                </div>
                 <% }) %>
-              </ul>
-            </div>
-
-            <div class="rodape-comanda">
-              <div>
-                <div class="total-pedido-card"> Total: R$ <%= comanda.total %> </div>
-                <div class="status"> Status: <span class="badge-status pendente"> <%= comanda.status %></span></div>
-                <div class="status"> Cancelar comanda: <button 
-  type="button" 
-  class="btn-excluir badge-status cancelada"
-  onclick="event.preventDefault(); atualizarStatusComanda('<%= comanda.id %>', 'cancelada')"> Cancelar
-</button>
-   </div>  
-              
-              <div> Data: <%= comanda.created_at.toLocaleDateString() %></div>
               </div>
-              <div class="data-comanda">
-                <i class="fa-solid fa-clock"></i> <%= comanda.created_at.toLocaleTimeString() %>
-              </div>
-            </div>
-
-            <div class="acoes-item">
-              <!-- EDITAR -->
-                  <a href="/editarComanda/<%= comanda.id %>" class="btn-editar">
-                    <i class="fa-solid fa-edit"></i> Editar
-                  </a> 
- 
-                  
-                  <!-- EXCLUIR -->
-                  <form action="/excluirComanda/<%= comanda.id %>" method="POST">
-                    <button type="submit" class="btn-excluir" onclick="return confirm('Deseja excluir esta comanda?');">
-                      <i class="fa-solid fa-trash"></i> Excluir
-                    </button>
-                  </form>
             </div>
           </div>
-          <% }) %>
-        </div>
+          <!-- Botão Voltar -->
+          <div class="text-end mt-3">
+            <a href="/area-gestor" class="btn btn-login-voltar">
+              <i class="fa-solid fa-arrow-left"></i> Voltar
+            </a>
+          </div>
+        </section>
       </div>
- </div>
-      <!-- Botão Voltar -->
-      <div class="text-end mt-3">
-        <a href="/area-gestor" class="btn btn-login-voltar">
-          <i class="fa-solid fa-arrow-left"></i> Voltar
-        </a>
-      </div>
-    </section>
-    </div>
   </main>
   <!-- Rodapé -->
   <footer class="rodape">
@@ -310,9 +305,9 @@
   </footer>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-<script src="/js/formularioComandaScript.js"></script>
+  <script src="/js/formularioComandaScript.js"></script>
 
-<script src="/js/filtroEstoqueScript.js"></script>
+  <script src="/js/filtroEstoqueScript.js"></script>
 
 
 </body>
