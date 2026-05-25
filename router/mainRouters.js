@@ -121,10 +121,16 @@ router.get("/fecharConta", fecharContaController.mostrarConta);
 router.post("/removerTaxaServico/:id", fecharContaController.removerTaxaServico);
 router.post("/removerTaxaCouvert/:id", fecharContaController.removerTaxaCouvert);
 router.post("/finalizarVenda/:id", fecharContaController.finalizarVenda);
+router.get("/imprimir-venda/:id", fecharContaController.imprimirVenda);
 
 //relatório
 //router.get("/relatorio", relatorioController.mostrarRelatorio);
 
 router.get("/relatorioMensal", relatorioController.gerarRelatorio);
 
+// Endpoint AJAX → retorna JSON com dados dia a dia
+router.get("/admin/relatorio/diario", relatorioController.obterDadosDiarios);
+
+router.get('/admin/relatorio/pdf', relatorioController.exportarPDF);
+router.get('/admin/relatorio/excel', relatorioController.exportarExcel);
 module.exports = router;

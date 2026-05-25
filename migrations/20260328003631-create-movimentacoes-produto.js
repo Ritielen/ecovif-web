@@ -21,7 +21,7 @@ module.exports = {
         allowNull: true,
       },
       nova_quantidade: {
-        type: Sequelize.DECIMAL(10, 2),
+        type: Sequelize.INTEGER,
         allowNull: true,
       },
       novo_valor_compra: {
@@ -30,7 +30,7 @@ module.exports = {
         defaultValue: 0.0,
       },
       quantidade_total: {
-        type: Sequelize.DECIMAL(10, 2),
+        type: Sequelize.INTEGER,
         allowNull: true,
       },
       valor_total_gasto: {

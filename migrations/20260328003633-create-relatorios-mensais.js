@@ -49,39 +49,6 @@ module.exports = {
         allowNull: false,
         defaultValue: 0.0,
       },
-
-      estoque_critico: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        defaultValue: 0,
-      },
-
-      posicao: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-      },
-
-      quantidade_vendida: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        defaultValue: 0,
-      },
-
-      tipo_item: {
-        type: Sequelize.ENUM("prato", "bebida"),
-        allowNull: false,
-      },
-
-      produto_id: {
-        type: Sequelize.INTEGER,
-        allowNull: true,
-      },
-
-      venda_id: {
-        type: Sequelize.INTEGER,
-        allowNull: true,
-      },
-
       usuario_id: {
         type: Sequelize.INTEGER,
         allowNull: false,

@@ -31,14 +31,13 @@
                             <i class="fa-solid fa-user-shield"></i> Área do Gestor
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="/vendas">
-                            <i class="fa-solid fa-cash-register"></i> Vendas
-                        </a>
-                    </li>
+                    
                     <li class="nav-item">
                         <a class="nav-link" href="/suporte">Suporte</a>
                     </li>
+                    <li class="nav-item">
+            <a class="nav-link" href="/pedidoCozinha">Voltar</a>
+          </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/login" id="logoutBtn"><i class="fa-solid fa-sign-out-alt"></i>
                             Sair</a>
@@ -147,6 +146,8 @@
                                     </div>
                                 </div>
 
+                                 <a href="/imprimir-venda/<%= comanda.id %>" target="_blank" class="btn-imprimir-venda">🖨️ Imprimir Venda </a>
+
                                 <div class="acoes-item">
                                     <% const vendaFechada = vendaMap && vendaMap[comanda.id]; %>
                                     <div class="venda-status">Venda: <strong><%= vendaFechada ? 'Fechada' : 'Aberta' %></strong></div>
@@ -169,6 +170,8 @@
                                                 <i class="fa-solid fa-check"></i> Finalizar Venda
                                             </button>
                                         </form>
+
+                                        
                                     <% } else { %>
                                         <button class="btn btn-secondary" disabled>Operações bloqueadas</button>
                                     <% } %>
@@ -178,6 +181,8 @@
                     <% } else { %>
                         <p class="texto-vazio">Nenhuma comanda registrada.</p>
                     <% } %>
+
+                    
                 </div>
             </div>
 

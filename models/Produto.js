@@ -31,7 +31,7 @@ const Produto = sequelizeconnect.define(
       allowNull: true,
     },
     tamanho: {
-      type: DataTypes.DECIMAL(10, 2),
+      type: DataTypes.INTEGER,
       allowNull: true,
     },
     unidade: {
@@ -43,21 +43,22 @@ const Produto = sequelizeconnect.define(
       allowNull: true,
     },
     quantidade_inicial: {
-      type: DataTypes.DECIMAL(10, 2),
+      type: DataTypes.INTEGER,
       allowNull: true,
     },
     quantidade: {
-      type: DataTypes.DECIMAL(10, 2),
+      type: DataTypes.INTEGER,
       allowNull: true,
     },
     quantidade_minima: {
-      type: DataTypes.DECIMAL(10, 2),
+      type: DataTypes.INTEGER,
       allowNull: true,
     },
     observacoes: {
       type: DataTypes.TEXT,
       allowNull: true,
     },
+    
     status: {
       type: DataTypes.STRING,
       allowNull: true,
@@ -68,6 +69,7 @@ const Produto = sequelizeconnect.define(
       allowNull: true,
       defaultValue: 0.0,
     },
+     
     usuario_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -81,6 +83,8 @@ const Produto = sequelizeconnect.define(
     underscored: true,
   },
 );
+
+
 
 // ASSOCIAÇÕES DO PRODUTO
 Produto.associate = (models) => {

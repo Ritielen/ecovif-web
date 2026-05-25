@@ -191,9 +191,134 @@ async function finalizarVenda(req, res) {
   }
 }
 
+async function imprimirVenda(req, res) {
+  try {
+    if (!req.session?.usuarioId) {
+      return res.redirect("/login?msg=Faça login para continuar");
+    }
+
+    const { id } = req.params;
+    
+    const venda = await db.Venda.findOne({
+      where: { comanda_id: id },
+      include: [
+        {
+          model: db.Comanda,
+          as: "comanda",
+          include: [
+            {
+              model: db.ItemComanda,
+              as: "itens",
+              include: [
+                {
+                  model: db.Prato,
+                  as: "prato",
+                },
+                {
+                  model: db.Bebida,
+                  as: "bebida",
+                  include: [
+                    {
+                      model: db.Produto,
+                      as: "produto",
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+        {
+          model: db.Evento,
+          as: "evento",
+        },
+        {
+          model: db.Usuario,
+          as: "usuario",
+          attributes: ["id", "nome", "email"],
+        },
+      ],
+    });
+
+    if (!venda) {
+      return res.redirect("/fecharConta?erro=Venda não encontrada");
+    }
+
+    // Formatar dados para impressão
+    const dadosImpressao = {
+      id_venda: venda.id,
+      data_venda: venda.createdAt,
+      status: venda.status || "Finalizada",
+      comanda: {
+        id: venda.comanda.id,
+        mesa: venda.comanda.mesa,
+        nome_cliente: venda.comanda.nome_cliente,
+      },
+      itens: [],
+      subtotal: 0,
+      taxa_servico: parseFloat(venda.taxa_servico || 0),
+      valor_couvert: parseFloat(venda.valor_couvert || 0),
+      total_final: parseFloat(venda.total_final || 0),
+      evento: venda.evento ? {
+        nome: venda.evento.nome,
+        descricao: venda.evento.descricao,
+      } : null,
+      atendente: venda.usuario ? venda.usuario.nome : "N/A",
+    };
+
+    // Processar itens da comanda
+    if (venda.comanda && venda.comanda.itens) {
+      venda.comanda.itens.forEach(item => {
+        let nomeItem = "";
+        let precoVenda = 0;
+        let tipo = "";
+
+        if (item.prato) {
+          nomeItem = item.prato.nome;
+          precoVenda = parseFloat(item.prato.preco_venda || 0);
+          tipo = "Prato";
+        } else if (item.bebida) {
+          nomeItem = item.bebida.produto 
+            ? `${item.bebida.produto.nome} (${item.bebida.volume || ''}ml)` 
+            : item.bebida.nome || "Bebida";
+          precoVenda = parseFloat(item.bebida.preco_venda || 0);
+          tipo = "Bebida";
+        }
+
+        const quantidade = item.quantidade || 1;
+        const subtotalItem = precoVenda * quantidade;
+
+        dadosImpressao.itens.push({
+          nome: nomeItem,
+          tipo: tipo,
+          quantidade: quantidade,
+          precoVenda: precoVenda,
+          subtotal: subtotalItem,
+        });
+
+        dadosImpressao.subtotal += subtotalItem;
+      });
+    }
+
+    // Formatar valores monetários
+    dadosImpressao.subtotal = parseFloat(dadosImpressao.subtotal.toFixed(2));
+
+    // Renderizar página de impressão
+    res.render("admin/imprimirVenda", {
+      venda: dadosImpressao,
+      layout: false, // Desabilita o layout principal para impressão limpa
+    });
+
+  } catch (error) {
+    console.error("Erro ao imprimir venda:", error);
+    res.redirect("/fecharConta?erro=Erro ao carregar dados para impressão");
+  }
+}
+
 module.exports = {
   mostrarConta,
   removerTaxaServico,
   removerTaxaCouvert,
   finalizarVenda,
+  imprimirVenda
 };

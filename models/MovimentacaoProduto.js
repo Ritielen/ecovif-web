@@ -22,7 +22,7 @@ const MovimentacaoProduto = sequelizeconnect.define(
       allowNull: true,
     },
     nova_quantidade:{
-    type: DataTypes.DECIMAL(10, 2),
+    type: DataTypes.INTEGER,
     allowNull: true,
     },
     novo_valor_compra: {
@@ -31,7 +31,7 @@ const MovimentacaoProduto = sequelizeconnect.define(
       defaultValue: 0.0,
     },
      quantidade_total: {   //soma quantidade e nova_quantidade
-     type: DataTypes.DECIMAL(10, 2),
+     type: DataTypes.INTEGER,
       allowNull: true, 
     },
     valor_total_gasto: {  //soma valor_compra e novo_valor_compra

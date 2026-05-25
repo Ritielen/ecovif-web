@@ -48,11 +48,25 @@ async function cadastrarProduto(req, res) {
     return res.redirect("/estoque?erro=Tipo, nome e unidade são obrigatórios");
   }
 
-  // Conversões 
-  const qtd = quantidade ? parseFloat(quantidade) : 0;
-  const qtdMin = quantidade_minima ? parseInt(quantidade_minima) : 0;
-  const tamanhoFinal = tamanho ? parseFloat(tamanho) : null;
   
+  
+ // Função de normalização de valores numéricos, tratando vírgula e ponto
+const normalizeInt = (val) => {
+  if (!val) return 0;
+  return parseInt(val.toString().replace(",", "."), 10);
+};
+
+const normalizeFloat = (val) => {
+  if (!val) return 0;
+  return parseFloat(val.toString().replace(",", "."));
+}; 
+
+// Conversões
+const qtd = quantidade ? normalizeInt(quantidade) : 0;          // produto sempre inteiro
+const qtdMin = quantidade_minima ? normalizeInt(quantidade_minima) : 0; // mínimo sempre inteiro
+const tamanhoFinal = tamanho ? normalizeFloat(tamanho) : 0;  //inteiro
+
+
   // Tratamento do valor_compra: Se não houver valor ou for inválido, salva 0
   const valorCompraLimpo = valor_compra ? parseFloat(valor_compra.toString().replace(',', '.')) : 0;
 
