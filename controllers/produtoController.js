@@ -49,23 +49,7 @@ async function cadastrarProduto(req, res) {
     return res.redirect("/estoque?erro=Tipo, nome e unidade são obrigatórios");
   }
 
-  
-  
- /*/ Função de normalização de valores numéricos, tratando vírgula e ponto
-const normalizeInt = (val) => {
-  if (!val) return 0;
-  return parseInt(val.toString().replace(",", "."), 10);
-};
-
-const normalizeFloat = (val) => {
-  if (!val) return 0;
-  return parseFloat(val.toString().replace(",", "."));
-}; 
-
-// Conversões
-const qtd = quantidade ? normalizeInt(quantidade) : 0;          // produto sempre inteiro
-const qtdMin = quantidade_minima ? normalizeInt(quantidade_minima) : 0; // mínimo sempre inteiro
-*/
+  //normalização de valores
 
 const qtdOriginal = quantidade ? normalizeFloat(quantidade) : 0;
 
@@ -291,10 +275,6 @@ const observacoesFinal = observacoes !== "" ? observacoes.toString() : produto.o
     res.redirect(`/produtoAdicionar/${id}?error=Erro ao processar`);
   }
 }
-
-
-
-
 
 
 module.exports = {

@@ -34,26 +34,34 @@
             </a>
           </li>
           <li class="nav-item dropdown position-relative">
-            <a class="nav-link" href="#" id="alertaDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-              <i class="fa-solid fa-bell"></i>
-              <% if (locals.totalComandasRecentes > 0) { %>
-              <span class="badge-alerta">
-                <%= locals.totalComandasRecentes %>
-              </span>
-              <% } %>
-            </a>
-            <div class="dropdown-menu dropdown-alerta">
-              <% if (locals.comandasRecentes && locals.comandasRecentes.length > 0) { %>
-              <% locals.comandasRecentes.forEach(comanda => { %>
-              <div class="alerta-item">
-                <span>Comanda #<%= comanda.id %></span> -
-                <strong><%= comanda.nome_cliente %></strong>
-              </div>
-              <% }) %>
-              <% } else { %>
-              <div class="alerta-item">Nenhuma comanda recente</div>
-              <% } %>
-            </div>
+    <a class="nav-link" href="#" id="alertaDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fa-solid fa-bell"></i>
+        <% 
+        // Filtrar apenas comandas prontas para o badge
+        const comandasProntas = locals.comandasRecentes ? 
+            locals.comandasRecentes.filter(comanda => comanda.status === 'pendente') : [];
+        const totalProntas = comandasProntas.length;
+        %>
+        <% if (totalProntas > 0) { %>
+            <span class="badge-alerta">
+                <%= totalProntas %>
+            </span>
+        <% } %>
+    </a>
+    <div class="dropdown-menu dropdown-alerta">
+        <% if (comandasProntas.length > 0) { %>
+            <% comandasProntas.forEach(comanda => { %>
+                <div class="alerta-item">
+                    <span>Comanda #<%= comanda.id %></span> -
+                    <strong><%= comanda.nome_cliente %></strong> -
+                    <span>Status: <%= comanda.status %></span> 
+                </div>
+            <% }) %>
+        <% } else { %>
+            <div class="alerta-item">Nenhuma comanda pendente</div>
+        <% } %>
+    </div>
+</li>
           <li class="nav-item">
             <a class="nav-link" href="/fecharConta">
               <i class="fa-solid fa-cash-register"></i> Fechar Conta

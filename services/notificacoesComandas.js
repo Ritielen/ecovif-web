@@ -6,11 +6,14 @@ async function carregarNotificacoesComandas(req, res, next) {
         // Buscar comandas criadas recentemente (últimas 24 horas)
         const comandasRecentes = await db.Comanda.findAll({
             where: {
-                data: {  // Alterado de created_at para data
+                data: {  
                     [Op.gte]: new Date(new Date() - 24 * 60 * 60 * 1000) // últimas 24 horas
-                }
+                },
+                status: {
+            [Op.in]: ['pronta', 'pendente']  // Busca ambos os status
+        }
             },
-            order: [['data', 'DESC']], // Alterado para ordenar por data
+            order: [['data', 'DESC']], 
             limit: 10 // Limitar a 10 comandas mais recentes
         });
 
