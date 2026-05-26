@@ -89,34 +89,89 @@ async function logarUsuario(req, res) {
   const { email, senha } = req.body;
 
   try {
-    const usuario = await db.Usuario.findOne({ where: { email } });
+
+    const usuario = await db.Usuario.findOne({
+      where: { email },
+      include: [
+        {
+          model: db.Grupo,
+          as: "grupo"
+        }
+      ]
+    });
 
     if (!usuario) {
-      return res.render("login/login", { msg: "Email ou senha inválidos!" });
+      return res.render("login/login", {
+        msg: "Email ou senha inválidos!"
+      });
     }
 
     const senhaCorreta = bcrypt.compareSync(senha, usuario.senha);
+
     if (!senhaCorreta) {
-      return res.render("login/login", { msg: "Email ou senha inválidos!" });
+      return res.render("login/login", {
+        msg: "Email ou senha inválidos!"
+      });
     }
 
-      // -Salvar o usuário na sessão
-        req.session.usuarioId = usuario.id;
-        req.session.usuarioNome = usuario.nome;
-        req.session.usuarioEmail = usuario.email;
-        req.session.usuarioFuncionario = usuario.funcionario;
-        
-        // Salvar explicitamente a sessão
-        req.session.save((err) => {
-            if (err) {
-                console.error("Erro ao salvar sessão:", err);
-                return res.render("login/login", { msg: "Erro interno" });
-            }
+    // Salvar sessão
+    req.session.usuarioId = usuario.id;
+    req.session.usuarioNome = usuario.nome;
+    req.session.usuarioEmail = usuario.email;
+    req.session.usuarioFuncionario = usuario.funcionario;
+    req.session.usuarioGrupo = usuario.grupo?.nome_grupo;
+
+    // Definir rota de redirecionamento
+    let redirecionarPara = "/";
+
+    // Gestor
+    if (usuario.funcionario === "gestor") {
+
+      redirecionarPara = "/area-gestor";
+
+    }
+
+    // Funcionários
+    else if (usuario.funcionario === "funcionario") {
+
+      const grupo = usuario.grupo?.nome_grupo;
+
+      if (grupo === "Garçons") {
+        redirecionarPara = "/comanda";
+      }
+
+      else if (grupo === "Cozinha") {
+        redirecionarPara = "/pedidoCozinha";
+      }
+
+      else if (grupo === "Caixa") {
+        redirecionarPara = "/fecharConta";
+      }
+
+    }
+
+    req.session.save((err) => {
+
+      if (err) {
+        console.error("Erro ao salvar sessão:", err);
+
+        return res.render("login/login", {
+          msg: "Erro interno"
         });
-    res.redirect("/area-gestor");
+      }
+
+      return res.redirect(redirecionarPara);
+
+    });
+
   } catch (error) {
+
     console.error(error);
-    res.render("login/login", { msg: "Erro ao fazer login." });
+
+    res.render("login/login", {
+      msg: "Erro ao fazer login."
+    });
+
   }
 }
 

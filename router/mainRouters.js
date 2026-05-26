@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const loginController = require("../controllers/loginController");
 const autenticacao = require("../config/autenticacao");
+
+
 //const upload = require("../config/upload");
 const mainController = require("../controllers/mainController");
 const produtoController = require("../controllers/produtoController");
@@ -51,13 +53,6 @@ router.post("/atualizarSenha", loginController.atualizarSenha);
 
 router.get("/suporte", loginController.renderizarSuporte);
 router.post("/enviar-suporte", loginController.enviarSuporte);
-
-//rotas de grupos
-router.get("/cadastrarGrupo", mainController.renderizarCadastrarGrupo);
-router.post('/criarGrupo', mainController.criarGrupo);
-router.get('/listaGrupos', mainController.renderizarListaGrupos);
-router.post("/admin/grupos/editar/:id", mainController.editarGrupo);
-router.post('/admin/grupos/excluir/:id', mainController.excluirGrupo);
 
 //rotas cadastro de funcionário
 router.get('/cadastrarFuncionario', mainController.renderizarCadastrarFuncionario);
@@ -124,8 +119,6 @@ router.post("/finalizarVenda/:id", fecharContaController.finalizarVenda);
 router.get("/imprimir-venda/:id", fecharContaController.imprimirVenda);
 
 //relatório
-//router.get("/relatorio", relatorioController.mostrarRelatorio);
-
 router.get("/relatorioMensal", relatorioController.gerarRelatorio);
 
 // Endpoint AJAX → retorna JSON com dados dia a dia
@@ -133,4 +126,7 @@ router.get("/admin/relatorio/diario", relatorioController.obterDadosDiarios);
 
 router.get('/admin/relatorio/pdf', relatorioController.exportarPDF);
 router.get('/admin/relatorio/excel', relatorioController.exportarExcel);
+
+
+
 module.exports = router;

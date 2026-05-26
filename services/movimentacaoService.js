@@ -1,7 +1,5 @@
 const db = require("../models");
-const {
-  converterParaBase
-} = require("./estoqueService");
+const { converterParaBase } = require("./estoqueService");
 
 async function baixarEstoqueComanda(itens, usuarioId, comandaId) {
 

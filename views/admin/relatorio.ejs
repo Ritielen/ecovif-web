@@ -144,10 +144,10 @@
           <div class="alerta-info">
             <h4><i class="fa-solid fa-exclamation-triangle"></i> <%= produto.nome %></h4>
             <p>
-              Estoque atual: <%= produto.quantidade_total %> <%= produto.unidade || 'un' %> |
+              Estoque atual: <%= produto.quantidade %> <%= produto.unidade || 'un' %> |
               Mínimo: <%= produto.quantidade_minima %> <%= produto.unidade || 'un' %>
             </p>
-            <div class="alerta-quantidade"><%= produto.quantidade_total %></div>
+            <div class="alerta-quantidade"><%= produto.quantidade %></div>
           </div>
           <% }); %>
           <% } else { %>

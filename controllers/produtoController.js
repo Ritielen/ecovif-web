@@ -2,6 +2,7 @@ const db = require("../models");
 const passport = require('../config/passport');
 const { sendMail, sendSupportContact } = require("../config/mailer");
 const {Op} = require("sequelize");
+const { converterParaBase } = require("../services/estoqueService");
 
  async function renderizarEstoque(req, res) {
     try {
@@ -50,7 +51,7 @@ async function cadastrarProduto(req, res) {
 
   
   
- // Função de normalização de valores numéricos, tratando vírgula e ponto
+ /*/ Função de normalização de valores numéricos, tratando vírgula e ponto
 const normalizeInt = (val) => {
   if (!val) return 0;
   return parseInt(val.toString().replace(",", "."), 10);
@@ -64,11 +65,24 @@ const normalizeFloat = (val) => {
 // Conversões
 const qtd = quantidade ? normalizeInt(quantidade) : 0;          // produto sempre inteiro
 const qtdMin = quantidade_minima ? normalizeInt(quantidade_minima) : 0; // mínimo sempre inteiro
+*/
+
+const qtdOriginal = quantidade ? normalizeFloat(quantidade) : 0;
+
+const qtdMinOriginal = quantidade_minima
+  ? normalizeFloat(quantidade_minima)
+  : 0;
+  const qtd = converterParaBase(qtdOriginal, unidade);
+
+const qtdMin = converterParaBase(qtdMinOriginal, unidade);
+
 const tamanhoFinal = tamanho ? normalizeFloat(tamanho) : 0;  //inteiro
 
 
   // Tratamento do valor_compra: Se não houver valor ou for inválido, salva 0
   const valorCompraLimpo = valor_compra ? parseFloat(valor_compra.toString().replace(',', '.')) : 0;
+
+
 
   try {
     // VERIFICAÇÃO DE SESSÃO
@@ -280,6 +294,9 @@ const observacoesFinal = observacoes !== "" ? observacoes.toString() : produto.o
 
 
 
+
+
+
 module.exports = {
    
     renderizarEstoque,
@@ -289,6 +306,7 @@ module.exports = {
     inativarProduto,
     ativarProduto,
     editarProduto
+
 };
 
 

@@ -4,74 +4,6 @@ const passport = require('../config/passport');
 const { sendMail, sendSupportContact } = require("../config/mailer");
 const {Op} = require("sequelize");
 
-// rendenrização de páginas
-async function renderizarCadastrarGrupo(req, res) {
-  try {
-    const grupos = await db.Grupo.findAll({ order: [['id', 'DESC']] });    
-    res.render("admin/cadastrarGrupo", { grupos, 
-    msg: req.query.msg,
-    error: req.query.error
-    });
-  } catch (error) {
-    console.error("Erro ao buscar grupos:", error);
-    res.render("admin/cadastrarGrupo", { grupos: [] });
-  }
-}
-
-async function renderizarListaGrupos(req, res) {
-  try {
-    const grupos = await db.Grupo.findAll({ order: [['id', 'DESC']] });
-    res.render("admin/listaGrupos", { grupos });
-  } catch (error) {
-    console.error("Erro ao buscar grupos:", error);
-    res.render("admin/listaGrupos", { grupos: [] });
-  }
-}
-
-// Função para criar grupo e redirecionar para a lista
-async function criarGrupo(req, res) {
-  const { nome_grupo, descricao_grupo } = req.body;
-  if (!nome_grupo || !descricao_grupo) {
-    return res.redirect("/cadastrarGrupo?erro=Todos os campos são obrigatórios");
-  }
-  try {
-    await db.Grupo.create({ nome_grupo, descricao_grupo });
-    return res.redirect("/listaGrupos?msg=Grupo cadastrado com sucesso!");
-  } catch (error) {
-    console.error(error);
-    return res.redirect("/cadastrarGrupo?erro=Erro ao cadastrar");
-  }
-}
-
-//editar grupo
-
-async function editarGrupo(req, res) {
-  const { id } = req.params;
-  const { nome_grupo, descricao_grupo } = req.body;
-
-  try {
-    await db.Grupo.update(
-      { nome_grupo, descricao_grupo },
-      { where: { id } }
-    );
-    return res.status(200).json({ msg: "Atualizado com sucesso" });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ erro: "Erro ao atualizar banco" });
-  }
-}
-
-// Função para excluir grupo
-async function excluirGrupo(req, res) {
-  const { id } = req.params;
-  try {
-    await db.Grupo.destroy({ where: { id } });
-    return res.redirect("/listaGrupos?msg=Grupo excluído com sucesso!");
-  } catch (error) {
-    console.error(error);
-    return res.redirect("/listaGrupos?erro=Erro ao excluir grupo, ele está em uso por mais de um funcionário.");
-  }
-}
 
 // Função para renderizar tela de CADASTRO de funcionário
 async function renderizarCadastrarFuncionario(req, res) {
@@ -84,11 +16,11 @@ async function renderizarCadastrarFuncionario(req, res) {
 
 //criar funcionario
 async function criarFuncionario(req, res) {
-  // 1. Pega os dados do formulário
+  
   const { nome, sobrenome, telefone, email, senha, grupo } = req.body;
 
   try {
-    // 2. VERIFICAÇÃO DE SESSÃO (Quem está criando?)
+    // VERIFICAÇÃO DE SESSÃO (Quem está criando?)
     if (!req.session || !req.session.usuarioId) {
       return res.redirect("/login?erro=Faça login para continuar");
     }
@@ -96,7 +28,7 @@ async function criarFuncionario(req, res) {
     // O ID  (quem está logado) vem da sessão
     const criadoPorId = req.session.usuarioId;
 
-    // 3. Validações básicas de preenchimento
+    // Validações básicas de preenchimento
     if (!nome || !sobrenome || !telefone || !email || !senha || !grupo) {
       const grupos = await db.Grupo.findAll({ order: [['nome_grupo', 'ASC']] });
       return res.render("admin/funcionarios", { 
@@ -105,7 +37,7 @@ async function criarFuncionario(req, res) {
       });
     }
 
-    // 4. Verifica se o e-mail já existe
+    // Verifica se o e-mail já existe
     const usuarioExistente = await db.Usuario.findOne({ where: { email } });
     if (usuarioExistente) {
       const grupos = await db.Grupo.findAll({ order: [['nome_grupo', 'ASC']] });
@@ -115,14 +47,14 @@ async function criarFuncionario(req, res) {
       });
     }
 
-    // 5. Busca o grupo selecionado
+    // Busca o grupo selecionado
     const grupoEncontrado = await db.Grupo.findOne({ where: { nome_grupo: grupo } });
 
-    // 6. Criptografa a senha do novo funcionário (Ygor)
+    // Criptografa a senha do novo funcionário 
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(senha, salt);
 
-    // 7. CRIAÇÃO DO USUÁRIO
+    // CRIAÇÃO DO USUÁRIO
     const novoUsuario = await db.Usuario.create({
       nome,
       sobrenome,
@@ -275,12 +207,6 @@ async function editarFuncionario(req, res) {
 }
  
 module.exports = {
-  
-    renderizarCadastrarGrupo,
-    criarGrupo,
-    renderizarListaGrupos,
-    editarGrupo,
-    excluirGrupo,
     renderizarCadastrarFuncionario,
     criarFuncionario,
     renderizarListaFuncionarios,

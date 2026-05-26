@@ -9,6 +9,11 @@ const sequelize = require('./config/connection');
 const db = require('./models');
 
 const mainRouter = require("./router/mainRouters");
+const { verificarPermissao } = require("./config/auth");
+const carregarNotificacoes = require("./services/notificacoes");
+const carregarNotificacoesComandas = require("./services/notificacoesComandas");
+
+
 
 app.use(express.json());
 
@@ -28,7 +33,14 @@ app.use(
     saveUninitialized: false,
   })
 );
+// Middleware de permissão DEPOIS da sessão
+app.use(verificarPermissao);
 
+//notificação de estoque navbar
+app.use(carregarNotificacoes);
+
+//notificação de pedidos navbar
+app.use(carregarNotificacoesComandas);
 
 app.use("/", mainRouter);
 

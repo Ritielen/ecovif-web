@@ -27,6 +27,28 @@ module.exports = {
         allowNull: false
       }
     });
+
+     await queryInterface.bulkInsert('grupos', [
+      {
+        nome_grupo: "Garçons",
+        descricao_grupo: "Responsável pela comanda.",
+        created_at: new Date(),
+        updated_at: new Date(),
+          },
+
+           {
+        nome_grupo: "Cozinha",
+        descricao_grupo: "Responsável pelos pedidos",
+        created_at: new Date(),
+        updated_at: new Date()
+          },
+          {
+        nome_grupo: "Caixa",
+        descricao_grupo: "Responsável pelo fechamento do caixa.",
+        created_at: new Date(),
+        updated_at: new Date()
+          },  
+    ]);
   }, 
 
   down: async (queryInterface, Sequelize) => {

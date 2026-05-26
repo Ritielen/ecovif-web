@@ -1,26 +1,96 @@
-const isGestor = async (req, res, next) => {
-    //  Verifica se o usuário logado é gestor
-    if (req.user && req.user.funcionario === 'gestor') {
+const rotasGarcons = [
+    "/comanda",
+    "/criarComanda",
+    "/editarComanda",
+    "/item-Comanda",
+    "/excluirComanda"
+];
+
+const rotasCozinha = [
+    "/pedidoCozinha",
+    "/admin/comanda"
+];
+
+const rotasCaixa = [
+    "/fecharConta",
+    "/removerTaxaServico",
+    "/removerTaxaCouvert",
+    "/finalizarVenda",
+    "/imprimir-venda"
+];
+
+// Rotas públicas
+const rotasPublicas = [
+    "/",
+    "/cadastro-gestor",
+    "/login",
+    "/recuperarSenha",
+    "/suporte",
+    "/token",
+    "/validar-token",
+    "/atualizarSenha",
+    "/enviar-suporte"
+];
+
+const verificarPermissao = (req, res, next) => {
+
+    // Remove parâmetros da URL
+    // Exemplo:
+    // /editarComanda/5 -> /editarComanda
+    const rotaAtual = "/" + req.path.split("/")[1];
+
+    // Permitir rotas públicas
+    if (rotasPublicas.includes(rotaAtual)) {
         return next();
     }
-    return res.status(403).json({ 
-        error: "Acesso negado. Apenas gestores podem realizar esta ação." 
-    });
+
+    // Verifica login
+    if (!req.session.usuarioId) {
+        return res.redirect("/login");
+    }
+
+    // Dados do usuário na sessão
+    const funcionario = req.session.usuarioFuncionario;
+    const grupo = req.session.usuarioGrupo;
+
+    // Gestor acessa tudo
+    if (funcionario === "gestor") {
+        return next();
+    }
+
+    // Funcionários
+    if (funcionario === "funcionario") {
+
+        // Grupo Garçons
+        if (
+            grupo === "Garçons" &&
+            rotasGarcons.includes(rotaAtual)
+        ) {
+            return next();
+        }
+
+        // Grupo Cozinha
+        if (
+            grupo === "Cozinha" &&
+            rotasCozinha.includes(rotaAtual)
+        ) {
+            return next();
+        }
+
+        // Grupo Caixa
+        if (
+            grupo === "Caixa" &&
+            rotasCaixa.includes(rotaAtual)
+        ) {
+            return next();
+        }
+
+    }
+
+    return res.status(403).send("Você não tem acesso a essa área.");
 };
 
-//  Middleware para bloquear cadastros indevidos via URL
-const bloquearCadastroFuncionario = (req, res, next) => {
-    // Se alguém tentar acessar rota de cadastro de funcionário sem estar logado
-    if (!req.user) {
-        return res.status(401).json({ error: "Não autorizado" });
-    }
-    
-    // Se não for gestor, bloqueia
-    if (req.user.funcionario !== 'gestor') {
-        return res.status(403).json({ 
-            error: "Apenas gestores podem criar funcionários" 
-        });
-    }
-    
-    next();
+
+module.exports = {
+    verificarPermissao
 };

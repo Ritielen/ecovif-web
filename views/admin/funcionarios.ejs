@@ -37,7 +37,11 @@
               <i class="fa-solid fa-users"></i> Funcionários
             </a>
           </li>
-
+          <li class="nav-item">
+            <a class="nav-link" href="/estoque">
+              <i class="fa-solid fa-boxes"></i> Estoque
+            </a>
+          </li>
           <li class="nav-item">
             <a class="nav-link" href="/suporte">
               <i class="fa-solid fa-headset"></i> Suporte
@@ -105,7 +109,7 @@
                 <% if (grupos && grupos.length> 0) { %>
                 <% grupos.forEach(function(grupo) { %>
                 <option value="<%= grupo.nome_grupo %>">
-                  <%= grupo.nome_grupo %>
+                  <%= grupo.nome_grupo %> - <%= grupo.descricao_grupo %>
                 </option>
                 <% }) %>
                 <% } else { %>

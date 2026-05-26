@@ -33,7 +33,27 @@
               <i class="fa-solid fa-user-shield"></i> Área do Gestor
             </a>
           </li>
-
+          <li class="nav-item dropdown position-relative">
+            <a class="nav-link" href="#" id="alertaDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fa-solid fa-bell"></i>
+              <% if (locals.totalComandasRecentes > 0) { %>
+              <span class="badge-alerta">
+                <%= locals.totalComandasRecentes %>
+              </span>
+              <% } %>
+            </a>
+            <div class="dropdown-menu dropdown-alerta">
+              <% if (locals.comandasRecentes && locals.comandasRecentes.length > 0) { %>
+              <% locals.comandasRecentes.forEach(comanda => { %>
+              <div class="alerta-item">
+                <span>Comanda #<%= comanda.id %></span> -
+                <strong><%= comanda.nome_cliente %></strong>
+              </div>
+              <% }) %>
+              <% } else { %>
+              <div class="alerta-item">Nenhuma comanda recente</div>
+              <% } %>
+            </div>
           <li class="nav-item">
             <a class="nav-link" href="/fecharConta">
               <i class="fa-solid fa-cash-register"></i> Fechar Conta
