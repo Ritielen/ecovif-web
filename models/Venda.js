@@ -36,7 +36,7 @@ const Venda = sequelizeconnect.define(
     },
     comanda_id: {
       type: DataTypes.INTEGER,
-      allowNull: false, 
+      allowNull: true, 
     },
     evento_id: {
       type: DataTypes.INTEGER,
@@ -44,7 +44,7 @@ const Venda = sequelizeconnect.define(
     },
     usuario_id: {
       type: DataTypes.INTEGER, 
-      allowNull: false,
+      allowNull: true,
     }
   },
   {
@@ -60,17 +60,34 @@ const Venda = sequelizeconnect.define(
 // ASSOCIAÇÕES DA VENDA
 Venda.associate = (models) => {
   Venda.belongsTo(models.Usuario, {
-    foreignKey: 'usuario_id',
-    as: 'usuario'
+    foreignKey: {
+      name: 'usuario_id',
+      allowNull: true
+    },
+    as: 'usuario',
+    onDelete: 'SET NULL',
+    onUpdate: 'CASCADE'
   });
   
+  //venda continua existindo sem a comanda
   Venda.belongsTo(models.Comanda, {
-    foreignKey: 'comanda_id',
-    as: 'comanda'
+    foreignKey: {
+      name: 'comanda_id',
+      allowNull: true
+    },
+    as: 'comanda',
+    onDelete: 'SET NULL',
+    onUpdate: 'CASCADE'
   });
+  //evento pode ser removido sem apagar vendas
   Venda.belongsTo(models.Evento, {
-    foreignKey: 'evento_id',
-    as: 'evento'
+    foreignKey: {
+      name: 'evento_id',
+      allowNull: true
+    },
+    as: 'evento',
+    onDelete: 'SET NULL',
+    onUpdate: 'CASCADE'
   });
 };
 

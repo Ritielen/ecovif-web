@@ -19,10 +19,22 @@ module.exports = {
         produto_id: {
              type: Sequelize.INTEGER,
            allowNull: false,
+           references: {
+            model: "produtos",
+            key: "id",
+           },
+           onDelete: "RESTRICT",
+             onUpdate: "CASCADE"
          },
           prato_id: {
              type: Sequelize.INTEGER,
            allowNull: false,
+           references: {
+            model: "pratos",
+            key: "id",
+           },
+           onDelete: "CASCADE",
+             onUpdate: "CASCADE"
          },
      created_at: {
         type: Sequelize.DATE,

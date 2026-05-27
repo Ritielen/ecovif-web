@@ -41,18 +41,43 @@ module.exports = {
       produto_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
+        references: {
+          model: "produtos",
+          key: "id",
+          onDelete: "RESTRICT",
+          onUpdate: "CASCADE"
+        },
       },
       usuario_id: {
         type: Sequelize.INTEGER,
-        allowNull: false,
+         allowNull: true,
+        references: {
+          model: "usuarios",
+          key: "id",
+        },
+        onDelete: "SET NULL",
+        onUpdate: "CASCADE",
       },
+      
       item_comanda_id: {
         type: Sequelize.INTEGER,
-        allowNull: true,
+         allowNull: true,
+        references: {
+          model: "itens_comanda",
+          key: "id",
+        },
+        onDelete: "SET NULL",
+        onUpdate: "CASCADE",
       },
       comanda_id: {
         type: Sequelize.INTEGER,
         allowNull: true,
+        references: {
+          model: "comandas",
+          key: "id",
+        },
+        onDelete: "SET NULL",
+        onUpdate: "CASCADE",
       },
 
       created_at: {

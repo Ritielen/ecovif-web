@@ -48,27 +48,51 @@ const ItemComanda = sequelizeconnect.define(
 // ASSOCIAÇÕES DO ITEMCOMANDA
 ItemComanda.associate = (models) => {
   ItemComanda.belongsTo(models.Comanda, {
-    foreignKey: 'comanda_id',
+    foreignKey: {
+      name: 'comanda_id',
+      allowNull: false
+    },
     as: 'comanda',
-    onDelete: 'CASCADE'
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
   });
  
   ItemComanda.belongsTo(models.Prato, {
-    foreignKey: 'prato_id',
-    as: 'prato'
+    foreignKey:  {
+      name: 'prato_id',
+      allowNull: true
+    },
+    as: 'prato',
+    onDelete: 'SET NULL',
+    onUpdate: 'CASCADE'
   });
   
   ItemComanda.belongsTo(models.Bebida, {
-    foreignKey: 'bebida_id',
-    as: 'bebida'
+    foreignKey: {
+      name: 'bebida_id',
+      allowNull: true
+    },
+    as: 'bebida',
+    onDelete: 'SET NULL',
+    onUpdate: 'CASCADE'
   });
+
+  //produto pode ser removido ou desativado
   ItemComanda.belongsTo(models.Produto, { 
-    foreignKey: 'produto_id', 
-    as: 'produto' 
+    foreignKey: {
+      name: 'produto_id',
+      allowNull: true
+    },
+    as: 'produto',
+    onDelete: 'SET NULL',
+    onUpdate: 'CASCADE'
   });
+  //movimentações são histórico
 ItemComanda.hasMany(models.MovimentacaoProduto, { 
     foreignKey: 'item_comanda_id', 
-    as: 'movimentacoes' 
+    as: 'movimentacoes',
+    onDelete: 'SET NULL',
+    hooks: true
   });
 };
 module.exports = ItemComanda;

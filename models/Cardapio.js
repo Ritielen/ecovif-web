@@ -11,7 +11,7 @@ const Cardapio = sequelizeconnect.define(
     },
     usuario_id: { 
         type: DataTypes.INTEGER, 
-        allowNull: false,
+        allowNull: true,
     },
    
   },
@@ -27,18 +27,27 @@ const Cardapio = sequelizeconnect.define(
 // ASSOCIAÇÕES DO CARDAPIO
 Cardapio.associate = (models) => {
   Cardapio.belongsTo(models.Usuario, {
-  foreignKey: 'usuario_id',
-  as: 'usuario'
-});
+  foreignKey: {
+      name: 'usuario_id',
+      allowNull: true
+    },
+    as: 'usuario',
+    onDelete: 'SET NULL',
+    onUpdate: 'CASCADE'
+  });
 
   Cardapio.hasMany(models.Prato, {
     foreignKey: 'cardapio_id',
-    as: 'pratos'
+    as: 'pratos',
+     onDelete: 'CASCADE',
+    hooks: true
   });
 
   Cardapio.hasMany(models.Bebida, {
     foreignKey: 'cardapio_id',
-    as: 'bebidas'
+    as: 'bebidas',
+     onDelete: 'CASCADE',
+    hooks: true
   });
 };
 module.exports = Cardapio;

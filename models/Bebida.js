@@ -25,7 +25,7 @@ const Bebida = sequelizeconnect.define(
   },
   usuario_id: {
     type: DataTypes.INTEGER,
-    allowNull: false,
+    allowNull: true,
   }
    
   },
@@ -41,18 +41,30 @@ const Bebida = sequelizeconnect.define(
 // ASSOCIAÇÕES DA BEBIDA
 Bebida.associate = (models) => {
   Bebida.belongsTo(models.Usuario, {
-    foreignKey: 'usuario_id',
-    as: 'usuario'
+    foreignKey: {
+      name: 'usuario_id',
+      allowNull: true
+    },
+    as: 'usuario',
+    onDelete: 'SET NULL',
+    onUpdate: 'CASCADE'
   });
 
   Bebida.belongsTo(models.Cardapio, {
-    foreignKey: 'cardapio_id',
-    as: 'cardapio'
+    foreignKey: {
+      name: 'cardapio_id',
+      allowNull: false
+    },
+    as: 'cardapio',
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
   });
-  // NOVA ASSOCIAÇÃO
+  
   Bebida.belongsTo(models.Produto, {
     foreignKey: 'produto_id',
-    as: 'produto'
+    as: 'produto',
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE"
   });
 };
 

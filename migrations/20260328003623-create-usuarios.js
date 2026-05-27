@@ -1,72 +1,74 @@
-'use strict';
+"use strict";
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('usuarios', {
+    await queryInterface.createTable("usuarios", {
       id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
-        primaryKey: true
+        primaryKey: true,
       },
       nome: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
       },
       sobrenome: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
       },
       telefone: {
         type: Sequelize.STRING,
-        allowNull: true
+        allowNull: true,
       },
       email: {
         type: Sequelize.STRING,
         allowNull: false,
-        unique: true
+        unique: true,
       },
       senha: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
       },
       funcionario: {
-        type: Sequelize.ENUM('gestor', 'funcionario'),
+        type: Sequelize.ENUM("gestor", "funcionario"),
         allowNull: false,
-        defaultValue: 'funcionario'
+        defaultValue: "funcionario",
       },
       criado_por: {
         type: Sequelize.INTEGER,
         allowNull: true,
         references: {
-          model: 'usuarios',
-          key: 'id'
-        }
+          model: "usuarios",
+          key: "id",
+        },
       },
       admin: {
         type: Sequelize.BOOLEAN,
         allowNull: false,
-        defaultValue: false
+        defaultValue: false,
       },
-      grupo_id : {
+      grupo_id: {
         type: Sequelize.INTEGER,
         allowNull: true,
         references: {
-          model: 'grupos',
-          key: 'id'
-        }
+          model: "grupos",
+          key: "id",
+        },
+        onDelete: "SET NULL",
+        onUpdate: "CASCADE",
       },
       created_at: {
         type: Sequelize.DATE,
-        allowNull: false
+        allowNull: false,
       },
       updated_at: {
         type: Sequelize.DATE,
-        allowNull: false
-      }
+        allowNull: false,
+      },
     });
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('usuarios');
-  }
+    await queryInterface.dropTable("usuarios");
+  },
 };

@@ -31,14 +31,32 @@ module.exports = {
       prato_id: {
         type: Sequelize.INTEGER,
         allowNull: true,
+        references: {
+          model: "pratos",
+          key: "id",
+        },
+        onDelete: "SET NULL",
+        onUpdate: "CASCADE",
       },
       bebida_id: {
         type: Sequelize.INTEGER,
         allowNull: true,
+        references: {
+          model: "bebidas",
+          key: "id",
+        },
+        onDelete: "SET NULL",
+        onUpdate: "CASCADE",
       },
       produto_id: {
         type: Sequelize.INTEGER,
         allowNull: true,
+        references: {
+          model: "produtos",
+          key: "id",
+        },
+        onDelete: "SET NULL",
+        onUpdate: "CASCADE",
       },
       created_at: {
         type: Sequelize.DATE,

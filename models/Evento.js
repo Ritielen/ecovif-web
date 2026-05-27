@@ -37,7 +37,7 @@ const Evento = sequelizeconnect.define(
     },
     usuario_id: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
     },
   },
   {
@@ -52,12 +52,19 @@ const Evento = sequelizeconnect.define(
 // ASSOCIAÇÕES DO EVENTO
 Evento.associate = (models) => {
   Evento.belongsTo(models.Usuario, {
-    foreignKey: "usuario_id",
-    as: "usuario",
+    foreignKey:  {
+      name: 'usuario_id',
+      allowNull: true
+    },
+    as: 'usuario',
+    onDelete: 'SET NULL',
+    onUpdate: 'CASCADE'
   });
   Evento.hasMany(models.Venda, {
     foreignKey: 'evento_id',
-    as: 'vendas'
+    as: 'vendas',
+    onDelete: 'SET NULL',
+    hooks: true
   });
 };
 module.exports = Evento;

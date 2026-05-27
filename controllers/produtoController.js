@@ -2,7 +2,7 @@ const db = require("../models");
 const passport = require('../config/passport');
 const { sendMail, sendSupportContact } = require("../config/mailer");
 const {Op} = require("sequelize");
-const { converterParaBase } = require("../services/estoqueService");
+const { converterParaBase, } = require("../services/estoqueService");
 
  async function renderizarEstoque(req, res) {
     try {
@@ -50,6 +50,11 @@ async function cadastrarProduto(req, res) {
   }
 
   //normalização de valores
+
+  function normalizeFloat(value) {
+  if (!value) return 0;
+  return parseFloat(value.toString().replace(',', '.'));
+}
 
 const qtdOriginal = quantidade ? normalizeFloat(quantidade) : 0;
 

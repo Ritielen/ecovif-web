@@ -40,14 +40,24 @@ const Ingrediente = sequelizeconnect.define(
 Ingrediente.associate = (models) => {
   // Ingrediente pertence a um Produto
   Ingrediente.belongsTo(models.Produto, {
-    foreignKey: 'produto_id',
-    as: 'produto'
+    foreignKey:  {
+      name: 'produto_id',
+      allowNull: false
+    },
+    as: 'produto',
+     onDelete: "RESTRICT",
+    onUpdate: "CASCADE"
   });
 
   // Ingrediente pertence a um Prato
   Ingrediente.belongsTo(models.Prato, {
-    foreignKey: 'prato_id',
-    as: 'prato'
+    foreignKey:  {
+      name: 'prato_id',
+      allowNull: false
+    },
+    as: 'prato',
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
   });
 };
 

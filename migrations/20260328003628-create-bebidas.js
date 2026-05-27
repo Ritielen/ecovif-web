@@ -17,15 +17,33 @@ module.exports = {
         produto_id: {
             type: Sequelize.INTEGER,
             allowNull: false,
+            references: {
+              model:"produtos",
+              key: "id",
+            },
+            onDelete: "CASCADE",
+            onUpdate: "CASCADE"
           },
           cardapio_id: {
               type: Sequelize.INTEGER,
             allowNull: false,
+            references: {
+              model:"cardapio",
+              key: "id",
+            },
+            onDelete: "CASCADE",
+            onUpdate: "CASCADE"
           },
             usuario_id: {
               type: Sequelize.INTEGER,
-            allowNull: false,
-          },
+            allowNull: true,
+        references: {
+          model: "usuarios",
+          key: "id",
+        },
+        onDelete: "SET NULL",
+        onUpdate: "CASCADE",
+      },
      created_at: {
         type: Sequelize.DATE,
         allowNull: false,

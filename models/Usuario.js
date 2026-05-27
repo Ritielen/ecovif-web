@@ -73,37 +73,53 @@ const Usuario = sequelizeconnect.define(
 // Associações
 Usuario.associate = (models) => {
   Usuario.belongsTo(models.Grupo, {
-    foreignKey: 'grupo_id',
-    as: 'grupo'
+    foreignKey: {
+      name: 'grupo_id',
+      allowNull: true
+    },
+    as: 'grupo',
+    onDelete: 'SET NULL',
+    onUpdate: 'CASCADE'
   });
 
   Usuario.hasMany(models.Usuario, {   
     foreignKey: 'criado_por',
-    as: 'subordinados'
+    as: 'subordinados',
+    onDelete: 'SET NULL',
+    hooks: true
   });
 
   Usuario.belongsTo(models.Usuario, {
     foreignKey: 'criado_por',
-    as: 'Criador'
+    as: 'criador',
+    onDelete: 'SET NULL',
+    onUpdate: 'CASCADE'
   });
 
   Usuario.hasMany(models.Produto, {
     foreignKey: 'usuario_id',
-    as: 'produtos'
+    as: 'produtos',
+    onDelete: 'SET NULL',
+    hooks: true
   });
   Usuario.hasMany(models.MovimentacaoProduto, {
     foreignKey: 'usuario_id',
-    as: 'movimentacoes_produto'
+    as: 'movimentacoes_produto',
+    onDelete: 'SET NULL',
+    hooks: true
   });
   Usuario.hasOne(models.Cardapio, {
   foreignKey: 'usuario_id',
-  as: 'cardapio'
+  as: 'cardapio',
+   onDelete: 'SET NULL',
+    hooks: true
 });
-
 
   Usuario.hasMany(models.Token, {
     foreignKey: 'usuario_id',
-    as: 'tokens'
+    as: 'tokens',
+     onDelete: 'CASCADE',
+    hooks: true
   });
 };
 

@@ -57,7 +57,7 @@ const RelatorioMensal = sequelize.define(
 
     usuario_id: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
     },
    
   },
@@ -80,8 +80,13 @@ const RelatorioMensal = sequelize.define(
 // ASSOCIAÇÕES
 RelatorioMensal.associate = (models) => {
   RelatorioMensal.belongsTo(models.Usuario, {
-    foreignKey: "usuario_id",
-    as: "usuario",
+    foreignKey:  {
+      name: 'usuario_id',
+      allowNull: true
+    },
+    as: 'usuario',
+    onDelete: 'SET NULL',
+    onUpdate: 'CASCADE'
   });
  
 };

@@ -72,7 +72,7 @@ const Produto = sequelizeconnect.define(
      
     usuario_id: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
     },
   },
   {
@@ -88,22 +88,36 @@ const Produto = sequelizeconnect.define(
 
 // ASSOCIAÇÕES DO PRODUTO
 Produto.associate = (models) => {
+   // usuário que cadastrou o produto
   Produto.belongsTo(models.Usuario, {
-    foreignKey: "usuario_id",
+   foreignKey: {
+      name: "usuario_id",
+      allowNull: true
+    },
     as: "usuario",
+    onDelete: "SET NULL",
+    onUpdate: "CASCADE"
   });
+  // ingredientes dos pratos
   Produto.hasMany(models.Ingrediente, {
     foreignKey: "produto_id",
     as: "ingredientes",
+     onDelete: "RESTRICT",
+    onUpdate: "CASCADE"
   });
-  // associate do movimentação produto
+  // histórico de estoque
   Produto.hasMany(models.MovimentacaoProduto, {
     foreignKey: "produto_id",
     as: "movimentacoes",
+    onDelete: "RESTRICT",
+    onUpdate: "CASCADE"
   });
+  // bebida depende do produto
   Produto.hasMany(models.Bebida, {
     foreignKey: "produto_id",
     as: "bebidas",
+     onDelete: "CASCADE",
+    onUpdate: "CASCADE"
   });
   Produto.belongsToMany(models.Prato, {
     through: models.Ingrediente,

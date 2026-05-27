@@ -90,7 +90,7 @@ async function renderizarListaFuncionarios(req, res) {
         },
         {
           model: db.Usuario, // Relacionamento com a própria tabela de usuários
-          as: 'Criador',     // apelido definido no Model
+          as: 'criador',     // apelido definido no Model
         }
       ],
       order: [['id', 'DESC']]

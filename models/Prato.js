@@ -34,7 +34,7 @@ const Prato = sequelizeconnect.define(
   },
   usuario_id: {
     type: DataTypes.INTEGER,
-    allowNull: false,
+    allowNull: true,
   }
   },
   {
@@ -46,21 +46,34 @@ const Prato = sequelizeconnect.define(
   }
 );
 
+// associações prato
 Prato.associate = (models) => {
   Prato.belongsTo(models.Usuario, {
-    foreignKey: 'usuario_id',
-    as: 'usuario'
+    foreignKey: {
+      name: 'usuario_id',
+      allowNull: true
+    },
+    as: 'usuario',
+    onDelete: 'SET NULL',
+    onUpdate: 'CASCADE'
   });
+    
 
  Prato.belongsTo(models.Cardapio, {
-    foreignKey: 'cardapio_id',
-    as: 'cardapio'
+    foreignKey: {
+      name: 'cardapio_id',
+      allowNull: false
+    },
+    as: 'cardapio',
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
   });
 
-  
   Prato.hasMany(models.Ingrediente, {
     foreignKey: 'prato_id',
-    as: 'ingredientes'
+    as: 'ingredientes',
+    onDelete: 'CASCADE',
+    hooks: true
   });
 };
 

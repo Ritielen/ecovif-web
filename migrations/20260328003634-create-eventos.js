@@ -28,7 +28,7 @@ module.exports = {
       status_evento: {
         type: Sequelize.ENUM("ativo", "cancelado"),
         allowNull: true,
-        defaultValue: "ativo"
+        defaultValue: "ativo",
       },
       valor_couvert: {
         type: Sequelize.DECIMAL(10, 2),
@@ -37,7 +37,13 @@ module.exports = {
       },
       usuario_id: {
         type: Sequelize.INTEGER,
-        allowNull: false,
+        allowNull: true,
+        references: {
+          model: "usuarios",
+          key: "id",
+        },
+        onDelete: "SET NULL",
+        onUpdate: "CASCADE",
       },
       created_at: {
         type: Sequelize.DATE,

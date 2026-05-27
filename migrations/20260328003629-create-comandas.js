@@ -32,7 +32,14 @@ module.exports = {
       },
       usuario_id: {
         type: Sequelize.INTEGER,
-        allowNull: false,
+         allowNull: true,
+        references: {
+          model: "usuarios",
+          key: "id",
+        },
+        onDelete: "SET NULL",
+        onUpdate: "CASCADE",
+      
       },
       data: {
         type: Sequelize.DATE,

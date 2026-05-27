@@ -26,13 +26,26 @@ module.exports = {
           defaultValue: 0.0,
         },
         cardapio_id: {
-          type: Sequelize.INTEGER,
+        type: Sequelize.INTEGER,
         allowNull: false,
+         references: {
+          model: "cardapio",
+          key: "id",
+        },
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
     },
        usuario_id: {
           type: Sequelize.INTEGER,
         allowNull: true, 
+        references: {
+          model: "usuarios",
+          key: "id",
+        },
+        onDelete: "SET NULL",
+        onUpdate: "CASCADE",
       },
+      
      
       
      created_at: {

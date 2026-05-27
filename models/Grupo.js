@@ -28,9 +28,15 @@ const Grupo = sequelizeconnect.define("Grupo", {
 // ASSOCIAÇÕES DO GRUPO
 Grupo.associate = (models) => {
   Grupo.hasMany(models.Usuario, {
-    foreignKey: 'grupo_id',
-    as: 'usuarios'
+    foreignKey: {
+      name: 'grupo_id',
+      allowNull: true
+    },
+    as: 'usuarios',
+    onDelete: 'SET NULL',
+    onUpdate: 'CASCADE'
   });
+
 };
 
 module.exports = Grupo;

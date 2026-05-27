@@ -33,7 +33,7 @@ const Comanda = sequelizeconnect.define(
          },
        usuario_id: {
       type: DataTypes.INTEGER,
-    allowNull: false,
+    allowNull: true,
   },
     data: { 
     type: DataTypes.DATE,
@@ -49,21 +49,30 @@ const Comanda = sequelizeconnect.define(
     }
 );
 
+// associações comanda
 Comanda.associate = (models) => {
   Comanda.belongsTo(models.Usuario, {
-    foreignKey: 'usuario_id',
-    as: 'usuario'
+    foreignKey: {
+      name: 'usuario_id',
+      allowNull: true
+    },
+    as: 'usuario',
+    onDelete: 'SET NULL',
+    onUpdate: 'CASCADE'
   });
   
-  // modelo ItemComanda 
+  // modelo Itens pertencem a Comanda 
   Comanda.hasMany(models.ItemComanda, {
     foreignKey: 'comanda_id',
     as: 'itens',
-    onDelete: 'CASCADE'  //serve para excluir os itens junto com a comanda.
+    onDelete: 'CASCADE',  //serve para excluir os itens junto com a comanda.
+   hooks: true
   });
   Comanda.hasMany(models.MovimentacaoProduto, {
   foreignKey: "comanda_id",
-  as: "movimentacoes"
+  as: "movimentacoes",
+  onDelete: 'SET NULL',
+    hooks: true
 });
 };
 module.exports = Comanda;

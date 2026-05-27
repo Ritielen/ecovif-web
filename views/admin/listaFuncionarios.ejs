@@ -123,8 +123,8 @@
                   <td>
                     <%= funcionario.funcionario %>
                   </td>
-                  <td><% if (funcionario.Criador) { %>
-                    <%= funcionario.criado_por %> - <%= funcionario.Criador.nome %> - <%= funcionario.Criador.sobrenome %>
+                  <td><% if (funcionario.criador) { %>
+                    <%= funcionario.criado_por %> - <%= funcionario.criador.nome %> - <%= funcionario.criador.sobrenome %>
                     <% } else { %>
                     <span class="badge bg-primary">Gestor </span>
                     <% } %>
