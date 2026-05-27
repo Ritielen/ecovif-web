@@ -63,6 +63,16 @@ module.exports = {
         onDelete: "SET NULL",
         onUpdate: "CASCADE",
       },
+      restaurante_id: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+        references: {
+          model: "restaurante",
+          key: "id",
+        },
+        onDelete: "SET NULL",
+        onUpdate: "CASCADE",
+      },
       created_at: {
         type: Sequelize.DATE,
         allowNull: false,

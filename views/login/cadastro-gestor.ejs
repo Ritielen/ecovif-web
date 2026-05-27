@@ -85,6 +85,15 @@
               <option value="false">NÃO</option>
             </select>
           </div>
+          <div class="form-group">
+              <label for="admin" class="form-label">Selecione o Restaurante para criar sua conta.</label>
+              <select class="form-select" name="restaurante" required>
+                <option value="">Selecione o Restaurante...</option>
+                <option value="<%= restaurante.nome %>">
+                  <%= restaurante.nome %> - <%= restaurante.descricao %>
+                </option>
+              </select>
+            </div>
           <!--Botão cadastrar-->
           <button type="submit" class="btn-login">Cadastrar</button>
         </form>

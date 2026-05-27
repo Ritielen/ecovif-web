@@ -58,6 +58,14 @@ const Usuario = sequelizeconnect.define(
         model: 'grupos',
         key: 'id'
       }
+    },
+    restaurante_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: 'restaurante',
+        key: 'id'
+      }
     }
     
   },
@@ -81,6 +89,16 @@ Usuario.associate = (models) => {
     onDelete: 'SET NULL',
     onUpdate: 'CASCADE'
   });
+
+  Usuario.belongsTo(models.Restaurante, {
+  foreignKey: {
+    name: 'restaurante_id',
+    allowNull: true
+  },
+  as: 'restaurante',
+  onDelete: 'SET NULL',
+  onUpdate: 'CASCADE'
+});
 
   Usuario.hasMany(models.Usuario, {   
     foreignKey: 'criado_por',

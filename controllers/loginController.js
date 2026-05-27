@@ -14,7 +14,10 @@ async function renderizarLogin(req, res) {
 async function renderizarCadastroGestor(req, res) {
   console.log("Rota de cadastro acessada");
   try {
-    res.render("login/cadastro-gestor");
+    const restaurante = await db.Restaurante.findOne({ order: [['nome', 'ASC']] });
+    res.render("login/cadastro-gestor", {
+      restaurante
+    });
   } catch (erro) {
     console.error("Erro ao renderizar:", erro);
   }
@@ -43,45 +46,64 @@ async function renderizarCadastroGestor(req, res) {
 
  // Ações para O Gestor (Público ou primeiro acesso)
 async function criarGestor(req, res) {
-  const { nome, sobrenome, telefone, email, senha, admin } = req.body;
 
-  if (!nome || !sobrenome || !telefone || !email || !senha) {
-    return res.render("login/cadastro-gestor", { msg: "Todos os campos são obrigatórios" });
-  }
-
-  if (senha.length < 6) {
-    return res.render("login/cadastro-gestor", { msg: "A senha deve ter no mínimo 6 caracteres!" });
-  }
+  const {
+    nome,
+    sobrenome,
+    telefone,
+    email,
+    senha,
+    admin,
+    restaurante
+  } = req.body;
 
   try {
-    const usuarioExistente = await db.Usuario.findOne({ where: { email } });
+
+    const restauranteData = await db.Restaurante.findOne({ order: [['nome', 'ASC']] });
+
+    const usuarioExistente = await db.Usuario.findOne({
+      where: { email }
+    });
+
     if (usuarioExistente) {
-      
-      return res.render("login/cadastro-gestor", { msg: "Este email já está cadastrado" });
+      return res.render("login/cadastro-gestor", {
+        restaurante: restauranteData,
+        msg: "Este email já está cadastrado"
+      });
     }
+
+    // busca restaurante pelo nome enviado do formulário
+    const restauranteEncontrado = await db.Restaurante.findOne({
+      where: { nome: restaurante }
+    });
 
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(senha, salt);
 
-    // Criação do gestor
     const novoGestor = await db.Usuario.create({
       nome,
       sobrenome,
       telefone,
       email,
       senha: hash,
-      funcionario: 'gestor',             // sempre gestor nesta rota
-      admin: admin === "true"     
+      funcionario: 'gestor',
+      admin: admin === "true",
+      restaurante_id: restauranteEncontrado
+        ? restauranteEncontrado.id
+        : null,
     });
-    // Criação automática do cardápio associado ao gestor
-await db.Cardapio.create({
-  usuario_id: novoGestor.id
-});
+
+    await db.Cardapio.create({
+      usuario_id: novoGestor.id,
+      restaurante_id: restauranteEncontrado
+        ? restauranteEncontrado.id
+        : null,
+    });
 
     res.redirect("/login");
+
   } catch (error) {
-    console.error("Erro ao cadastrar gestor:", error);
-    res.render("login/cadastro-gestor", { msg: "Erro interno. Tente novamente." });
+    console.error(error);
   }
 }
 
@@ -96,6 +118,10 @@ async function logarUsuario(req, res) {
         {
           model: db.Grupo,
           as: "grupo"
+        },
+         {
+          model: db.Restaurante,
+          as: "restaurante"
         }
       ]
     });
@@ -120,6 +146,7 @@ async function logarUsuario(req, res) {
     req.session.usuarioEmail = usuario.email;
     req.session.usuarioFuncionario = usuario.funcionario;
     req.session.usuarioGrupo = usuario.grupo?.nome_grupo;
+    req.session.usuarioRestaurante = usuario.restaurante?.nome;
 
     // Definir rota de redirecionamento
     let redirecionarPara = "/";

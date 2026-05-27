@@ -79,10 +79,21 @@ const tamanhoFinal = tamanho ? normalizeFloat(tamanho) : 0;  //inteiro
       return res.redirect("/login?erro=Faça login para continuar");
     }
     const usuarioId = req.session.usuarioId;
-    const usuarioRegistrado = await db.Usuario.findByPk(usuarioId);
+
+    
+     // Busca o usuário com o include do restaurante
+    const usuarioRegistrado = await db.Usuario.findByPk(usuarioId, {
+      include: ['restaurante'] // Inclui os dados do restaurante
+    });
+    
     if (!usuarioRegistrado) {
       return res.redirect("/login?erro=Usuário não encontrado");
     }
+      // Pega o restaurante_id do usuário logado
+    const restauranteId = usuarioRegistrado.restaurante_id;
+
+       console.log("Usuário:", usuarioRegistrado.nome);
+    console.log("Restaurante ID:", restauranteId);
 
     // Criação do produto
     await db.Produto.create({
@@ -100,6 +111,7 @@ const tamanhoFinal = tamanho ? normalizeFloat(tamanho) : 0;  //inteiro
       valor_compra: valorCompraLimpo, 
       tamanho: tamanhoFinal,
       usuario_id: usuarioRegistrado.id,
+      restaurante_id: restauranteId, 
     });
     return res.redirect("/estoque?msg=Produto cadastrado com sucesso!");
   } catch (error) {

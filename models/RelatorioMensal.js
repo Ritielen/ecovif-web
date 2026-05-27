@@ -59,6 +59,14 @@ const RelatorioMensal = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: true,
     },
+    restaurante_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: 'restaurante',
+        key: 'id'
+      }
+    }
    
   },
   {
@@ -85,6 +93,15 @@ RelatorioMensal.associate = (models) => {
       allowNull: true
     },
     as: 'usuario',
+    onDelete: 'SET NULL',
+    onUpdate: 'CASCADE'
+  });
+  RelatorioMensal.belongsTo(models.Restaurante, {
+    foreignKey:  {
+      name: 'restaurante_id',
+      allowNull: true
+    },
+    as: 'restaurante',
     onDelete: 'SET NULL',
     onUpdate: 'CASCADE'
   });

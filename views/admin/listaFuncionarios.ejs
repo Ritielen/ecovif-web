@@ -89,6 +89,7 @@
                   <th>Tipo Funcionario</th>
                   <th>Criado Pelo Usuário</th>
                   <th>Admin</th>
+                  <th>Restaurante</th>
                   <th>Ações</th>
                 </tr>
               </thead>
@@ -131,6 +132,9 @@
                   </td>
                   <td>
                     <%= funcionario.admin ? "Sim" : "Não" %>
+                  </td>
+                  <td>
+                    <%= funcionario.restaurante.nome%>
                   </td>
                   <td>
                     <a href="/admin/funcionario/editar/<%= funcionario.id %>" class="btn-editar" role="button">

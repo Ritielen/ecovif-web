@@ -2,79 +2,110 @@ const bcrypt = require("bcrypt");
 const db = require("../models");
 const passport = require('../config/passport');
 const { sendMail, sendSupportContact } = require("../config/mailer");
-const {Op} = require("sequelize");
+const {Op, where} = require("sequelize");
 
 
 // Função para renderizar tela de CADASTRO de funcionário
 async function renderizarCadastrarFuncionario(req, res) {
   const grupos = await db.Grupo.findAll({ order: [['nome_grupo', 'ASC']] });
-  res.render("admin/funcionarios", { grupos,
+  const restauranteData = await db.Restaurante.findOne({ order: [['nome', 'ASC']] });
+  
+  res.render("admin/funcionarios", { 
+    grupos, 
+    restaurante: restauranteData,
     msg: req.query.msg,
-         error: req.query.error
-   });
+    error: req.query.error
+  });
 }
 
-//criar funcionario
+
+
+// Função para renderizar tela de CADASTRO de funcionário
 async function criarFuncionario(req, res) {
-  
-  const { nome, sobrenome, telefone, email, senha, grupo } = req.body;
+  const { nome, sobrenome, telefone, email, senha, grupo, restaurante } = req.body;
 
   try {
-    // VERIFICAÇÃO DE SESSÃO (Quem está criando?)
     if (!req.session || !req.session.usuarioId) {
       return res.redirect("/login?erro=Faça login para continuar");
     }
 
-    // O ID  (quem está logado) vem da sessão
     const criadoPorId = req.session.usuarioId;
 
-    // Validações básicas de preenchimento
-    if (!nome || !sobrenome || !telefone || !email || !senha || !grupo) {
+    // Validação
+    if (!nome || !sobrenome || !telefone || !email || !senha || !grupo || !restaurante) {
       const grupos = await db.Grupo.findAll({ order: [['nome_grupo', 'ASC']] });
+      const restauranteData = await db.Restaurante.findOne({ order: [['nome', 'ASC']] });
       return res.render("admin/funcionarios", { 
         grupos, 
+        restaurante: restauranteData, 
         msg: "Todos os campos são obrigatórios" 
       });
     }
 
-    // Verifica se o e-mail já existe
+    // Verifica email
     const usuarioExistente = await db.Usuario.findOne({ where: { email } });
     if (usuarioExistente) {
       const grupos = await db.Grupo.findAll({ order: [['nome_grupo', 'ASC']] });
+      const restauranteData = await db.Restaurante.findOne({ order: [['nome', 'ASC']] });
       return res.render("admin/funcionarios", { 
         grupos, 
+        restaurante: restauranteData, 
         msg: "Este email já está cadastrado" 
       });
     }
 
-    // Busca o grupo selecionado
-    const grupoEncontrado = await db.Grupo.findOne({ where: { nome_grupo: grupo } });
+    // BUSCA DIRETO POR ID (pois o formulário envia o ID)
+    const grupoEncontrado = await db.Grupo.findByPk(grupo);
+    if (!grupoEncontrado) {
+      const grupos = await db.Grupo.findAll({ order: [['nome_grupo', 'ASC']] });
+      const restauranteData = await db.Restaurante.findOne({ order: [['nome', 'ASC']] });
+      return res.render("admin/funcionarios", { 
+        grupos, 
+        restaurante: restauranteData, 
+        msg: "Grupo não encontrado" 
+      });
+    }
 
-    // Criptografa a senha do novo funcionário 
+    // BUSCA RESTAURANTE POR ID
+    const restauranteEncontrado = await db.Restaurante.findByPk(restaurante);
+    if (!restauranteEncontrado) {
+      const grupos = await db.Grupo.findAll({ order: [['nome_grupo', 'ASC']] });
+      const restauranteData = await db.Restaurante.findOne({ order: [['nome', 'ASC']] });
+      return res.render("admin/funcionarios", { 
+        grupos, 
+        restaurante: restauranteData, 
+        msg: "Restaurante não encontrado" 
+      });
+    }
+
+    // Criptografa senha
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(senha, salt);
 
-    // CRIAÇÃO DO USUÁRIO
+    // Cria o usuário
     const novoUsuario = await db.Usuario.create({
       nome,
       sobrenome,
       telefone,
       email,
       senha: hash,
-      role: 'funcionario',
-      grupo_id: grupoEncontrado ? grupoEncontrado.id : null,
-      criado_por: criadoPorId 
+      funcionario: 'funcionario',
+      grupo_id: grupoEncontrado.id,
+      restaurante_id: restauranteEncontrado.id,
+      criado_por: criadoPorId
     });
 
-    console.log(` Funcionário ${nome} criado com sucesso por ID: ${criadoPorId}`);
+    console.log("Funcionário criado com sucesso! ID:", novoUsuario.id);
     res.redirect("/listaFuncionarios?sucesso=true");
 
   } catch (error) {
-    console.error("Erro ao cadastrar funcionário:", error);
+    console.error("Erro ao cadastrar funcionário:", error.message);
     const grupos = await db.Grupo.findAll({ order: [['nome_grupo', 'ASC']] });
+    const restauranteData = await db.Restaurante.findOne({ order: [['nome', 'ASC']] });
     res.render("admin/funcionarios", { 
       grupos, 
-      msg: "Erro interno no servidor." 
+      restaurante: restauranteData, 
+      msg: "Erro interno: " + error.message 
     });
   }
 }
@@ -87,6 +118,10 @@ async function renderizarListaFuncionarios(req, res) {
         {
           model: db.Grupo,
           as: 'grupo',
+        },
+         {
+          model: db.Restaurante,
+          as: 'restaurante',
         },
         {
           model: db.Usuario, // Relacionamento com a própria tabela de usuários
@@ -126,17 +161,22 @@ async function renderizarEditarFuncionario(req, res) {
         model: db.Grupo,
         as: 'grupo',
         attributes: ['id', 'nome_grupo']
+      }],
+      include: [{
+        model: db.Restaurante,
+        as: 'restaurante',
+        attributes: ['id', 'nome']
       }]
     });
     if (!funcionario) {
       return res.redirect("/listaFuncionarios?erro=Funcionário não encontrado");
     }    
-    const grupos = await db.Grupo.findAll({ 
-      order: [['nome_grupo', 'ASC']] 
-    });    
+    const grupos = await db.Grupo.findAll({ order: [['nome_grupo', 'ASC']] });  
+    const restaurante = await db.Restaurante.findAll({ order: [['nome', 'ASC']] });  
     res.render("admin/editarFuncionario", { 
       funcionario, 
       grupos,
+      restaurante,
       msg: req.query.msg || null
     });
   } catch (error) {

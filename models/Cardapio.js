@@ -13,6 +13,14 @@ const Cardapio = sequelizeconnect.define(
         type: DataTypes.INTEGER, 
         allowNull: true,
     },
+    restaurante_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: 'restaurante',
+        key: 'id'
+      }
+    }
    
   },
   {
@@ -32,6 +40,15 @@ Cardapio.associate = (models) => {
       allowNull: true
     },
     as: 'usuario',
+    onDelete: 'SET NULL',
+    onUpdate: 'CASCADE'
+  });
+  Cardapio.belongsTo(models.Restaurante, {
+  foreignKey: {
+      name: 'restaurante_id',
+      allowNull: true
+    },
+    as: 'restaurante',
     onDelete: 'SET NULL',
     onUpdate: 'CASCADE'
   });

@@ -106,7 +106,8 @@
 
                 <% if (grupos && grupos.length> 0) { %>
                 <% grupos.forEach(function(grupo) { %>
-                <option value="<%= grupo.nome_grupo %>">
+                  <option value="<%= grupo.id %>">
+                
                   <%= grupo.nome_grupo %> - <%= grupo.descricao_grupo %>
                 </option>
                 <% }) %>
@@ -114,6 +115,18 @@
                 <%# Se a lista estiver vazia ou nula, mostra esta opção %>
                 <option value="" disabled selected>Nenhum grupo cadastrado</option>
                 <% } %>
+              </select>
+            </div>
+             <div class="grupo-formulario">
+              <label class="label-formulario">Selecione o Restaurante para registro das funcionalidades.</label>
+              <select class="controle-formulario" name="restaurante" required>
+                <option value="">Selecione o Restaurante...</option>
+
+                <% if (restaurante) { %>
+    <option value="<%= restaurante.id %>">
+      <%= restaurante.nome %> - <%= restaurante.descricao %>
+    </option>
+  <% } %>
               </select>
             </div>
             <button type="submit" class="btn-login w-100">

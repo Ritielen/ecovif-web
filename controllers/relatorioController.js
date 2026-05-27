@@ -73,6 +73,22 @@ async function obterDadosDiarios(req, res) {
     const usuarioId = verificarSessao(req, res);
     if (!usuarioId) return;
 
+    // ✅ Busca o usuário para pegar o restaurante_id
+    const usuario = await db.Usuario.findByPk(usuarioId);
+    if (!usuario) {
+      return res.status(401).json({ erro: "Usuário não encontrado." });
+    }
+
+    
+    const restauranteId = usuario.restaurante_id;
+    
+    if (!restauranteId) {
+      return res.status(400).json({ erro: "Usuário não está vinculado a um restaurante." });
+    }
+
+    console.log("👤 Usuário:", usuario.nome);
+    console.log("🏪 Restaurante ID:", restauranteId);
+
     const mes = parseInt(req.query.mes);
     const ano = parseInt(req.query.ano);
 
@@ -85,20 +101,22 @@ async function obterDadosDiarios(req, res) {
     // Busca todas as vendas do mês
     const vendas = await db.Venda.findAll({
       where: {
-        usuario_id: usuarioId,
+         restaurante_id: restauranteId, // Filtra por restaurante
         data_venda: { [Op.between]: [inicio, fim] },
       },
       attributes: ["data_venda", "total_final"],
     });
+     console.log("📊 Vendas encontradas:", vendas.length);
 
     // Busca todos os produtos cadastrados no mês (representam despesas)
     const produtos = await db.Produto.findAll({
       where: {
-        usuario_id: usuarioId,
+        restaurante_id: restauranteId, // Filtra por restaurante
         created_at: { [Op.between]: [inicio, fim] },
       },
       attributes: ["created_at", "valor_compra"],
     });
+     console.log("📦 Produtos encontrados:", produtos.length);
 
     // Descobre quantos dias tem o mês
     const diasNoMes = new Date(ano, mes, 0).getDate();
@@ -135,7 +153,9 @@ async function obterDadosDiarios(req, res) {
       qtd_vendas: d.qtd_vendas,
     }));
 
-    return res.json({ mes, ano, dadosDiarios });
+    return res.json({ mes, ano,
+      restaurante: usuario.restaurante?.nome || "Restaurante", 
+      dadosDiarios });
   } catch (error) {
     console.error("[obterDadosDiarios]", error);
     return res.status(500).json({ erro: "Erro ao buscar dados diários." });
@@ -160,6 +180,28 @@ async function gerarRelatorio(req, res) {
   try {
     const usuarioId = verificarSessao(req, res);
     if (!usuarioId) return;
+
+     // Pegar o restaurante_id do usuário logado
+    const usuario = await db.Usuario.findByPk(usuarioId);
+    const restauranteId = usuario?.restaurante_id;
+
+     if (!restauranteId) {
+      return res.render("admin/relatorio", {
+        relatorio: null,
+        msg: "Usuário não vinculado a um restaurante.",
+        meses,
+        anos: gerarAnos(),
+        selectedMes: String(new Date().getMonth() + 1).padStart(2, "0"),
+        selectedAno: new Date().getFullYear(),
+        rankingProdutos: [],
+        produtosEstoqueBaixo: [],
+        quantidadeVendida: 0,
+        relatorioExiste: false,
+      });
+    }
+
+    console.log("👤 Usuário:", usuario.nome);
+    console.log("🏪 Restaurante ID:", restauranteId);
 
     const anos = gerarAnos();
     const anoAtual = new Date().getFullYear();
@@ -186,7 +228,7 @@ async function gerarRelatorio(req, res) {
     // ── VENDAS ──────────────────────────────────
     const vendas = await db.Venda.findAll({
       where: {
-        usuario_id: usuarioId,
+        restaurante_id: restauranteId,
         data_venda: { [Op.between]: [inicio, fim] },
       },
     });
@@ -201,7 +243,7 @@ async function gerarRelatorio(req, res) {
     // ── DESPESAS (produtos cadastrados no período) ──
     const produtos = await db.Produto.findAll({
       where: {
-        usuario_id: usuarioId,
+        restaurante_id: restauranteId, 
         created_at: { [Op.between]: [inicio, fim] },
       },
     });
@@ -219,7 +261,7 @@ async function gerarRelatorio(req, res) {
     // ── ESTOQUE CRÍTICO ─────────────────────────
     const produtosEstoqueBaixo = await db.Produto.findAll({
       where: {
-        usuario_id: usuarioId,
+         restaurante_id: restauranteId, // ✅ Filtra por restaurante
         quantidade: { [Op.lte]: db.Sequelize.col("quantidade_minima") },
       },
     });
@@ -244,8 +286,16 @@ async function gerarRelatorio(req, res) {
           as: "comanda",
           attributes: [],
           where: {
-            usuario_id: usuarioId,
-            created_at: { [Op.between]: [inicio, fim] },
+             // ✅ Filtra comandas pelo restaurante_id (através da Venda)
+            [Op.and]: [
+              db.Sequelize.literal(`EXISTS (
+                SELECT 1 FROM vendas v 
+                WHERE v.comanda_id = "comanda"."id" 
+                AND v.restaurante_id = ${restauranteId}
+                AND v.data_venda BETWEEN '${inicio.toISOString()}' AND '${fim.toISOString()}'
+              )`)
+            ]
+            //created_at: { [Op.between]: [inicio, fim] },
           },
           required: true,
         },
@@ -338,10 +388,11 @@ async function gerarRelatorio(req, res) {
       ticket_medio: ticketMedio,
       estoque_critico: produtosEstoqueBaixo.length,
       usuario_id: usuarioId,
+      restaurante_id: restauranteId,
     });
 
     const relatorio = await db.RelatorioMensal.findOne({
-      where: { mes, ano, usuario_id: usuarioId },
+      where: { mes, ano, restaurante_id: restauranteId  },// ✅ Busca por restaurante },
     });
 
     return res.render("admin/relatorio", {
@@ -390,6 +441,16 @@ async function exportarPDF(req, res) {
     const usuarioId = verificarSessao(req, res);
     if (!usuarioId) return;
 
+     // ✅ Busca o usuário e seu restaurante
+    const usuario = await db.Usuario.findByPk(usuarioId);
+    const restauranteId = usuario?.restaurante_id;
+
+     if (!restauranteId) {
+      return res.status(400).send("Usuário não vinculado a um restaurante.");
+    }
+
+    console.log("📄 Gerando PDF para restaurante ID:", restauranteId);
+
     const mes = parseInt(req.query.mes);
     const ano = parseInt(req.query.ano);
 
@@ -402,24 +463,43 @@ async function exportarPDF(req, res) {
 
     // Buscar dados do relatório
     const relatorio = await db.RelatorioMensal.findOne({
-      where: { mes, ano, usuario_id: usuarioId }
+      where: { mes, ano, restaurante_id: restauranteId }// ✅ Filtra por restaurante 
     });
 
     if (!relatorio) {
       return res.status(404).send("Relatório não encontrado para este período.");
     }
 
+    // ✅ Buscar vendas do restaurante no período
+    const vendas = await db.Venda.findAll({
+      where: {
+        restaurante_id: restauranteId,
+        data_venda: { [Op.between]: [inicio, fim] },
+      },
+      attributes: ["comanda_id"],
+    });
+
+     const comandasIds = vendas.map(v => v.comanda_id);
+    console.log("🛒 Comandas com venda:", comandasIds.length);
+
     // Buscar ranking de produtos
-    const itensComandaRaw = await db.ItemComanda.findAll({
+    //const itensComandaRaw = await db.ItemComanda.findAll({
+
+     // ✅ Buscar ranking de produtos (filtrando pelas comandas que têm venda)
+    let itensComandaRaw = [];
+
+     if (comandasIds.length > 0) {
+      itensComandaRaw = await db.ItemComanda.findAll({
+
       attributes: ["produto_id", "prato_id", "bebida_id", "tipo_item", "quantidade"],
       include: [
         {
           model: db.Comanda,
           as: "comanda",
-          attributes: [],
+          attributes: ["id"],
           where: {
-            usuario_id: usuarioId,
-            created_at: { [Op.between]: [inicio, fim] },
+            id: { [Op.in]: comandasIds } // ✅ Filtra pelas comandas com venda
+           // created_at: { [Op.between]: [inicio, fim] },
           },
           required: true,
         },
@@ -451,6 +531,9 @@ async function exportarPDF(req, res) {
         },
       ],
     });
+  }
+
+  console.log("📦 Itens encontrados:", itensComandaRaw.length);
 
     // Agrupar produtos
     const agrupado = {};
@@ -487,7 +570,7 @@ async function exportarPDF(req, res) {
     // Buscar produtos com estoque baixo
     const produtosEstoqueBaixo = await db.Produto.findAll({
       where: {
-        usuario_id: usuarioId,
+        restaurante_id: restauranteId, // ✅ Filtra por restaurante
         quantidade: { [Op.lte]: db.Sequelize.col("quantidade_minima") },
       },
       attributes: ["nome", "quantidade", "quantidade_minima"],
@@ -621,6 +704,18 @@ async function exportarExcel(req, res) {
     const usuarioId = verificarSessao(req, res);
     if (!usuarioId) return;
 
+    // ✅ Busca o usuário e seu restaurante
+    const usuario = await db.Usuario.findByPk(usuarioId, {
+      include: ['restaurante']
+    });
+    const restauranteId = usuario?.restaurante_id;
+
+    if (!restauranteId) {
+      return res.status(400).send("Usuário não vinculado a um restaurante.");
+    }
+
+    console.log("📊 Gerando Excel para restaurante ID:", restauranteId);
+
     const mes = parseInt(req.query.mes);
     const ano = parseInt(req.query.ano);
 
@@ -631,31 +726,39 @@ async function exportarExcel(req, res) {
     const { inicio, fim } = periodoMes(mes, ano);
     const mesLabel = meses.find(m => m.valor === String(mes).padStart(2, '0'))?.label || `Mês ${mes}`;
 
-    // Buscar dados do relatório consolidado
+    // ✅ Buscar dados do relatório consolidado por restaurante
     const relatorio = await db.RelatorioMensal.findOne({
-      where: { mes, ano, usuario_id: usuarioId }
+      where: { 
+        mes, 
+        ano, 
+        restaurante_id: restauranteId // ✅ Filtra por restaurante
+      }
     });
 
     if (!relatorio) {
       return res.status(404).send("Relatório não encontrado para este período.");
     }
 
-    // Buscar dados diários
+    // ✅ Buscar dados diários por restaurante
     const vendas = await db.Venda.findAll({
       where: {
-        usuario_id: usuarioId,
+        restaurante_id: restauranteId, // ✅ Filtra por restaurante
         data_venda: { [Op.between]: [inicio, fim] },
       },
       attributes: ["data_venda", "total_final"],
     });
 
+    console.log("📊 Vendas encontradas:", vendas.length);
+
     const produtos = await db.Produto.findAll({
       where: {
-        usuario_id: usuarioId,
+        restaurante_id: restauranteId, // ✅ Filtra por restaurante
         created_at: { [Op.between]: [inicio, fim] },
       },
       attributes: ["created_at", "valor_compra"],
     });
+
+    console.log("📦 Produtos (despesas):", produtos.length);
 
     // Calcular dados diários
     const diasNoMes = new Date(ano, mes, 0).getDate();
@@ -687,48 +790,54 @@ async function exportarExcel(req, res) {
       qtd_vendas: d.qtd_vendas,
     }));
 
-    // Buscar ranking de produtos
-    const itensComandaRaw = await db.ItemComanda.findAll({
-      attributes: ["produto_id", "prato_id", "bebida_id", "tipo_item", "quantidade"],
-      include: [
-        {
-          model: db.Comanda,
-          as: "comanda",
-          attributes: [],
-          where: {
-            usuario_id: usuarioId,
-            created_at: { [Op.between]: [inicio, fim] },
-          },
-          required: true,
-        },
-        {
-          model: db.Produto,
-          as: "produto",
-          attributes: ["id", "nome"],
-          required: false,
-        },
-        {
-          model: db.Prato,
-          as: "prato",
-          attributes: ["id", "nome"],
-          required: false,
-        },
-        {
-          model: db.Bebida,
-          as: "bebida",
-          attributes: ["id", "produto_id"],
-          required: false,
-          include: [
-            {
-              model: db.Produto,
-              as: "produto",
-              attributes: ["id", "nome"],
-              required: false,
+    // ✅ Buscar ranking de produtos por restaurante
+    const vendasIds = vendas.map(v => v.comanda_id);
+    
+    let itensComandaRaw = [];
+    if (vendasIds.length > 0) {
+      itensComandaRaw = await db.ItemComanda.findAll({
+        attributes: ["produto_id", "prato_id", "bebida_id", "tipo_item", "quantidade"],
+        include: [
+          {
+            model: db.Comanda,
+            as: "comanda",
+            attributes: ["id"],
+            where: {
+              id: { [Op.in]: vendasIds } // ✅ Filtra pelas comandas com venda
             },
-          ],
-        },
-      ],
-    });
+            required: true,
+          },
+          {
+            model: db.Produto,
+            as: "produto",
+            attributes: ["id", "nome"],
+            required: false,
+          },
+          {
+            model: db.Prato,
+            as: "prato",
+            attributes: ["id", "nome"],
+            required: false,
+          },
+          {
+            model: db.Bebida,
+            as: "bebida",
+            attributes: ["id", "produto_id"],
+            required: false,
+            include: [
+              {
+                model: db.Produto,
+                as: "produto",
+                attributes: ["id", "nome"],
+                required: false,
+              },
+            ],
+          },
+        ],
+      });
+    }
+
+    console.log("🛒 Itens de comanda:", itensComandaRaw.length);
 
     // Agrupar produtos
     const agrupado = {};
@@ -765,14 +874,18 @@ async function exportarExcel(req, res) {
     const rankingProdutos = Object.values(agrupado)
       .sort((a, b) => b.quantidade_vendida - a.quantidade_vendida);
 
-    // Buscar produtos com estoque baixo
+    console.log("🏆 Ranking:", rankingProdutos.length, "itens");
+
+    // ✅ Buscar produtos com estoque baixo por restaurante
     const produtosEstoqueBaixo = await db.Produto.findAll({
       where: {
-        usuario_id: usuarioId,
+        restaurante_id: restauranteId, // ✅ Filtra por restaurante
         quantidade: { [Op.lte]: db.Sequelize.col("quantidade_minima") },
       },
       attributes: ["nome", "quantidade", "quantidade_minima", "valor_compra"],
     });
+
+    console.log("⚠️ Estoque crítico:", produtosEstoqueBaixo.length, "produtos");
 
     // ── CRIAR WORKBOOK EXCEL ──────────────────
     const workbook = new ExcelJS.Workbook();
@@ -790,7 +903,6 @@ async function exportarExcel(req, res) {
       };
       headerRow.alignment = { horizontal: 'center', vertical: 'middle' };
       
-      // Borda nos cabeçalhos
       for (let col = 1; col <= colunas; col++) {
         headerRow.getCell(col).border = {
           top: { style: 'thin' },
@@ -801,7 +913,6 @@ async function exportarExcel(req, res) {
       }
     }
 
-    // Função helper para adicionar bordas em células
     function adicionarBordas(worksheet, startRow, endRow, colunas) {
       for (let row = startRow; row <= endRow; row++) {
         for (let col = 1; col <= colunas; col++) {
@@ -815,12 +926,9 @@ async function exportarExcel(req, res) {
       }
     }
 
-    // ─────────────────────────────────────────
-    // ABA 1: RESUMO FINANCEIRO
-    // ─────────────────────────────────────────
+    // ── ABA 1: RESUMO FINANCEIRO ──
     const wsResumo = workbook.addWorksheet('Resumo Financeiro');
     
-    // Título
     wsResumo.mergeCells('A1:C1');
     const tituloCell = wsResumo.getCell('A1');
     tituloCell.value = `Relatório Mensal - ${mesLabel} de ${ano}`;
@@ -828,17 +936,22 @@ async function exportarExcel(req, res) {
     tituloCell.alignment = { horizontal: 'center', vertical: 'middle' };
     wsResumo.getRow(1).height = 30;
 
-    // Espaçamento
+    // Nome do restaurante
+    wsResumo.mergeCells('A2:C2');
+    const restCell = wsResumo.getCell('A2');
+    restCell.value = `Restaurante: ${usuario.restaurante?.nome || 'N/A'}`;
+    restCell.font = { size: 12, color: { argb: '2F5496' } };
+    restCell.alignment = { horizontal: 'center' };
+
     wsResumo.addRow([]);
 
-    // Dados financeiros
     const dadosFinanceiros = [
       ['Indicador', 'Valor', 'Percentual'],
-      ['Faturamento Bruto', parseFloat(relatorio.faturamento_bruto), '100%'],
-      ['Despesas', parseFloat(relatorio.despesas), `${((relatorio.despesas / relatorio.faturamento_bruto) * 100).toFixed(2)}%`],
-      ['Lucro Líquido', parseFloat(relatorio.lucro_liquido), `${parseFloat(relatorio.margem_lucro).toFixed(2)}%`],
-      ['Ticket Médio', parseFloat(relatorio.ticket_medio), '-'],
-      ['Produtos em Estoque Crítico', relatorio.estoque_critico, '-'],
+      ['Faturamento Bruto', parseFloat(relatorio.faturamento_bruto || 0), '100%'],
+      ['Despesas', parseFloat(relatorio.despesas || 0), `${((relatorio.despesas / relatorio.faturamento_bruto) * 100 || 0).toFixed(2)}%`],
+      ['Lucro Líquido', parseFloat(relatorio.lucro_liquido || 0), `${parseFloat(relatorio.margem_lucro || 0).toFixed(2)}%`],
+      ['Ticket Médio', parseFloat(relatorio.ticket_medio || 0), '-'],
+      ['Produtos em Estoque Crítico', relatorio.estoque_critico || 0, '-'],
     ];
 
     dadosFinanceiros.forEach((row, index) => {
@@ -848,210 +961,155 @@ async function exportarExcel(req, res) {
       }
     });
 
-    // Formatar valores monetários
-    for (let i = 4; i <= 8; i++) {
+    for (let i = 5; i <= 9; i++) {
       const cell = wsResumo.getRow(i).getCell(2);
-      if (i !== 8) { // Não formatar "Produtos em Estoque Crítico" como moeda
+      if (i !== 9) {
         cell.numFormat = 'R$ #,##0.00';
       }
       cell.alignment = { horizontal: 'center' };
     }
 
-    // Ajustar largura das colunas
     wsResumo.getColumn(1).width = 30;
     wsResumo.getColumn(2).width = 20;
     wsResumo.getColumn(3).width = 15;
-
-    // Centralizar dados
     wsResumo.getColumn(2).alignment = { horizontal: 'center' };
     wsResumo.getColumn(3).alignment = { horizontal: 'center' };
+    adicionarBordas(wsResumo, 4, 9, 3);
 
-    // Bordas na tabela
-    adicionarBordas(wsResumo, 3, 8, 3);
-
-    // ─────────────────────────────────────────
-    // ABA 2: DADOS DIÁRIOS
-    // ─────────────────────────────────────────
+    // ── ABA 2: DADOS DIÁRIOS ──
     const wsDiario = workbook.addWorksheet('Dados Diários');
 
-    // Título
     wsDiario.mergeCells('A1:E1');
     const tituloDiario = wsDiario.getCell('A1');
     tituloDiario.value = `Movimentação Diária - ${mesLabel} de ${ano}`;
     tituloDiario.font = { bold: true, size: 14, color: { argb: '2F5496' } };
     tituloDiario.alignment = { horizontal: 'center' };
     wsDiario.getRow(1).height = 25;
-
     wsDiario.addRow([]);
 
-    // Cabeçalhos
     const headersDiario = ['Dia', 'Faturamento', 'Despesas', 'Lucro', 'Qtd. Vendas'];
     const headerRowDiario = wsDiario.addRow(headersDiario);
     aplicarEstiloCabecalho(wsDiario, headerRowDiario.number, 5);
 
-    // Dados
-    let totalFaturamento = 0;
-    let totalDespesas = 0;
-    let totalLucro = 0;
-    let totalVendas = 0;
+    let totalFaturamento = 0, totalDespesas = 0, totalLucro = 0, totalVendas = 0;
 
     dadosDiarios.forEach(d => {
-      wsDiario.addRow([
-        d.dia,
-        d.faturamento,
-        d.despesas,
-        d.lucro,
-        d.qtd_vendas,
-      ]);
+      wsDiario.addRow([d.dia, d.faturamento, d.despesas, d.lucro, d.qtd_vendas]);
       totalFaturamento += d.faturamento;
       totalDespesas += d.despesas;
       totalLucro += d.lucro;
       totalVendas += d.qtd_vendas;
     });
 
-    // Linha de totais
-    const totalRow = wsDiario.addRow([
-      'TOTAL',
-      totalFaturamento,
-      totalDespesas,
-      totalLucro,
-      totalVendas,
-    ]);
+    const totalRow = wsDiario.addRow(['TOTAL', totalFaturamento, totalDespesas, totalLucro, totalVendas]);
     totalRow.font = { bold: true };
-    totalRow.fill = {
-      type: 'pattern',
-      pattern: 'solid',
-      fgColor: { argb: 'D9E2F3' },
-    };
+    totalRow.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'D9E2F3' } };
 
-    // Formatar colunas monetárias
     for (let i = 4; i <= 4 + dadosDiarios.length + 1; i++) {
       wsDiario.getRow(i).getCell(2).numFormat = 'R$ #,##0.00';
       wsDiario.getRow(i).getCell(3).numFormat = 'R$ #,##0.00';
       wsDiario.getRow(i).getCell(4).numFormat = 'R$ #,##0.00';
     }
 
-    // Ajustar largura das colunas
     wsDiario.getColumn(1).width = 10;
     wsDiario.getColumn(2).width = 18;
     wsDiario.getColumn(3).width = 18;
     wsDiario.getColumn(4).width = 18;
     wsDiario.getColumn(5).width = 15;
-
-    // Centralizar
     wsDiario.getColumn(1).alignment = { horizontal: 'center' };
     wsDiario.getColumn(5).alignment = { horizontal: 'center' };
-
-    // Bordas
     adicionarBordas(wsDiario, 3, 3 + dadosDiarios.length + 1, 5);
 
-    // ─────────────────────────────────────────
-    // ABA 3: RANKING DE PRODUTOS
-    // ─────────────────────────────────────────
+    // ── ABA 3: RANKING DE PRODUTOS ──
     const wsRanking = workbook.addWorksheet('Ranking de Produtos');
 
-    // Título
     wsRanking.mergeCells('A1:D1');
     const tituloRanking = wsRanking.getCell('A1');
     tituloRanking.value = `Produtos Mais Vendidos - ${mesLabel} de ${ano}`;
     tituloRanking.font = { bold: true, size: 14, color: { argb: '2F5496' } };
     tituloRanking.alignment = { horizontal: 'center' };
     wsRanking.getRow(1).height = 25;
-
     wsRanking.addRow([]);
 
-    // Cabeçalhos
     const headersRanking = ['Posição', 'Produto', 'Tipo', 'Quantidade Vendida'];
     const headerRowRanking = wsRanking.addRow(headersRanking);
     aplicarEstiloCabecalho(wsRanking, headerRowRanking.number, 4);
 
-    // Dados
-    rankingProdutos.forEach((item, index) => {
-      wsRanking.addRow([
-        `${index + 1}º`,
-        item.nome,
-        item.tipo,
-        item.quantidade_vendida,
-      ]);
-    });
+    if (rankingProdutos.length > 0) {
+      rankingProdutos.forEach((item, index) => {
+        wsRanking.addRow([`${index + 1}º`, item.nome, item.tipo, item.quantidade_vendida]);
+      });
+    } else {
+      wsRanking.mergeCells('A4:D4');
+      const noData = wsRanking.getCell('A4');
+      noData.value = 'Nenhum produto vendido neste período';
+      noData.alignment = { horizontal: 'center' };
+      noData.font = { italic: true, color: { argb: '808080' } };
+    }
 
-    // Ajustar largura das colunas
     wsRanking.getColumn(1).width = 10;
     wsRanking.getColumn(2).width = 35;
     wsRanking.getColumn(3).width = 15;
     wsRanking.getColumn(4).width = 20;
-
-    // Centralizar
     wsRanking.getColumn(1).alignment = { horizontal: 'center' };
     wsRanking.getColumn(3).alignment = { horizontal: 'center' };
     wsRanking.getColumn(4).alignment = { horizontal: 'center' };
+    
+    if (rankingProdutos.length > 0) {
+      adicionarBordas(wsRanking, 3, 3 + rankingProdutos.length, 4);
+    }
 
-    // Bordas
-    const lastRowRanking = 3 + rankingProdutos.length;
-    adicionarBordas(wsRanking, 3, lastRowRanking, 4);
-
-    // ─────────────────────────────────────────
-    // ABA 4: ESTOQUE CRÍTICO
-    // ─────────────────────────────────────────
+    // ── ABA 4: ESTOQUE CRÍTICO ──
     const wsEstoque = workbook.addWorksheet('Estoque Crítico');
 
-    // Título
     wsEstoque.mergeCells('A1:D1');
     const tituloEstoque = wsEstoque.getCell('A1');
     tituloEstoque.value = `Produtos com Estoque Baixo - ${mesLabel} de ${ano}`;
     tituloEstoque.font = { bold: true, size: 14, color: { argb: '2F5496' } };
     tituloEstoque.alignment = { horizontal: 'center' };
     wsEstoque.getRow(1).height = 25;
-
     wsEstoque.addRow([]);
 
-    // Cabeçalhos
     const headersEstoque = ['Produto', 'Estoque Atual', 'Estoque Mínimo', 'Preço Venda'];
     const headerRowEstoque = wsEstoque.addRow(headersEstoque);
     aplicarEstiloCabecalho(wsEstoque, headerRowEstoque.number, 4);
 
-    // Dados
-    produtosEstoqueBaixo.forEach(produto => {
-      wsEstoque.addRow([
-        produto.nome,
-        produto.quantidade,
-        produto.quantidade_minima,
-        parseFloat(produto.valor_compra || 0),
-      ]);
-    });
+    if (produtosEstoqueBaixo.length > 0) {
+      produtosEstoqueBaixo.forEach(produto => {
+        wsEstoque.addRow([
+          produto.nome,
+          produto.quantidade,
+          produto.quantidade_minima,
+          parseFloat(produto.valor_compra || 0),
+        ]);
+      });
 
-    // Formatar coluna de preço
-    for (let i = 4; i <= 4 + produtosEstoqueBaixo.length; i++) {
-      wsEstoque.getRow(i).getCell(4).numFormat = 'R$ #,##0.00';
+      for (let i = 4; i <= 4 + produtosEstoqueBaixo.length; i++) {
+        wsEstoque.getRow(i).getCell(4).numFormat = 'R$ #,##0.00';
+        wsEstoque.getRow(i).getCell(2).font = { color: { argb: 'FF0000' }, bold: true };
+      }
+    } else {
+      wsEstoque.mergeCells('A4:D4');
+      const noData = wsEstoque.getCell('A4');
+      noData.value = 'Nenhum produto com estoque crítico';
+      noData.alignment = { horizontal: 'center' };
+      noData.font = { italic: true, color: { argb: '808080' } };
     }
 
-    // Destacar estoque crítico em vermelho
-    for (let i = 4; i <= 4 + produtosEstoqueBaixo.length; i++) {
-      const cell = wsEstoque.getRow(i).getCell(2);
-      cell.font = { color: { argb: 'FF0000' }, bold: true };
-    }
-
-    // Ajustar largura das colunas
     wsEstoque.getColumn(1).width = 35;
     wsEstoque.getColumn(2).width = 18;
     wsEstoque.getColumn(3).width = 18;
     wsEstoque.getColumn(4).width = 18;
-
-    // Centralizar
     wsEstoque.getColumn(2).alignment = { horizontal: 'center' };
     wsEstoque.getColumn(3).alignment = { horizontal: 'center' };
     wsEstoque.getColumn(4).alignment = { horizontal: 'center' };
-
-    // Bordas
+    
     if (produtosEstoqueBaixo.length > 0) {
-      const lastRowEstoque = 3 + produtosEstoqueBaixo.length;
-      adicionarBordas(wsEstoque, 3, lastRowEstoque, 4);
+      adicionarBordas(wsEstoque, 3, 3 + produtosEstoqueBaixo.length, 4);
     }
 
-    // ─────────────────────────────────────────
-    // GERAR ARQUIVO E ENVIAR
-    // ─────────────────────────────────────────
-    const filename = `relatorio_${mes}_${ano}.xlsx`;
+    // ── GERAR ARQUIVO ──
+    const filename = `relatorio_${mesLabel.replace(' ', '_')}_${ano}.xlsx`;
     
     res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
     res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
@@ -1062,12 +1120,10 @@ async function exportarExcel(req, res) {
   } catch (error) {
     console.error("[exportarExcel]", error);
     if (!res.headersSent) {
-      res.status(500).send("Erro ao gerar arquivo Excel");
+      res.status(500).send("Erro ao gerar arquivo Excel: " + error.message);
     }
   }
 }
-
-
 // ─────────────────────────────────────────────
 // EXPORTS
 // ─────────────────────────────────────────────

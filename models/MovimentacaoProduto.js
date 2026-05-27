@@ -57,6 +57,14 @@ const MovimentacaoProduto = sequelizeconnect.define(
       type: DataTypes.INTEGER,
       allowNull: true,
     },
+    restaurante_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: 'restaurante',
+        key: 'id'
+      }
+    }
   },
 
   {
@@ -76,6 +84,15 @@ MovimentacaoProduto.associate = (models) => {
       allowNull: true,
     },
     as: "usuario",
+    onDelete: "SET NULL",
+    onUpdate: "CASCADE",
+  });
+   MovimentacaoProduto.belongsTo(models.Restaurante, {
+    foreignKey: {
+      name: "restaurante_id",
+      allowNull: true,
+    },
+    as: "restaurante",
     onDelete: "SET NULL",
     onUpdate: "CASCADE",
   });

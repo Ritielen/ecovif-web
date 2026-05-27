@@ -4,7 +4,11 @@ const { Op } = require("sequelize");
 
 async function mostrarConta(req, res) {
   try {
+    const usuario = await db.Usuario.findByPk(req.session.usuarioId);
+  
+
     const comandas = await db.Comanda.findAll({
+      
       include: [
         {
           model: db.ItemComanda,
@@ -134,6 +138,8 @@ async function removerTaxaCouvert(req, res) {
 
 async function finalizarVenda(req, res) {
   try {
+    const usuario = await db.Usuario.findByPk(req.session.usuarioId);
+  const restauranteId = usuario?.restaurante_id;
     if (!req.session?.usuarioId) {
       return res.redirect("/login?msg=Faça login para continuar");
     }
@@ -175,6 +181,7 @@ async function finalizarVenda(req, res) {
       comanda_id: id,
       evento_id: eventoAtivo ? eventoAtivo.id : null,
       usuario_id: req.session.usuarioId,
+      restaurante_id: restauranteId, 
     });
 
     if (req.session.remocoes) {
