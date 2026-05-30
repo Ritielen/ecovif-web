@@ -1,6 +1,8 @@
 const db = require("../models");
 const passport = require('../config/passport');
 const { sendMail, sendSupportContact } = require("../config/mailer");
+const { devolverEstoqueComanda } = require("../services/movimentacaoService");
+
 const {Op} = require("sequelize");
 
 
@@ -8,28 +10,21 @@ const {Op} = require("sequelize");
 async function listarComandas(req, res) {
   try {
     const comandas = await db.Comanda.findAll({
+      
+      include: [
+    {
+      model: db.ItemComanda,
+      as: "itens",
+        required: true, // obrigatoriamente precisa ter item
       include: [
         {
-          model: db.ItemComanda,
-          as: "itens",
-          include: [
-            {
-              model: db.Prato,
-              as: "prato",
-            },
-            {
-              model: db.Bebida,
-              as: "bebida",
-              include: [
-                {
-                  model: db.Produto,
-                  as: "produto",
-                }
-              ]
-            }
-          ]
+          model: db.Prato,
+          as: "prato",
+           required: true // garante que só itens com prato sejam retornados
         }
-      ],
+      ]
+    }
+  ],
       order: [["created_at", "DESC"]]
     });
 
@@ -67,8 +62,17 @@ async function atualizarStatus(req, res) {
       });
     }
 
-    // Buscar comanda
-    const comanda = await db.Comanda.findByPk(comandaId);
+    // Buscar comanda + itens
+    const comanda = await db.Comanda.findByPk(comandaId,
+       {
+        include: [
+          {
+            model: db.ItemComanda,
+            as: "itens"
+          }
+        ]
+      }
+    );
     
     if (!comanda) {
       return res.status(404).json({ 
@@ -99,6 +103,22 @@ async function atualizarStatus(req, res) {
         message: 'Só é possível mover para "Pronta" comandas que estão "Em Preparo"' 
       });
     }
+
+      /*
+    =====================================
+    CANCELAMENTO
+    =====================================
+    */
+
+    if (status === "cancelada") {
+
+      await devolverEstoqueComanda(
+        comanda.itens,
+        req.session.usuarioId,
+        comanda.id
+      );
+    }
+
 
     // Atualizar status
     comanda.status = status;

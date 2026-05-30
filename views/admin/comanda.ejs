@@ -33,35 +33,41 @@
             </a>
           </li>
           <li class="nav-item dropdown position-relative">
-    <a class="nav-link" href="#" id="alertaDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-        <i class="fa-solid fa-bell"></i>
-        <% 
-        // Filtrar apenas comandas prontas para o badge
-        const comandasProntas = locals.comandasRecentes ? 
-            locals.comandasRecentes.filter(comanda => comanda.status === 'pronta') : [];
-        const totalProntas = comandasProntas.length;
-        %>
-        <% if (totalProntas > 0) { %>
-            <span class="badge-alerta">
-                <%= totalProntas %>
-            </span>
-        <% } %>
-    </a>
-    <div class="dropdown-menu dropdown-alerta">
-        <% if (comandasProntas.length > 0) { %>
-            <% comandasProntas.forEach(comanda => { %>
-                <div class="alerta-item">
-                    <span>Comanda #<%= comanda.id %></span> -
-                    <strong><%= comanda.nome_cliente %></strong> -
-                    <span>Status: <%= comanda.status %></span> 
-                </div>
-            <% }) %>
-        <% } else { %>
-            <div class="alerta-item">Nenhuma comanda pronta</div>
-        <% } %>
-    </div>
-</li>
+            <a class="nav-link" href="#" id="alertaDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fa-solid fa-bell"></i>
+              <%
+                const comandasGarcom =
+                locals.comandasGarcom || [];
 
+                const totalGarcom =
+                comandasGarcom.length;
+              %>
+
+              <% if (totalGarcom > 0) { %>
+
+              <span class="badge-alerta">
+                <%= totalGarcom %>
+              </span>
+              <% } %>
+            </a>
+            <div class="dropdown-menu dropdown-alerta">
+
+              <% if (comandasGarcom.length > 0) { %>
+              <% comandasGarcom.forEach(comanda => { %>
+
+              <div class="alerta-item">
+                <span>Comanda #<%= comanda.id %></span> -
+                <strong><%= comanda.nome_cliente %></strong> -
+                <span>Status: <%= comanda.status %></span>
+              </div>
+              <% }) %>
+              <% } else { %>
+              <div class="alerta-item">
+                Nenhuma comanda em preparo ou pronta.
+              </div>
+              <% } %>
+            </div>
+          </li>
           <li class="nav-item">
             <a class="nav-link" href="/pedidoCozinha">
               <i class="fa-solid fa-utensils"></i> Pedidos da Cozinha
@@ -195,53 +201,50 @@
           </div>
         </section>
         <!--Seção lista de comandas-->
+        <!--Seção lista-->
         <section class="col-lg-7 secao-lista">
-          <div class="filtro-comandas">
-
-
-
-
-            <button class="btn-filtro active filtro-opcao" data-filtro="todas">
-              <i class="fa-solid fa-list"></i> Todas
-            </button>
-
-            <button class="btn-filtro filtro-opcao" data-filtro="em preparo">
-              <i class="fa-solid fa-clock"></i> Em Preparo
-            </button>
-
-            <button class="btn-filtro filtro-opcao" data-filtro="finalizada">
-              <i class="fa-solid fa-check"></i> Finalizadas
-            </button>
-
-            <button class="btn-filtro filtro-opcao" data-filtro="cancelada">
-              <i class="fa-solid fa-xmark"></i> Canceladas
-            </button>
-
-          </div>
-
-
-
-
 
           <!-- ========== BARRA DE PESQUISA ========== -->
           <div class="barra-pesquisa-wrapper">
-            <label for="inputPesquisa">
-              <i class="fa-solid fa-magnifying-glass"></i> Pesquisar comanda
-            </label>
+            <label for="inputPesquisa"><i class="fa-solid fa-magnifying-glass"></i> Pesquisar item do cardápio</label>
             <div class="linha-pesquisa">
-              <input type="text" id="inputPesquisa" class="input-pesquisa" placeholder="Ex.: Nome do cliente, número da mesa..." autocomplete="off">
-              <button type="button" class="btn-pesquisar" id="btnPesquisar">
+              <input type="text" id="inputPesquisa" class="input-pesquisa" placeholder="Ex.: Suco de Uva, Merlot, Filé Mignon..." autocomplete="off">
+              <button class="btn-pesquisar" id="btnPesquisar">
                 <i class="fa-solid fa-search"></i> Pesquisar
               </button>
-              <button type="button" class="btn-limpar-filtro" id="btnLimparFiltro">
-                <i class="fa-solid fa-broom"></i> Limpar Pesquisa
-              </button>
+              <div class="filtro-wrapper">
+                <button class="btn-filtro" id="btnFiltro">
+                  <i class="fa-solid fa-filter"></i> Filtrar
+                </button>
+                <div class="filtro-dropdown" id="filtroDropdown">
+                  <button class="filtro-opcao ativo" data-filtro="todas">
+                    <i class="fa-solid fa-border-all"></i> Todas
+                  </button>
+                  <button class="filtro-opcao" data-filtro="em preparo">
+                     Em preparo
+                  </button>
+                  <button class="filtro-opcao" data-filtro="pronta">
+                     Pronta
+                  </button>
+                  <button class="filtro-opcao" data-filtro="cancelada">
+                     Cancelada
+                  </button>
+
+                </div>
+              </div>
+
             </div>
+            <div class="filtro-ativo-tag" id="filtroAtivoTag">
+              <i class="fa-solid fa-tag"></i> Filtro ativo: <span id="filtroAtivoNome">Todos</span>
+              <button class="btn-limpar-filtro" id="btnLimparFiltro">Limpar</button>
+            </div>
+
           </div>
 
           <div class="msg-sem-resultado" id="msgSemResultado">
-            <i class="fa-solid fa-magnifying-glass"></i> Nenhuma comanda encontrada para "<span id="termoPesquisado"></span>"
+            <i class="fa-solid fa-magnifying-glass"></i> Nenhum item encontrado para "<span id="termoPesquisado"></span>".
           </div>
+
 
           <!-- ================= COMANDA ================= -->
           <div class="caixa-categoria">
@@ -305,13 +308,6 @@
                       <i class="fa-solid fa-edit"></i> Editar
                     </a>
 
-
-                    <!-- EXCLUIR -->
-                    <form action="/excluirComanda/<%= comanda.id %>" method="POST">
-                      <button type="submit" class="btn-excluir" onclick="return confirm('Deseja excluir esta comanda?');">
-                        <i class="fa-solid fa-trash"></i> Excluir
-                      </button>
-                    </form>
                   </div>
                 </div>
                 <% }) %>
@@ -337,7 +333,8 @@
 
   <script src="/js/formularioComandaScript.js"></script>
 
-  <script src="/js/filtroEstoqueScript.js"></script>
+  <script src="/js/filtroComandaScript.js"></script>
+  
 
 
 </body>

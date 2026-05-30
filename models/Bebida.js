@@ -26,7 +26,12 @@ const Bebida = sequelizeconnect.define(
   usuario_id: {
     type: DataTypes.INTEGER,
     allowNull: true,
-  }
+  },
+  status: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      defaultValue: 'ativo'
+    }
    
   },
   {

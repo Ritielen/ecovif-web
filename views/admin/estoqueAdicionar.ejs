@@ -156,11 +156,18 @@
             <% movimentacoes.forEach(mov => { %>
             <tr>
               <td><span class="badge-tipo"><%= mov.tipo %></span></td>
-              <td><%= mov.origem %></td>
+<td><%= mov.origem %></td>
 
-              <td><span class="qtd <%= mov.tipo === 'entrada' ? 'qtd-entrada' : 'qtd-saida' %>">
-                  <%= mov.tipo === 'entrada' ? '+' : '-' %> <%= mov.nova_quantidade %>
-                </span></td>
+<td>
+  <% if (mov.origem === 'cancelamento_comanda') { %>
+    <span class="qtd qtd-devolucao">+ <%= mov.nova_quantidade %></span>
+  <% } else { %>
+    <span class="qtd <%= mov.tipo === 'entrada' ? 'qtd-entrada' : 'qtd-saida' %>">
+      <%= mov.tipo === 'entrada' ? '+' : '-' %> <%= mov.nova_quantidade %>
+    </span>
+  <% } %>
+</td>
+
               <td><%= mov.nova_data_validade || 'Mesma do cadastro' %></td>
               <td><%= Number(mov.quantidade_total) %></td>
               <td>R$ <%= Number(mov.novo_valor_compra).toFixed(2) %></td>

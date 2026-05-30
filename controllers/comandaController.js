@@ -3,6 +3,8 @@ const { baixarEstoqueComanda } = require("../services/movimentacaoService");
 const passport = require('../config/passport');
 const { sendMail, sendSupportContact } = require("../config/mailer");
 const {Op} = require("sequelize");
+const { devolverEstoqueComanda } = require("../services/movimentacaoService");
+
 
 //exibição da comanda
 async function mostrarComanda(req, res) {
@@ -12,6 +14,7 @@ async function mostrarComanda(req, res) {
 
     // pratos
     const pratos = await db.Prato.findAll({
+      where: { status: 'ativo' }, 
       include: [
         {
           model: db.Ingrediente,
@@ -28,6 +31,7 @@ async function mostrarComanda(req, res) {
 
     // bebidas
     const bebidas = await db.Bebida.findAll({
+      where: { status: 'ativo' }, 
       include: [
         {
           model: db.Produto,
@@ -237,28 +241,72 @@ async function recalcularTotalComanda(comandaId) {
 
 // Remove um item da comanda e recalcula o total
 async function deletarItemComanda(req, res) {
+
   try {
+
     const { id } = req.params;
 
     const item = await db.ItemComanda.findByPk(id);
+
     if (!item) {
-      return res.json({ success: false, message: "Item não encontrado" });
+
+      return res.json({
+        success: false,
+        message: "Item não encontrado"
+      });
     }
 
-    const comandaId = item.comanda_id; // salva antes de destruir
+    const comandaId = item.comanda_id;
+
+    /*
+    =====================================
+    DEVOLVER ESTOQUE
+    =====================================
+    */
+
+    await devolverEstoqueComanda(
+      [item], // array
+      req.session.usuarioId,
+      comandaId
+    );
+
+    /*
+    =====================================
+    REMOVER ITEM
+    =====================================
+    */
+
     await item.destroy();
 
-    // Recalcula e devolve o novo total pro front atualizar sem recarregar
-    const novoTotal = await recalcularTotalComanda(comandaId);
+    /*
+    =====================================
+    RECALCULAR TOTAL
+    =====================================
+    */
+
+    const novoTotal =
+      await recalcularTotalComanda(comandaId);
 
     return res.json({
+
       success: true,
+
       message: "Item removido com sucesso",
+
       novoTotal: novoTotal.toFixed(2),
     });
+
   } catch (error) {
-    console.error("Erro ao remover item:", error);
-    return res.json({ success: false, message: "Erro ao remover item" });
+
+    console.error(
+      "Erro ao remover item:",
+      error
+    );
+
+    return res.json({
+      success: false,
+      message: "Erro ao remover item"
+    });
   }
 }
 
@@ -298,7 +346,25 @@ async function atualizarComanda(req, res) {
           bebida_id:   item.tipo_item === "bebida" ? item.item_id : null,
         }));
 
+         /*
+      =====================================
+      SALVA ITENS
+      =====================================
+      */
       await db.ItemComanda.bulkCreate(novosItens);
+    
+
+     /*
+      =====================================
+      BAIXA ESTOQUE
+      =====================================
+      */
+
+      await baixarEstoqueComanda(
+        novosItens,
+        req.session.usuarioId,
+        comanda.id
+      );
     }
 
     // Recalcula total com todos os itens (antigos + novos)
@@ -311,25 +377,15 @@ async function atualizarComanda(req, res) {
   }
 }
 
-// Função para EXCLUIR comanda
-async function excluirComanda(req, res) {
-  const { id } = req.params;
-  try {
-    await db.Comanda.destroy({ where: { id } });
-    res.redirect("/comanda?msg=Comanda excluída com sucesso!");
-  } catch (error) {
-    console.error("Erro ao excluir comanda:", error);
-    res.redirect("/comanda?erro=Erro ao excluir comanda");
-  }
-}
+
 
 module.exports = {
     mostrarComanda,
     criarComanda,
     telaEdicaoComanda,
     atualizarComanda,
-    deletarItemComanda,
-    excluirComanda,
+    deletarItemComanda
+    
     
   
 };

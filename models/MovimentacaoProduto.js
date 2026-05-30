@@ -10,11 +10,11 @@ const MovimentacaoProduto = sequelizeconnect.define(
       primaryKey: true,
     },
     tipo: {
-      type: DataTypes.ENUM("entrada", "saida"),
+      type: DataTypes.ENUM("entrada", "saida", "devolucao"),
       allowNull: false,
     },
     origem: {
-      type: DataTypes.ENUM("estoque", "comanda"),
+      type: DataTypes.ENUM("estoque", "comanda",  "cancelamento_comanda"),
       allowNull: false,
     },
     nova_data_validade: {

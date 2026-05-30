@@ -11,6 +11,7 @@ async function mostrarCardapio(req, res) {
 
     
     const pratos = await db.Prato.findAll({
+  
   include: [
     {
       model: db.Ingrediente,
@@ -25,6 +26,7 @@ async function mostrarCardapio(req, res) {
   ]
 });
 const bebidas = await db.Bebida.findAll({
+ 
   include: [
     {
       model: db.Produto,
@@ -34,6 +36,7 @@ const bebidas = await db.Bebida.findAll({
 });
 
     const produtos = await db.Produto.findAll({
+      where: { status: 'ativo' }, 
       order: [['nome', 'ASC']]
     });
 
@@ -83,6 +86,7 @@ async function cadastrarItemCardapio(req, res) {
         preco_venda,
         cardapio_id,
         usuario_id: usuarioId
+        
       });
       
    // Se ingredientes vierem como array no req.body
@@ -300,6 +304,43 @@ async function excluirPrato(req, res) {
   }
 }
 
+// Função de inativar prato
+async function inativarPrato(req, res) {
+    try{
+     const { id } = req.params;
+        const prato = await db.Prato.findByPk(id);
+        
+        if (!prato) {
+            return res.redirect("/cardapio?error=Prato não encontrado");
+        }
+        
+        await prato.update({ status: "inativo" });
+        return res.redirect("/cardapio?msg=Prato inativado com sucesso!");
+    } catch(error) {
+        console.error(error);
+        return res.redirect("/cardapio?error=Erro ao inativar prato");
+    }
+}
+
+// Função de ativar prato
+async function ativarPrato(req, res) {
+    try {
+        const { id } = req.params;
+        const prato = await db.Prato.findByPk(id);
+        
+        if (!prato) {
+            return res.redirect("/cardapio?error=Prato não encontrado");
+        }
+        
+        await prato.update({ status: "ativo" });
+        return res.redirect("/cardapio?msg=Prato ativado com sucesso!");
+    } catch(error) {
+        console.error(error);
+        return res.redirect("/cardapio?error=Erro ao ativar prato");
+    }
+}
+
+
 async function atualizarBebida(req, res) {
   const { id } = req.params;
   const { preco_venda } = req.body;
@@ -345,6 +386,36 @@ async function excluirBebida(req, res) {
   }
 }
 
+// Função de inativar Bebida
+async function inativarBebida(req, res) {
+    try{
+        const { id } = req.params;
+        await db.Bebida.update(
+            { status : "inativo" },
+            { where: { id } }
+        );
+        return res.redirect("/cardapio?msg=Bebida inativada com sucesso!");
+    } catch(error){
+        console.error(error);
+        return res.status(500).send("Erro ao inativar bebida.");
+    }
+}
+
+// Função de ativar Bebida
+async function ativarBebida(req, res) {
+    try{
+        const { id } = req.params;
+        await db.Bebida.update(
+            { status: "ativo" },
+            { where : { id }}
+        );
+        return res.redirect("/cardapio?msg=Bebida ativado com sucesso!");
+    } catch(error){
+        console.error(error);
+        return res.status(500).send("Erro ao ativar bebida.");
+    }
+}
+
 module.exports = {
     mostrarCardapio,
     cadastrarItemCardapio,
@@ -352,6 +423,10 @@ module.exports = {
     edicaoBebida,
     atualizarPrato,
     excluirPrato,
+    inativarPrato,
+    ativarPrato,
     atualizarBebida,
-    excluirBebida
+    excluirBebida,
+    inativarBebida,
+    ativarBebida
 };

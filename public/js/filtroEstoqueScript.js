@@ -126,7 +126,7 @@
                 this.classList.add('ativo');
 
                 // Tag de filtro ativo
-                const nomes = { todos: 'Todos', produto: 'Produtos', bebida: 'Bebidas' };
+                const nomes = { todos: 'Todos', produto: 'Produtos', bebida: 'Bebidas', };
                 if (filtroAtivoNome) filtroAtivoNome.textContent = nomes[filtroAtual];
                 if (filtroAtivoTag) filtroAtivoTag.classList.toggle('visivel', filtroAtual !== 'todos');
 

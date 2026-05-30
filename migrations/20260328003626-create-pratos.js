@@ -25,6 +25,11 @@ module.exports = {
           allowNull: false,
           defaultValue: 0.0,
         },
+        status: {
+        type: Sequelize.ENUM("ativo", "inativo"),
+        allowNull: false,
+        defaultValue: "ativo",
+      },
         cardapio_id: {
         type: Sequelize.INTEGER,
         allowNull: false,

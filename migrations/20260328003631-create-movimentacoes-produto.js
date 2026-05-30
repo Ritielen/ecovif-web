@@ -9,11 +9,11 @@ module.exports = {
         primaryKey: true,
       },
       tipo: {
-        type: Sequelize.ENUM("entrada", "saida"),
+        type: Sequelize.ENUM("entrada", "saida", "devolucao"),
         allowNull: false,
       },
       origem: {
-        type: Sequelize.ENUM("estoque", "comanda"),
+        type: Sequelize.ENUM("estoque", "comanda", "cancelamento_comanda"),
         allowNull: false,
       },
       nova_data_validade: {

@@ -364,6 +364,13 @@
                     Editar
                   </a>
 
+                  <!-- Botões Inativar e Excluir -->
+                    <form action="/admin/prato/<%= prato.status === 'ativo' ? 'inativar' : 'ativar' %>/<%= prato.id %>" method="POST">
+                      <button type="submit" class="btn <%= prato.status === 'ativo' ? 'btn-inativar' : 'btn-ativar' %>" onclick="return confirm('Deseja alterar o status deste prato?');">
+                        <%= prato.status === 'ativo' ? 'Inativar' : 'Ativar' %>
+                      </button>
+                    </form>
+
                   <!-- EXCLUIR -->
                   <form action="/excluirPrato/<%= prato.id %>" method="POST">
 
@@ -421,6 +428,12 @@
                   <a href="/editarBebida/<%= bebida.id %>" class="btn-editar">
                     <i class="fa-solid fa-edit"></i> Editar
                   </a>
+                   <!-- Botões Inativar e Excluir -->
+                    <form action="/admin/bebida/<%= bebida.status === 'ativo' ? 'inativar' : 'ativar' %>/<%= bebida.id %>" method="POST">
+                      <button type="submit" class="btn <%= bebida.status === 'ativo' ? 'btn-inativar' : 'btn-ativar' %>" onclick="return confirm('Deseja alterar o status desta bebida?');">
+                        <%= bebida.status === 'ativo' ? 'Inativar' : 'Ativar' %>
+                      </button>
+                    </form>
 
                   <form action="/excluirBebida/<%= bebida.id %>" method="POST">
                     <button type="submit" class="btn-excluir" onclick="return confirm('A bebida só pode ser excluída se não estiver em uma comanda.');">

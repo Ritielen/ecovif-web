@@ -34,34 +34,39 @@
             </a>
           </li>
           <li class="nav-item dropdown position-relative">
-    <a class="nav-link" href="#" id="alertaDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-        <i class="fa-solid fa-bell"></i>
-        <% 
-        // Filtrar apenas comandas prontas para o badge
-        const comandasProntas = locals.comandasRecentes ? 
-            locals.comandasRecentes.filter(comanda => comanda.status === 'pendente') : [];
-        const totalProntas = comandasProntas.length;
+            <a class="nav-link" href="#" id="alertaDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fa-solid fa-bell"></i>
+              <% 
+        // Filtrar apenas comandas pendentes com pratos para o badge
+        const comandasPendentes = 
+        locals.comandasCozinha || [];
+        const totalPendentes = 
+        comandasPendentes.length;
         %>
-        <% if (totalProntas > 0) { %>
-            <span class="badge-alerta">
-                <%= totalProntas %>
-            </span>
-        <% } %>
-    </a>
-    <div class="dropdown-menu dropdown-alerta">
-        <% if (comandasProntas.length > 0) { %>
-            <% comandasProntas.forEach(comanda => { %>
-                <div class="alerta-item">
-                    <span>Comanda #<%= comanda.id %></span> -
-                    <strong><%= comanda.nome_cliente %></strong> -
-                    <span>Status: <%= comanda.status %></span> 
-                </div>
-            <% }) %>
-        <% } else { %>
-            <div class="alerta-item">Nenhuma comanda pendente</div>
-        <% } %>
-    </div>
-</li>
+              <% if (totalPendentes > 0) { %>
+              <span class="badge-alerta">
+                <%= totalPendentes %>
+              </span>
+              <% } %>
+            </a>
+            <div class="dropdown-menu dropdown-alerta">
+              <% if (comandasPendentes.length > 0) { %>
+              <% comandasPendentes.forEach(comanda => { %>
+
+              <div class="alerta-item">
+                <span>Comanda #<%= comanda.id %></span> -
+                <strong><%= comanda.nome_cliente %></strong> -
+                <span>Status: <%= comanda.status %></span>
+              </div>
+              <% }) %>
+              <% } else { %>
+              <div class="alerta-item">
+                Nenhuma comanda pendente
+              </div>
+              <% } %>
+              
+            </div>
+          </li>
           <li class="nav-item">
             <a class="nav-link" href="/fecharConta">
               <i class="fa-solid fa-cash-register"></i> Fechar Conta
@@ -102,48 +107,49 @@
   <!-- Principal -->
   <main class="funcionalidades-grid">
 
-    <!-- Filtros de Pedidos -->
-    <section class="secao-filtros-cozinha">
-      <div class="container">
-        <div class="filtros-cozinha">
-          <button class="btn-filtro-cozinha active">
-            <i class="fa-solid fa-list"></i> Todos os Pedidos
-          </button>
-          <button class="btn-filtro-cozinha">
-            <i class="fa-solid fa-exclamation-circle"></i> Pendentes
-          </button>
-          <button class="btn-filtro-cozinha">
-            <i class="fa-solid fa-clock"></i> Em Preparo
-          </button>
-          <button class="btn-filtro-cozinha">
-            <i class="fa-solid fa-check-circle"></i> Prontos
-          </button>
-        </div>
-      </div>
-    </section>
+   
 
     <!-- Lista de Pedidos -->
     <section class="col-lg-7 secao-lista">
 
       <!-- ========== BARRA DE PESQUISA ========== -->
       <div class="barra-pesquisa-wrapper">
-        <label for="inputPesquisa">
-          <i class="fa-solid fa-magnifying-glass"></i> Pesquisar comanda
-        </label>
-        <div class="linha-pesquisa">
-          <input type="text" id="inputPesquisa" class="input-pesquisa" placeholder="Ex.: Nome do cliente, número da mesa..." autocomplete="off">
-          <button type="button" class="btn-pesquisar" id="btnPesquisar">
-            <i class="fa-solid fa-search"></i> Pesquisar
-          </button>
-          <button type="button" class="btn-limpar-filtro" id="btnLimparFiltro">
-            <i class="fa-solid fa-broom"></i> Limpar Pesquisa
-          </button>
-        </div>
-      </div>
+            <label for="inputPesquisa"><i class="fa-solid fa-magnifying-glass"></i> Pesquisar item do cardápio</label>
+            <div class="linha-pesquisa">
+              <input type="text" id="inputPesquisa" class="input-pesquisa" placeholder="Ex.: Suco de Uva, Merlot, Filé Mignon..." autocomplete="off">
+              <button class="btn-pesquisar" id="btnPesquisar">
+                <i class="fa-solid fa-search"></i> Pesquisar
+              </button>
+              <div class="filtro-wrapper">
+                <button class="btn-filtro" id="btnFiltro">
+                  <i class="fa-solid fa-filter"></i> Filtrar
+                </button>
+                <div class="filtro-dropdown" id="filtroDropdown">
+                  <button class="filtro-opcao ativo" data-filtro="todas">
+                    <i class="fa-solid fa-border-all"></i> Todos os pedidos
+                  </button>
+                  <button class="filtro-opcao" data-filtro="pendente">
+                     Pendentes
+                  </button>
+                  <button class="filtro-opcao" data-filtro="em preparo">
+                     Em preparo
+                  </button>
+                  <button class="filtro-opcao" data-filtro="pronta">
+                     Prontos
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="filtro-ativo-tag" id="filtroAtivoTag">
+              <i class="fa-solid fa-tag"></i> Filtro ativo: <span id="filtroAtivoNome">Todos</span>
+              <button class="btn-limpar-filtro" id="btnLimparFiltro">Limpar</button>
+            </div>
 
-      <div class="msg-sem-resultado" id="msgSemResultado">
-        <i class="fa-solid fa-magnifying-glass"></i> Nenhuma comanda encontrada para "<span id="termoPesquisado"></span>"
-      </div>
+          </div>
+
+          <div class="msg-sem-resultado" id="msgSemResultado">
+            <i class="fa-solid fa-magnifying-glass"></i> Nenhum item encontrado para "<span id="termoPesquisado"></span>".
+          </div>
 
       <!-- ================= COMANDA ================= -->
       <div class="caixa-categoria">
@@ -175,8 +181,10 @@
                 <% comanda.itens.forEach(item => { %>
                 <li>
                   <strong><%= item.quantidade %>x</strong>
-                  <%= item.tipo_item === "prato" ? item.prato.nome : item.bebida.produto.nome %>
-                  - R$ <%= item.tipo_item === "prato" ? item.prato.preco_venda : item.bebida.preco_venda %>
+                  <% if (item.prato) { %>
+                  <%= item.prato.nome %> - R$ <%= item.prato.preco_venda %>
+                  <% } %>
+
                   <% if (item.observacoes) { %>
                   <br><em>Obs.: <%= item.observacoes %></em>
                   <% } %>
@@ -229,11 +237,11 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-  <script src="/js/formularioCardapioScript.js"></script>
-
-  <script src="/js/filtroEstoqueScript.js"></script>
-
   <script src="/js/formularioComandaScript.js"></script>
+
+  <script src="/js/filtroComandaScript.js"></script>
+
+  
 </body>
 
 </html>
