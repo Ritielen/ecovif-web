@@ -286,6 +286,7 @@ const observacoesFinal = observacoes !== "" ? observacoes.toString() : produto.o
       quantidade: estoqueAtualizado, 
       valor_compra: valorTotalAtualizado, 
     });
+   
     res.redirect(`/produtoAdicionar/${id}?sucesso=Estoque atualizado`);
   } catch (error) {
     console.error(error);

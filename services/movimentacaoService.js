@@ -1,5 +1,7 @@
 const db = require("../models");
 const { converterParaBase } = require("./estoqueService");
+const { sendLowStockAlert } = require("../config/mailer");
+
 
 async function baixarEstoqueComanda(itens, usuarioId, comandaId) {
 
@@ -71,6 +73,20 @@ async function baixarEstoqueComanda(itens, usuarioId, comandaId) {
           quantidade: estoqueFinal
         });
 
+        // alerta estoque mínimo
+if (estoqueFinal <= produto.quantidade_minima) {
+
+  await sendLowStockAlert([
+    {
+      nome: produto.nome,
+      quantidade: estoqueFinal,
+      quantidade_minima: produto.quantidade_minima,
+      unidade: produto.unidade
+    }
+  ]);
+
+}
+
         // movimentação
         await db.MovimentacaoProduto.create({
 
@@ -124,6 +140,18 @@ async function baixarEstoqueComanda(itens, usuarioId, comandaId) {
         quantidade: novoEstoque
       });
 
+      if (novoEstoque <= produto.quantidade_minima) {
+
+  await sendLowStockAlert([
+    {
+      nome: produto.nome,
+      quantidade: novoEstoque,
+      quantidade_minima: produto.quantidade_minima,
+      unidade: produto.unidade
+    }
+  ]);
+
+}
       await db.MovimentacaoProduto.create({
 
         tipo: "saida",

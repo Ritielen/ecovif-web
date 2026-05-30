@@ -56,5 +56,41 @@ async function sendSupportContact(clienteNome, clienteEmail, assunto, mensagem) 
     }
 }
 
-module.exports = { sendMail, sendSupportContact };
+// Função para avisar produtos com estoque baixo
+async function sendLowStockAlert(produtos) {
+    try {
+
+        // Monta lista HTML
+        const listaProdutos = produtos.map(produto => `
+            <li>
+                <strong>${produto.nome}</strong><br>
+                Quantidade atual: ${produto.quantidade} ${produto.unidade}<br>
+                Quantidade mínima: ${produto.quantidade_minima}
+            </li>
+        `).join("");
+
+        await transporter.sendMail({
+            from: 'Acme <onboarding@resend.dev>',
+            to: process.env.EMAIL_PESSOAL,
+            subject: '⚠️ Produtos com estoque baixo',
+            html: `
+                <h2>Alerta de estoque baixo</h2>
+
+                <p>Os seguintes produtos estão abaixo da quantidade mínima:</p>
+
+                <ul>
+                    ${listaProdutos}
+                </ul>
+            `,
+        });
+
+        console.log("Alerta de estoque enviado!");
+    } catch (error) {
+        console.error("Erro ao enviar alerta de estoque:", error);
+        throw error;
+    }
+}
+
+
+module.exports = { sendMail, sendSupportContact, sendLowStockAlert };
 
