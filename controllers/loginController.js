@@ -196,6 +196,7 @@ async function logarUsuario(req, res) {
     console.error(error);
 
     res.render("login/login", {
+      
       msg: "Erro ao fazer login."
     });
 

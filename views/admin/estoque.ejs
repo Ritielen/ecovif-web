@@ -45,8 +45,15 @@
               <% if (produtosBaixo.length > 0) { %>
               <% produtosBaixo.forEach(produto => { %>
               <div class="alerta-item">
-                <strong><%= produto.nome %></strong>
-                abaixo do estoque mínimo
+                <h5>Produto abaixo do estoque mínimo:</h5>
+                <ul class="lista-produtos">
+                  <li>
+                    <strong><%= produto.nome %></strong>
+                    <span class="tipo-item">(Tipo: <%= produto.tipo_item %>)</span> —
+                    <span>Qtd. atual: <strong><%= produto.quantidade %></strong></span> /
+                    <span>Mínima: <strong><%= produto.quantidade_minima %></strong></span>
+                  </li>
+                </ul>
               </div>
               <% }) %>
               <% } else { %>
@@ -126,8 +133,6 @@
                   <option value="bebida">Bebida</option>
                 </select>
               </div>
-
-
 
               <!-- Formulário para Produtos -->
               <div id="formProduto" class="formulario-tipo" style="display: none;">

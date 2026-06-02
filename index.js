@@ -14,7 +14,6 @@ const carregarNotificacoes = require("./services/notificacoes");
 const carregarNotificacoesComandas = require("./services/notificacoesComandas");
 
 
-
 app.use(express.json());
 
 //configuração dos arquivos de visão (VIEWS)
@@ -42,8 +41,21 @@ app.use(carregarNotificacoes);
 //notificação de pedidos navbar
 app.use(carregarNotificacoesComandas);
 
+//mostrar o nome do usuário logado no navbar
+app.use((req, res, next) => {
+
+  res.locals.usuarioNome = req.session.usuarioNome;
+  res.locals.usuarioGrupo = req.session.usuarioGrupo;
+  res.locals.usuarioRestaurante = req.session.usuarioRestaurante;
+
+  next();
+
+});
+
 app.use("/", mainRouter);
 
 app.listen(port, function () {
   console.log("Servidor funcionando na porta: " + port);
 });
+
+
