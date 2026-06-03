@@ -56,16 +56,11 @@ function verificarSessao(req, res) {
 // ─────────────────────────────────────────────
 // FUNÇÃO 1 — DADOS DIÁRIOS (tabela por dia)
 // ─────────────────────────────────────────────
-//
 // Retorna, para cada dia do mês selecionado:
 //   - faturamento (soma das vendas do dia)
 //   - despesas    (soma dos produtos cadastrados no dia)
 //   - lucro       (faturamento - despesas)
 //   - qtd_vendas  (número de vendas)
-//
-// Rota sugerida:
-//   GET /admin/relatorio/diario?mes=05&ano=2025
-//   Pode ser chamada via fetch/AJAX para atualizar a tabela sem recarregar a página.
 // ─────────────────────────────────────────────
 
 async function obterDadosDiarios(req, res) {
@@ -79,7 +74,6 @@ async function obterDadosDiarios(req, res) {
       return res.status(401).json({ erro: "Usuário não encontrado." });
     }
 
-    
     const restauranteId = usuario.restaurante_id;
     
     if (!restauranteId) {
@@ -101,7 +95,7 @@ async function obterDadosDiarios(req, res) {
     // Busca todas as vendas do mês
     const vendas = await db.Venda.findAll({
       where: {
-         restaurante_id: restauranteId, // Filtra por restaurante
+         restaurante_id: restauranteId, 
         data_venda: { [Op.between]: [inicio, fim] },
       },
       attributes: ["data_venda", "total_final"],
@@ -111,7 +105,7 @@ async function obterDadosDiarios(req, res) {
     // Busca todos os produtos cadastrados no mês (representam despesas)
     const produtos = await db.Produto.findAll({
       where: {
-        restaurante_id: restauranteId, // Filtra por restaurante
+        restaurante_id: restauranteId, 
         created_at: { [Op.between]: [inicio, fim] },
       },
       attributes: ["created_at", "valor_compra"],
@@ -165,15 +159,11 @@ async function obterDadosDiarios(req, res) {
 // ─────────────────────────────────────────────
 // FUNÇÃO 2 — RELATÓRIO CONSOLIDADO DO MÊS
 // ─────────────────────────────────────────────
-//
 // Gera (ou atualiza via upsert) o relatório mensal com:
 //   - faturamento bruto, despesas, lucro, margem, ticket médio
 //   - ranking dos itens mais vendidos
 //   - produtos com estoque crítico
 //   - totais de itens vendidos
-//
-// Rota sugerida:
-//   GET /admin/relatorio?mes=05&ano=2025
 // ─────────────────────────────────────────────
 
 async function gerarRelatorio(req, res) {
@@ -225,7 +215,7 @@ async function gerarRelatorio(req, res) {
 
     const { inicio, fim } = periodoMes(mes, ano);
 
-    // ── VENDAS ──────────────────────────────────
+    // VENDAS 
     const vendas = await db.Venda.findAll({
       where: {
         restaurante_id: restauranteId,
@@ -261,7 +251,7 @@ async function gerarRelatorio(req, res) {
     // ── ESTOQUE CRÍTICO ─────────────────────────
     const produtosEstoqueBaixo = await db.Produto.findAll({
       where: {
-         restaurante_id: restauranteId, // ✅ Filtra por restaurante
+         restaurante_id: restauranteId, 
         quantidade: { [Op.lte]: db.Sequelize.col("quantidade_minima") },
       },
     });
@@ -271,12 +261,8 @@ async function gerarRelatorio(req, res) {
     // Estrutura das associações:
     //   ItemComanda → Produto  (tipo_item = 'produto')  → produto.nome
     //   ItemComanda → Prato    (tipo_item = 'prato')    → prato.nome
-    //   ItemComanda → Bebida   (tipo_item = 'bebida')   → bebida.produto.nome
-    //     (Bebida não tem nome próprio — o nome vem do Produto associado via bebida.produto_id)
-    //
-    // Por causa do join aninhado (bebida → produto), o GROUP BY com Sequelize
-    // fica complexo e propenso a erros. A solução mais robusta é buscar os
-    // itens sem GROUP BY e agrupar em JavaScript, evitando conflitos de coluna.
+    //   ItemComanda → Bebida   (tipo_item = 'bebida')   → bebida.produto.nome  
+    // ─────────────────────────────────────────────  
 
     const itensComandaRaw = await db.ItemComanda.findAll({
       attributes: ["produto_id", "prato_id", "bebida_id", "tipo_item", "quantidade"],
@@ -295,7 +281,6 @@ async function gerarRelatorio(req, res) {
                 AND v.data_venda BETWEEN '${inicio.toISOString()}' AND '${fim.toISOString()}'
               )`)
             ]
-            //created_at: { [Op.between]: [inicio, fim] },
           },
           required: true,
         },
@@ -377,7 +362,7 @@ async function gerarRelatorio(req, res) {
       0
     );
 
-    // ── SALVA / ATUALIZA O RELATÓRIO NO BANCO ───
+    // ── SALVA / ATUALIZA O RELATÓRIO NO BANCO
     await db.RelatorioMensal.upsert({
       mes,
       ano,
@@ -392,7 +377,7 @@ async function gerarRelatorio(req, res) {
     });
 
     const relatorio = await db.RelatorioMensal.findOne({
-      where: { mes, ano, restaurante_id: restauranteId  },// ✅ Busca por restaurante },
+      where: { mes, ano, restaurante_id: restauranteId },
     });
 
     return res.render("admin/relatorio", {
@@ -428,12 +413,8 @@ async function gerarRelatorio(req, res) {
 // ─────────────────────────────────────────────
 // FUNÇÃO 3 — EXPORTAR RELATÓRIO EM PDF
 // ─────────────────────────────────────────────
-//
 // Gera um arquivo PDF com os dados do relatório mensal
 // e faz o download automático
-//
-// Rota sugerida:
-//   GET /admin/relatorio/pdf?mes=05&ano=2025
 // ─────────────────────────────────────────────
 
 async function exportarPDF(req, res) {
@@ -463,7 +444,7 @@ async function exportarPDF(req, res) {
 
     // Buscar dados do relatório
     const relatorio = await db.RelatorioMensal.findOne({
-      where: { mes, ano, restaurante_id: restauranteId }// ✅ Filtra por restaurante 
+      where: { mes, ano, restaurante_id: restauranteId }
     });
 
     if (!relatorio) {
@@ -482,8 +463,6 @@ async function exportarPDF(req, res) {
      const comandasIds = vendas.map(v => v.comanda_id);
     console.log("🛒 Comandas com venda:", comandasIds.length);
 
-    // Buscar ranking de produtos
-    //const itensComandaRaw = await db.ItemComanda.findAll({
 
      // ✅ Buscar ranking de produtos (filtrando pelas comandas que têm venda)
     let itensComandaRaw = [];
@@ -499,7 +478,6 @@ async function exportarPDF(req, res) {
           attributes: ["id"],
           where: {
             id: { [Op.in]: comandasIds } // ✅ Filtra pelas comandas com venda
-           // created_at: { [Op.between]: [inicio, fim] },
           },
           required: true,
         },
@@ -570,7 +548,7 @@ async function exportarPDF(req, res) {
     // Buscar produtos com estoque baixo
     const produtosEstoqueBaixo = await db.Produto.findAll({
       where: {
-        restaurante_id: restauranteId, // ✅ Filtra por restaurante
+        restaurante_id: restauranteId, 
         quantidade: { [Op.lte]: db.Sequelize.col("quantidade_minima") },
       },
       attributes: ["nome", "quantidade", "quantidade_minima"],
@@ -688,15 +666,11 @@ async function exportarPDF(req, res) {
 // ─────────────────────────────────────────────
 // FUNÇÃO 4 — EXPORTAR RELATÓRIO EM EXCEL
 // ─────────────────────────────────────────────
-//
 // Gera um arquivo Excel com múltiplas abas:
 //   - Resumo Financeiro
 //   - Ranking de Produtos
 //   - Estoque Crítico
 //   - Dados Diários (detalhamento por dia)
-//
-// Rota sugerida:
-//   GET /admin/relatorio/excel?mes=05&ano=2025
 // ─────────────────────────────────────────────
 
 async function exportarExcel(req, res) {
@@ -731,7 +705,7 @@ async function exportarExcel(req, res) {
       where: { 
         mes, 
         ano, 
-        restaurante_id: restauranteId // ✅ Filtra por restaurante
+        restaurante_id: restauranteId 
       }
     });
 
@@ -742,7 +716,7 @@ async function exportarExcel(req, res) {
     // ✅ Buscar dados diários por restaurante
     const vendas = await db.Venda.findAll({
       where: {
-        restaurante_id: restauranteId, // ✅ Filtra por restaurante
+        restaurante_id: restauranteId, 
         data_venda: { [Op.between]: [inicio, fim] },
       },
       attributes: ["data_venda", "total_final"],
@@ -752,7 +726,7 @@ async function exportarExcel(req, res) {
 
     const produtos = await db.Produto.findAll({
       where: {
-        restaurante_id: restauranteId, // ✅ Filtra por restaurante
+        restaurante_id: restauranteId, 
         created_at: { [Op.between]: [inicio, fim] },
       },
       attributes: ["created_at", "valor_compra"],
