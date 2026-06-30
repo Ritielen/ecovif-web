@@ -23,8 +23,7 @@ Plataforma web completa para gerenciamento integrado de restaurantes. O Ecovif W
 - **Sequelize 6.37** - ORM para banco de dados
 
 ### Banco de Dados
-- **MySQL 2** - Suporte principal
-- **PostgreSQL** - Suporte alternativo
+- **PostgreSQL** - Suporte principal
 - **pg-hstore** - Serialização para PostgreSQL
 
 ### Autenticação & Segurança

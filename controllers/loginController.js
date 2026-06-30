@@ -15,13 +15,12 @@ async function renderizarCadastroGestor(req, res) {
   console.log("Rota de cadastro acessada");
   try {
     const restaurante = await db.Restaurante.findOne({ order: [['nome', 'ASC']] });
-    res.render("login/cadastro-gestor", {
-      restaurante
-    });
+    res.render("login/cadastro-gestor", { restaurante });
   } catch (erro) {
-    console.error("Erro ao renderizar:", erro);
+    console.error("Erro ao renderizar cadastro-gestor:", erro);
+    res.status(500).send("Erro ao carregar página: " + erro.message); // ← mostra o erro real
   }
-  }
+}
 
   async function renderizarAreaGestor(req, res) {
   res.render("admin/areaGestor");
@@ -104,6 +103,7 @@ async function criarGestor(req, res) {
 
   } catch (error) {
     console.error(error);
+    res.status(500).send("Erro ao criar gestor: " + error.message);
   }
 }
 
