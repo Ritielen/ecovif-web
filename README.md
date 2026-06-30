@@ -50,6 +50,9 @@ Plataforma web completa para gerenciamento integrado de restaurantes. O Ecovif W
 - **Nodemon** - Auto-reload em desenvolvimento
 - **sequelize-cli** - Ferramenta de migração
 
+  ### Hospedagem do servidor Node
+- **Render** - Plataforma que hospeda sites, apps e banco de dados.
+
 ## 📦 Instalação
 
 1. **Clone o repositório**
