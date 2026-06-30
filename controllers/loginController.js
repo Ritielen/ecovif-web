@@ -18,7 +18,7 @@ async function renderizarCadastroGestor(req, res) {
     res.render("login/cadastro-gestor", { restaurante });
   } catch (erro) {
     console.error("Erro ao renderizar cadastro-gestor:", erro);
-    res.status(500).send("Erro ao carregar página: " + erro.message); // ← mostra o erro real
+    res.status(500).send("Erro ao carregar página: " + erro.message); 
   }
 }
 
