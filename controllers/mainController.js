@@ -124,8 +124,8 @@ async function renderizarListaFuncionarios(req, res) {
           as: 'restaurante',
         },
         {
-          model: db.Usuario, // Relacionamento com a própria tabela de usuários
-          as: 'criador',     // apelido definido no Model
+          model: db.Usuario, 
+          as: 'criador',     
         }
       ],
       order: [['id', 'DESC']]
@@ -140,12 +140,24 @@ async function renderizarListaFuncionarios(req, res) {
     });
   }
 }
-// Função para EXCLUIR funcionário 
+// Função EXCLUIR funcionário somente gestores que são admin
 async function excluirFuncionario(req, res) {
   const { id } = req.params;
+
   try {
-    await db.Usuario.destroy({ where: { id } });
-    res.redirect("/listaFuncionarios?sucesso=Funcionário excluído com sucesso!");
+    
+    if (!req.session.usuarioAdmin) {
+      return res.redirect("/listaFuncionarios?msg=Você não tem permissão para excluir funcionários.");
+    }
+
+    await db.Usuario.destroy({
+      where: { id }
+    });
+
+    res.redirect(
+      "/listaFuncionarios?sucesso=Funcionário excluído com sucesso!"
+    );
+
   } catch (error) {
     console.error("Erro ao excluir funcionário:", error);
     res.redirect("/listaFuncionarios?msg=Erro ao excluir funcionário");
